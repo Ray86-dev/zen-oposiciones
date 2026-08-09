@@ -22,7 +22,7 @@ export default function AjustesLectura({
 
   return (
     <div ref={caja}
-      className="absolute right-0 top-11 z-30 w-72 rounded-xl border border-borde bg-tinta-2 p-4 shadow-2xl">
+      className="absolute right-0 top-10 z-40 max-h-[70vh] w-72 overflow-y-auto rounded-xl border border-borde bg-tinta-2 p-4 shadow-2xl">
       <Grupo titulo="Tamaño del texto">
         <div className="flex items-center gap-3">
           <button onClick={() => cambiar({ tamano: Math.max(14, prefs.tamano - 1) })}

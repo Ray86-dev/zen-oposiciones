@@ -167,15 +167,42 @@ export default function LectorCliente({ numero }: { numero: number }) {
 
   const estadoActual = (estado.progreso[numero]?.estado ?? "pendiente") as EstadoTema;
   const papel = papelDe(prefs.papel);
-  const anchoTexto = prefs.ancho === "ancho" ? "max-w-none" : "max-w-[68ch]";
+  // En modo ancho el panel ocupa toda la fila y la columna de texto se estira;
+  // en normal se conserva el tope de 68 caracteres, que es lo cómodo de leer.
+  const modoAncho = prefs.ancho === "ancho";
+  const anchoTexto = modoAncho ? "max-w-[92ch]" : "max-w-[68ch]";
+
+  const barra = (
+    <div className="relative flex items-center gap-1">
+      <button onClick={() => setAjustes((a) => !a)} title="Tamaño, tipografía y papel"
+        className="rounded-lg border border-borde bg-tinta-2/80 px-2.5 py-1 text-suave transition hover:text-texto">
+        <span className="text-[11px]">A</span><span className="text-[15px]">A</span>
+      </button>
+      <button onClick={() => cambiar({ ancho: prefs.ancho === "normal" ? "ancho" : "normal" })}
+        title={prefs.ancho === "normal" ? "Ensanchar: oculta el panel lateral" : "Volver a dos columnas"}
+        className={`rounded-lg border bg-tinta-2/80 px-2.5 py-1 text-[11px] transition ${
+          prefs.ancho === "ancho" ? "border-jade text-jade" : "border-borde text-suave hover:text-texto"}`}>
+        {prefs.ancho === "ancho" ? "Ancho" : "Normal"}
+      </button>
+      <button onClick={() => setZen((z) => !z)} title="Modo zen (Escape para salir)"
+        className={`rounded-lg border bg-tinta-2/80 px-2.5 py-1 text-[11px] transition ${
+          zen ? "border-jade text-jade" : "border-borde text-suave hover:text-texto"}`}>
+        Zen
+      </button>
+      {ajustes && <AjustesLectura prefs={prefs} cambiar={cambiar} cerrar={() => setAjustes(false)} />}
+    </div>
+  );
 
   const lectura = (
     <div
       ref={contenedor}
-      className="relative flex h-full flex-col overflow-hidden rounded-xl border border-borde"
+      className="relative flex h-full flex-col rounded-xl border border-borde"
       style={{ background: papel.fondo }}
     >
-      <div className="h-0.5 shrink-0 bg-black/10">
+      {/* Los controles van pegados al panel que gobiernan, no en la cabecera. */}
+      <div className="absolute right-3 top-3 z-20">{barra}</div>
+
+      <div className="h-0.5 shrink-0 overflow-hidden rounded-t-xl bg-black/10">
         <div className="h-full bg-jade transition-[width] duration-150" style={{ width: `${avance}%` }} />
       </div>
 
@@ -183,7 +210,7 @@ export default function LectorCliente({ numero }: { numero: number }) {
         ref={scroller}
         onScroll={alScroll}
         onMouseUp={alSoltar}
-        className="flex-1 overflow-y-auto overscroll-contain px-6 py-8 sm:px-10"
+        className="flex-1 overflow-y-auto overscroll-contain rounded-b-xl px-6 py-8 sm:px-10"
         style={estiloLectura(prefs)}
       >
         {!html && !error && <div className="h-96 animate-pulse rounded bg-black/5" />}
@@ -202,7 +229,7 @@ export default function LectorCliente({ numero }: { numero: number }) {
       </div>
 
       {menu && seleccion && (
-        <div className="absolute z-20 flex items-center gap-1 rounded-lg border border-borde bg-tinta-2 p-1 shadow-2xl"
+        <div className="absolute z-30 flex items-center gap-1 rounded-lg border border-borde bg-tinta-2 p-1 shadow-2xl"
              style={{ left: Math.max(4, Math.min(menu.x - 90, (contenedor.current?.clientWidth ?? 400) - 210)), top: Math.max(4, menu.y) }}>
           {COLORES.map((c) => (
             <button key={c.id} title={c.nombre} onClick={() => subrayar(c.id)}
@@ -213,27 +240,6 @@ export default function LectorCliente({ numero }: { numero: number }) {
           <button onClick={limpiar} className="rounded px-1.5 py-1 text-xs text-suave">✕</button>
         </div>
       )}
-    </div>
-  );
-
-  const barra = (
-    <div className="relative flex items-center gap-1">
-      <button onClick={() => setAjustes((a) => !a)} title="Tamaño, tipografía y papel"
-        className="rounded-lg border border-borde px-3 py-1.5 text-sm text-suave transition hover:text-texto">
-        <span className="text-xs">A</span><span className="text-base">A</span>
-      </button>
-      <button onClick={() => cambiar({ ancho: prefs.ancho === "normal" ? "ancho" : "normal" })}
-        title="Ancho de columna"
-        className={`rounded-lg border px-3 py-1.5 text-xs transition ${
-          prefs.ancho === "ancho" ? "border-jade text-jade" : "border-borde text-suave hover:text-texto"}`}>
-        {prefs.ancho === "ancho" ? "Ancho" : "Normal"}
-      </button>
-      <button onClick={() => setZen((z) => !z)} title="Modo zen (Escape para salir)"
-        className={`rounded-lg border px-3 py-1.5 text-xs transition ${
-          zen ? "border-jade text-jade" : "border-borde text-suave hover:text-texto"}`}>
-        Zen
-      </button>
-      {ajustes && <AjustesLectura prefs={prefs} cambiar={cambiar} cerrar={() => setAjustes(false)} />}
     </div>
   );
 
@@ -248,7 +254,6 @@ export default function LectorCliente({ numero }: { numero: number }) {
             <span className="text-xs tabular-nums" style={{ color: papel.texto, opacity: 0.5 }}>
               {Math.round(avance)}%
             </span>
-            {barra}
             <button onClick={() => setZen(false)}
               className="rounded-lg border border-borde px-3 py-1.5 text-xs text-suave hover:text-texto">
               Salir
@@ -264,26 +269,24 @@ export default function LectorCliente({ numero }: { numero: number }) {
     <div className="space-y-4">
       <Cabecera tema={tema} />
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-1">
-          {ESTADOS.map((s) => (
-            <button key={s.id} onClick={() => fijarEstadoTema(numero, s.id)}
-              className={`rounded px-2.5 py-1 text-[11px] transition ${
-                estadoActual === s.id ? "text-tinta" : "bg-tinta-3 text-suave hover:text-texto"}`}
-              style={estadoActual === s.id ? { background: s.color } : undefined}>
-              {s.label}
-            </button>
-          ))}
-        </div>
-        {barra}
+      <div className="flex flex-wrap items-center gap-1">
+        {ESTADOS.map((e) => (
+          <button key={e.id} onClick={() => fijarEstadoTema(numero, e.id)}
+            className={`rounded px-2.5 py-1 text-[11px] transition ${
+              estadoActual === e.id ? "text-tinta" : "bg-tinta-3 text-suave hover:text-texto"}`}
+            style={estadoActual === e.id ? { background: e.color } : undefined}>
+            {e.label}
+          </button>
+        ))}
       </div>
 
       {error && <p className="rounded-lg border border-coral/40 bg-coral/10 px-4 py-3 text-sm text-coral">{error}</p>}
 
-      <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
-        <div className="h-[calc(100vh-230px)] min-h-[420px]">{lectura}</div>
+      <div className={`grid gap-5 ${modoAncho ? "" : "lg:grid-cols-[1fr_320px]"}`}>
+        <div className="h-[calc(100vh-210px)] min-h-[440px]">{lectura}</div>
 
-        <aside className="flex h-[calc(100vh-230px)] min-h-[420px] flex-col gap-3">
+        <aside className={`flex flex-col gap-3 ${
+          modoAncho ? "max-h-[60vh]" : "h-[calc(100vh-210px)] min-h-[440px]"}`}>
           <div className="flex shrink-0 gap-1 rounded-lg border border-borde p-1">
             {(["notas", "ia"] as const).map((p) => (
               <button key={p} onClick={() => setPanel(p)}
