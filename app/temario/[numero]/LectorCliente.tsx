@@ -182,7 +182,7 @@ export default function LectorCliente({ numero }: { numero: number }) {
         title={prefs.ancho === "normal" ? "Ensanchar: oculta el panel lateral" : "Volver a dos columnas"}
         className={`rounded-lg border bg-tinta-2/80 px-2.5 py-1 text-[11px] transition ${
           prefs.ancho === "ancho" ? "border-jade text-jade" : "border-borde text-suave hover:text-texto"}`}>
-        {prefs.ancho === "ancho" ? "Ancho" : "Normal"}
+        {prefs.ancho === "ancho" ? "Normal" : "Ancho"}
       </button>
       <button onClick={() => setZen((z) => !z)} title="Modo zen (Escape para salir)"
         className={`rounded-lg border bg-tinta-2/80 px-2.5 py-1 text-[11px] transition ${
@@ -199,9 +199,6 @@ export default function LectorCliente({ numero }: { numero: number }) {
       className="relative flex h-full flex-col rounded-xl border border-borde"
       style={{ background: papel.fondo }}
     >
-      {/* Los controles van pegados al panel que gobiernan, no en la cabecera. */}
-      <div className="absolute right-3 top-3 z-20">{barra}</div>
-
       <div className="h-0.5 shrink-0 overflow-hidden rounded-t-xl bg-black/10">
         <div className="h-full bg-jade transition-[width] duration-150" style={{ width: `${avance}%` }} />
       </div>
@@ -254,6 +251,7 @@ export default function LectorCliente({ numero }: { numero: number }) {
             <span className="text-xs tabular-nums" style={{ color: papel.texto, opacity: 0.5 }}>
               {Math.round(avance)}%
             </span>
+            {barra}
             <button onClick={() => setZen(false)}
               className="rounded-lg border border-borde px-3 py-1.5 text-xs text-suave hover:text-texto">
               Salir
@@ -283,7 +281,12 @@ export default function LectorCliente({ numero }: { numero: number }) {
       {error && <p className="rounded-lg border border-coral/40 bg-coral/10 px-4 py-3 text-sm text-coral">{error}</p>}
 
       <div className={`grid gap-5 ${modoAncho ? "" : "lg:grid-cols-[1fr_320px]"}`}>
-        <div className="h-[calc(100vh-210px)] min-h-[440px]">{lectura}</div>
+        {/* La barra va justo encima del panel y alineada con su borde derecho:
+            cerca del texto que gobierna, sin invadir el margen de lectura. */}
+        <div className="flex h-[calc(100vh-210px)] min-h-[440px] flex-col">
+          <div className="mb-2 flex shrink-0 justify-end">{barra}</div>
+          <div className="min-h-0 flex-1">{lectura}</div>
+        </div>
 
         <aside className={`flex flex-col gap-3 ${
           modoAncho ? "max-h-[60vh]" : "h-[calc(100vh-210px)] min-h-[440px]"}`}>
