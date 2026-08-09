@@ -68,5 +68,36 @@ for (const [nombre, C] of PAGINAS) {
   if (faltan.length) fallos++;
   act(() => root.unmount());
 }
-console.log(fallos === 0 ? "\nTODAS LAS PÁGINAS RENDERIZAN CORRECTAMENTE" : `\n${fallos} PÁGINAS CON PROBLEMAS`);
-process.exit(fallos ? 1 : 0);
+
+// --- Lectura de la salida del modelo, que es lo que más se rompe ---
+import { leerTarjetas } from "./components/Flashcards";
+import { leerDiagrama } from "./components/Mermaid";
+
+const casos: [string, boolean][] = [
+  ['[{"anverso":"a","reverso":"b"}]', true],
+  ['```json\n[{"anverso":"a","reverso":"b","tipo":"concepto"}]\n```', true],
+  ['Aquí tienes:\n[{"anverso":"a","reverso":"b"}]\nEspero que sirva.', true],
+  ['no es json', false],
+  ['[]', false],
+];
+let fp = 0;
+for (const [entrada, esperado] of casos) {
+  const ok = leerTarjetas(entrada) !== null;
+  if (ok !== esperado) { console.log("FALLO flashcards:", entrada.slice(0, 30)); fp++; }
+}
+const diagramas: [string, boolean][] = [
+  ["graph TD\n A-->B", true],
+  ["```mermaid\ngraph TD\n A-->B\n```", true],
+  ["Este es el mapa:\n```mermaid\nflowchart TD\n A-->B\n```", true],
+  ["texto sin diagrama", false],
+];
+for (const [entrada, esperado] of diagramas) {
+  const ok = leerDiagrama(entrada) !== null;
+  if (ok !== esperado) { console.log("FALLO mermaid:", entrada.slice(0, 30)); fp++; }
+}
+console.log(fp === 0
+  ? `Parseo de la salida del modelo: ${casos.length + diagramas.length}/${casos.length + diagramas.length} casos OK`
+  : `${fp} casos de parseo fallan`);
+
+console.log(fallos + fp === 0 ? "\nTODO CORRECTO" : `\n${fallos + fp} PROBLEMAS`);
+process.exit(fallos + fp ? 1 : 0);

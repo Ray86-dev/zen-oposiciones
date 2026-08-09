@@ -80,22 +80,28 @@ export default function Flashcards({ bruto }: { bruto: string }) {
         ))}
       </div>
 
-      <div className="[perspective:1400px]">
+      <div style={{ perspective: "1600px" }}>
         <div
           onClick={() => setGirada((g) => !g)}
-          className="relative min-h-[240px] w-full cursor-pointer transition-transform duration-500 [transform-style:preserve-3d]"
-          style={{ transform: girada ? "rotateY(180deg)" : "rotateY(0deg)" }}
+          className="relative min-h-[250px] w-full cursor-pointer"
+          style={{
+            transformStyle: "preserve-3d",
+            transition: "transform .5s cubic-bezier(.4,.2,.2,1)",
+            transform: girada ? "rotateY(180deg)" : "rotateY(0deg)",
+          }}
         >
-          <Cara visible>
+          <Cara lado="frente" acento={color}>
             <span className="mb-3 self-start rounded-full px-2.5 py-0.5 text-[10px] uppercase tracking-widest"
-                  style={{ background: `${color}22`, color }}>
+                  style={{ background: `${color}26`, color }}>
               {t.tipo ?? "pregunta"}
             </span>
             <p className="serif text-xl leading-snug">{t.anverso}</p>
-            <span className="mt-auto pt-4 text-[11px] text-suave">Pulsa o barra espaciadora para girar</span>
+            <span className="mt-auto pt-4 text-[11px] text-suave">
+              Pulsa o barra espaciadora para girar
+            </span>
           </Cara>
-          <Cara>
-            <span className="mb-3 self-start text-[10px] uppercase tracking-widest text-suave">Respuesta</span>
+          <Cara lado="dorso" acento="#2fbf94">
+            <span className="mb-3 self-start text-[10px] uppercase tracking-widest text-jade">Respuesta</span>
             <p className="text-[15px] leading-relaxed">{t.reverso}</p>
             <span className="mt-auto pt-4 text-[11px] text-suave">1 la sabía · 2 repasar</span>
           </Cara>
@@ -135,11 +141,25 @@ export default function Flashcards({ bruto }: { bruto: string }) {
   );
 }
 
-function Cara({ children, visible }: { children: React.ReactNode; visible?: boolean }) {
+/**
+ * Cada cara es OPACA. Con fondo translúcido la cara oculta se transparentaba a
+ * través de la visible y las dos se leían a la vez.
+ */
+function Cara({ lado, acento, children }: {
+  lado: "frente" | "dorso"; acento: string; children: React.ReactNode;
+}) {
   return (
     <div
-      className="absolute inset-0 flex flex-col rounded-xl border border-borde bg-tinta-3/50 p-6 [backface-visibility:hidden]"
-      style={visible ? undefined : { transform: "rotateY(180deg)" }}
+      className="absolute inset-0 flex flex-col overflow-y-auto rounded-xl border p-6"
+      style={{
+        background: "var(--fondo-3)",
+        borderColor: lado === "dorso" ? `${acento}55` : "var(--borde)",
+        borderLeft: `3px solid ${acento}`,
+        boxShadow: "0 10px 30px -18px rgba(0,0,0,.55)",
+        backfaceVisibility: "hidden",
+        WebkitBackfaceVisibility: "hidden",
+        transform: lado === "dorso" ? "rotateY(180deg) translateZ(1px)" : "translateZ(1px)",
+      }}
     >
       {children}
     </div>
