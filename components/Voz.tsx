@@ -10,7 +10,8 @@ export default function Voz({
 }: { bloques: string[]; alCambiarBloque: (i: number) => void; cerrar: () => void }) {
   const [trozos] = useState(() => trocearParaVoz(bloques));
   const [i, setI] = useState(0);
-  const [sonando, setSonando] = useState(false);
+  /** parado | sonando | pausado. Derivado de lo que realmente suena. */
+  const [estado, setEstado] = useState<"parado" | "sonando" | "pausado">("parado");
   const [ajustes, setAjustes] = useState(false);
   const [prefs, setPrefs] = useState<PrefsVoz>(VOZ_POR_DEFECTO);
   const [voces, setVoces] = useState<SpeechSynthesisVoice[]>([]);
@@ -19,12 +20,20 @@ export default function Voz({
 
   const iRef = useRef(0);
   const sonandoRef = useRef(false);
+  /**
+   * Cada arranque, parada o salto incrementa la epoca. Las cadenas asincronas
+   * capturan la suya y se abortan si ha cambiado: sin esto, cambiar de voz
+   * mientras se sintetiza una frase dejaba dos reproducciones vivas a la vez.
+   */
+  const epoca = useRef(0);
   const audio = useRef<HTMLAudioElement | null>(null);
   const cache = useRef<Map<number, Blob>>(new Map());
 
+  const prefsRef = useRef<PrefsVoz>(VOZ_POR_DEFECTO);
+  useEffect(() => { prefsRef.current = prefs; }, [prefs]);
   useEffect(() => { setPrefs(cargarPrefsVoz()); }, []);
   useEffect(() => { iRef.current = i; }, [i]);
-  useEffect(() => { sonandoRef.current = sonando; }, [sonando]);
+  useEffect(() => { sonandoRef.current = estado === "sonando"; }, [estado]);
   useEffect(() => { void vocesDescargadas().then(setDescargadas); }, []);
 
   useEffect(() => {
@@ -37,17 +46,27 @@ export default function Voz({
     return () => window.speechSynthesis.removeEventListener("voiceschanged", leer);
   }, []);
 
-  const detener = useCallback(() => {
+  const detener = useCallback((volverAlInicio = false) => {
+    epoca.current += 1;               // invalida cualquier cadena en vuelo
+    if (volverAlInicio) { iRef.current = 0; setI(0); }
     sonandoRef.current = false;
-    setSonando(false);
+    setEstado("parado");
     window.speechSynthesis.cancel();
-    if (audio.current) { audio.current.pause(); audio.current.src = ""; }
+    if (audio.current) { audio.current.pause(); audio.current.removeAttribute("src"); }
+  }, []);
+
+  /** Pausa sin perder el sitio. */
+  const pausar = useCallback(() => {
+    sonandoRef.current = false;
+    setEstado("pausado");
+    if (prefsRef.current.motor === "neuronal") audio.current?.pause();
+    else window.speechSynthesis.pause();
   }, []);
 
   useEffect(() => () => { window.speechSynthesis.cancel(); }, []);
 
   useEffect(() => {
-    if (!sonando || prefs.motor !== "sistema") return;
+    if (estado !== "sonando" || prefs.motor !== "sistema") return;
     const t = setInterval(() => {
       if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
         window.speechSynthesis.pause();
@@ -55,7 +74,7 @@ export default function Voz({
       }
     }, 10000);
     return () => clearInterval(t);
-  }, [sonando, prefs.motor]);
+  }, [estado, prefs.motor]);
 
   // ------------------------------------------------------------- neuronal
   const pedirAudio = useCallback(async (idx: number, p: PrefsVoz): Promise<Blob> => {
@@ -70,37 +89,39 @@ export default function Voz({
     return b;
   }, [trozos]);
 
-  const sonarNeuronal = useCallback(async (idx: number, p: PrefsVoz) => {
+  const sonarNeuronal = useCallback(async (idx: number, p: PrefsVoz, mi: number) => {
     if (idx >= trozos.length) { detener(); return; }
     let blob: Blob;
     try {
       blob = await pedirAudio(idx, p);
     } catch (e) {
+      if (epoca.current !== mi) return;
       // Nunca fallar en silencio: fue el error que dejó a Kokoro mudo.
       setNeuronal({ fase: "error", pct: 0, mensaje: e instanceof Error ? e.message : "No se pudo sintetizar." });
       detener();
       return;
     }
-    if (!sonandoRef.current) return;
+    if (epoca.current !== mi || !sonandoRef.current) return;
 
     if (!audio.current) audio.current = new Audio();
     const el = audio.current;
     el.src = URL.createObjectURL(blob);
     el.playbackRate = p.velocidad;
     el.onended = () => {
-      if (!sonandoRef.current) return;
+      if (epoca.current !== mi || !sonandoRef.current) return;
       const sig = idx + 1;
       if (sig >= trozos.length) { detener(); return; }
       setI(sig);
       alCambiarBloque(trozos[sig].bloque);
-      void sonarNeuronal(sig, p);
+      void sonarNeuronal(sig, p, mi);
     };
     try {
       await el.play();
-    } catch (e) {
+    } catch {
+      if (epoca.current !== mi) return;
       setNeuronal({
         fase: "error", pct: 0,
-        mensaje: "El navegador ha bloqueado la reproducción. Vuelve a pulsar Escuchar.",
+        mensaje: "El navegador ha bloqueado la reproducción. Vuelve a pulsar el botón de reproducir.",
       });
       detener();
       return;
@@ -111,7 +132,7 @@ export default function Voz({
   }, [pedirAudio, trozos, alCambiarBloque, detener]);
 
   // -------------------------------------------------------------- sistema
-  const sonarSistema = useCallback((idx: number, p: PrefsVoz) => {
+  const sonarSistema = useCallback((idx: number, p: PrefsVoz, mi: number) => {
     const trozo = trozos[idx];
     if (!trozo) { detener(); return; }
     const u = new SpeechSynthesisUtterance(limpiarParaVoz(trozo.texto));
@@ -120,32 +141,51 @@ export default function Voz({
     u.lang = v?.lang ?? "es-ES";
     u.rate = p.velocidad;
     u.onend = () => {
-      if (!sonandoRef.current) return;
+      if (epoca.current !== mi || !sonandoRef.current) return;
       const sig = idx + 1;
       if (sig >= trozos.length) { detener(); return; }
       setI(sig);
       alCambiarBloque(trozos[sig].bloque);
-      sonarSistema(sig, p);
+      sonarSistema(sig, p, mi);
     };
     u.onerror = () => detener();
     window.speechSynthesis.speak(u);
   }, [trozos, voces, detener, alCambiarBloque]);
 
-  const reproducir = useCallback((p = prefs) => {
+  const reproducir = useCallback((p = prefsRef.current) => {
+    // Corta lo anterior antes de nada: nunca dos voces a la vez.
     window.speechSynthesis.cancel();
+    audio.current?.pause();
+    const mi = ++epoca.current;
     sonandoRef.current = true;
-    setSonando(true);
+    setEstado("sonando");
     setNeuronal((v) => (v.fase === "error" ? { fase: "apagado", pct: 0, mensaje: "" } : v));
     alCambiarBloque(trozos[iRef.current]?.bloque ?? 0);
-    if (p.motor === "neuronal") void sonarNeuronal(iRef.current, p);
-    else sonarSistema(iRef.current, p);
-  }, [prefs, trozos, alCambiarBloque, sonarNeuronal, sonarSistema]);
+    if (p.motor === "neuronal") void sonarNeuronal(iRef.current, p, mi);
+    else sonarSistema(iRef.current, p, mi);
+  }, [trozos, alCambiarBloque, sonarNeuronal, sonarSistema]);
+
+  /** Reanuda desde donde se pausó, sin volver a sintetizar. */
+  const reanudar = useCallback(() => {
+    sonandoRef.current = true;
+    setEstado("sonando");
+    if (prefsRef.current.motor === "neuronal") {
+      const el = audio.current;
+      if (el && el.src) { void el.play().catch(() => reproducir()); }
+      else reproducir();
+    } else {
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+      else reproducir();
+    }
+  }, [reproducir]);
 
   const cambiar = (p: Partial<PrefsVoz>) => {
     const n = { ...prefs, ...p };
     setPrefs(n); guardarPrefsVoz(n);
     if (p.motor || p.vozNeuronal) cache.current.clear();
-    if (sonandoRef.current) { detener(); setTimeout(() => reproducir(n), 60); }
+    const estabaSonando = sonandoRef.current;
+    detener();
+    if (estabaSonando) setTimeout(() => reproducir(n), 80);
   };
 
   const bajarVoz = async (vozId: string) => {
@@ -164,11 +204,15 @@ export default function Voz({
     const n = Math.max(0, Math.min(trozos.length - 1, iRef.current + d));
     setI(n);
     alCambiarBloque(trozos[n].bloque);
-    if (sonandoRef.current) {
+    if (sonandoRef.current || estado === "pausado") {
       window.speechSynthesis.cancel();
       audio.current?.pause();
-      if (prefs.motor === "neuronal") void sonarNeuronal(n, prefs);
-      else sonarSistema(n, prefs);
+      const mi = ++epoca.current;
+      sonandoRef.current = true;
+      setEstado("sonando");
+      iRef.current = n;
+      if (prefs.motor === "neuronal") void sonarNeuronal(n, prefs, mi);
+      else sonarSistema(n, prefs, mi);
     }
   };
 
@@ -177,6 +221,7 @@ export default function Voz({
     trozos.slice(i).reduce((a, t) => a + t.texto.length, 0) / (14 * prefs.velocidad) / 60,
   );
   const usandoNeuronal = prefs.motor === "neuronal";
+  const sonando = estado === "sonando";
   const vozActual = VOCES_ES.find((v) => v.id === prefs.vozNeuronal);
 
   if (!trozos.length) return null;
@@ -189,17 +234,31 @@ export default function Voz({
 
       <div className="flex items-center gap-2">
         <button onClick={() => saltar(-1)} title="Frase anterior"
-          className="rounded-lg border border-borde px-2 py-1.5 text-xs text-suave hover:text-texto">⏮</button>
-        <button onClick={() => (sonando ? detener() : reproducir())}
+          className="rounded-lg border border-borde px-2 py-1.5 text-xs text-suave transition hover:text-texto">⏮</button>
+
+        <button
+          onClick={() => (sonando ? pausar() : estado === "pausado" ? reanudar() : reproducir())}
           disabled={neuronal.fase === "descargando"}
-          className="rounded-lg bg-jade px-4 py-1.5 text-sm font-medium text-tinta disabled:opacity-50">
-          {sonando ? "Pausar" : "Escuchar"}
+          title={sonando ? "Pausar" : estado === "pausado" ? "Continuar" : "Reproducir"}
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-jade text-tinta transition hover:opacity-90 disabled:opacity-50"
+        >
+          {sonando
+            ? <svg width="12" height="13" viewBox="0 0 12 13" fill="currentColor"><rect x="0" y="0" width="4" height="13" rx="1"/><rect x="8" y="0" width="4" height="13" rx="1"/></svg>
+            : <svg width="12" height="13" viewBox="0 0 12 13" fill="currentColor" style={{ marginLeft: 2 }}><path d="M0 .8v11.4a.8.8 0 0 0 1.2.7l9.4-5.7a.8.8 0 0 0 0-1.4L1.2.1A.8.8 0 0 0 0 .8Z"/></svg>}
         </button>
+
+        <button onClick={() => detener(true)} disabled={estado === "parado"} title="Detener y volver al principio"
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-borde text-suave transition hover:text-texto disabled:opacity-30">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><rect width="10" height="10" rx="1.5"/></svg>
+        </button>
+
         <button onClick={() => saltar(1)} title="Frase siguiente"
-          className="rounded-lg border border-borde px-2 py-1.5 text-xs text-suave hover:text-texto">⏭</button>
+          className="rounded-lg border border-borde px-2 py-1.5 text-xs text-suave transition hover:text-texto">⏭</button>
 
         <span className="ml-1 text-[11px] tabular-nums text-suave">
-          {i + 1}/{trozos.length}{sonando && restante > 0 && ` · ~${restante} min`}
+          {i + 1}/{trozos.length}
+          {estado !== "parado" && restante > 0 && ` · ~${restante} min`}
+          {estado === "pausado" && " · en pausa"}
         </span>
 
         <button onClick={() => setAjustes((a) => !a)}
