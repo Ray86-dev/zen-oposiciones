@@ -104,16 +104,36 @@ export default function Panel() {
           </p>
         ) : (
           <ul className="mt-4 space-y-2">
-            {deHoy.map((s, i) => (
-              <li key={i} className="flex items-start gap-3 rounded-lg bg-tinta-3/60 px-4 py-3">
-                <Pastilla tipo={s.tipo} />
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm">{s.titulo}</p>
-                  <p className="text-xs text-suave">{s.motivo}</p>
-                </div>
-                <span className="shrink-0 text-xs tabular-nums text-suave">{s.minutos} min</span>
-              </li>
-            ))}
+            {deHoy.map((s, i) => {
+              const fila = (
+                <>
+                  <Pastilla tipo={s.tipo} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm">{s.titulo}</p>
+                    <p className="text-xs text-suave">{s.motivo}</p>
+                  </div>
+                  <span className="shrink-0 self-center text-xs tabular-nums text-suave">{s.minutos} min</span>
+                </>
+              );
+              const clases = "flex items-start gap-3 rounded-lg bg-tinta-3/60 px-4 py-3";
+              return (
+                <li key={i}>
+                  {s.temaNumero ? (
+                    <Link href={`/temario/${s.temaNumero}`} className={`${clases} group transition hover:bg-tinta-3`}>
+                      {fila}
+                      <span className="self-center text-jade opacity-0 transition group-hover:opacity-100">→</span>
+                    </Link>
+                  ) : s.tipo === "supuesto" ? (
+                    <Link href="/supuestos" className={`${clases} group transition hover:bg-tinta-3`}>
+                      {fila}
+                      <span className="self-center text-jade opacity-0 transition group-hover:opacity-100">→</span>
+                    </Link>
+                  ) : (
+                    <div className={clases}>{fila}</div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
         <p className="mt-5 border-l-2 border-jade/40 pl-3 text-sm italic text-suave">
@@ -125,11 +145,22 @@ export default function Panel() {
         <h2 className="serif text-xl">A continuación</h2>
         <ul className="mt-3 space-y-1.5">
           {proximas.map((s, i) => (
-            <li key={i} className="flex items-center gap-3 text-sm">
-              <span className="w-14 shrink-0 text-xs tabular-nums text-suave">{formatoCorto(s.fecha)}</span>
-              <Pastilla tipo={s.tipo} />
-              <span className="min-w-0 flex-1 truncate text-suave">{s.titulo}</span>
-              <span className="shrink-0 text-xs tabular-nums text-suave">{s.minutos}′</span>
+            <li key={i}>
+              {s.temaNumero ? (
+                <Link href={`/temario/${s.temaNumero}`} className="flex items-center gap-3 rounded px-1 py-0.5 text-sm transition hover:bg-tinta-3/60">
+                  <span className="w-14 shrink-0 text-xs tabular-nums text-suave">{formatoCorto(s.fecha)}</span>
+                  <Pastilla tipo={s.tipo} />
+                  <span className="min-w-0 flex-1 truncate text-suave">{s.titulo}</span>
+                  <span className="shrink-0 text-xs tabular-nums text-suave">{s.minutos}′</span>
+                </Link>
+              ) : (
+                <div className="flex items-center gap-3 px-1 py-0.5 text-sm">
+                  <span className="w-14 shrink-0 text-xs tabular-nums text-suave">{formatoCorto(s.fecha)}</span>
+                  <Pastilla tipo={s.tipo} />
+                  <span className="min-w-0 flex-1 truncate text-suave">{s.titulo}</span>
+                  <span className="shrink-0 text-xs tabular-nums text-suave">{s.minutos}′</span>
+                </div>
+              )}
             </li>
           ))}
         </ul>

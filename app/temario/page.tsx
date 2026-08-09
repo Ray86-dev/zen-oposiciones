@@ -2,12 +2,10 @@
 import { useMemo, useState } from "react";
 import { useApp } from "@/components/Proveedor";
 import { ESTADOS, EstadoTema } from "@/lib/tipos";
-import { useEnlaces } from "@/lib/enlaces";
 import Link from "next/link";
 
 export default function PaginaTemario() {
   const { temario, estado, fijarEstadoTema, listo } = useApp();
-  const enlaces = useEnlaces();
   const [bloque, setBloque] = useState<string>("todos");
   const [filtro, setFiltro] = useState<string>("todos");
   const [busca, setBusca] = useState("");
@@ -91,15 +89,6 @@ export default function PaginaTemario() {
                   <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-suave">
                     <span>{t.bloque}</span>
                     <Link href={`/temario/${t.numero}`} className="text-jade underline">Leer y anotar</Link>
-                    {enlaces[String(t.numero)]?.[0] && (
-                      <a
-                        href={enlaces[String(t.numero)][0].url}
-                        target="_blank" rel="noreferrer"
-                        className="text-jade underline"
-                      >
-                        Abrir en Drive
-                      </a>
-                    )}
                     {viejo && (
                       <span className="text-ambar">
                         material de {t.ultimaActualizacion!.slice(0, 4)} · revisar

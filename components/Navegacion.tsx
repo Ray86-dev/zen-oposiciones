@@ -8,6 +8,7 @@ const ENLACES = [
   { href: "/temario", label: "Temario" },
   { href: "/calendario", label: "Calendario" },
   { href: "/supuestos", label: "Supuestos" },
+  { href: "/materiales", label: "Materiales" },
   { href: "/ajustes", label: "Ajustes" },
 ];
 

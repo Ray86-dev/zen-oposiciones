@@ -222,7 +222,7 @@ export default function LectorCliente({ numero }: { numero: number }) {
           </div>
 
           {panel === "ia" ? (
-            <PanelIA numero={numero} />
+            <PanelIA numero={numero} titulo={tema.titulo} />
           ) : (
             <div className="space-y-2">
               {notaAbierta && (

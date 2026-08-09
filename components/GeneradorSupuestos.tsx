@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { llamarFuncion } from "@/lib/supabase";
-import { markdownAHtml } from "@/lib/markdown";
+import VisorMaterial from "@/components/VisorMaterial";
 import { useSesion } from "@/components/Sesion";
 import curriculo from "@/data/curriculo-canarias.json";
 import temarioJson from "@/data/temario-filosofia.json";
@@ -93,10 +93,15 @@ export default function GeneradorSupuestos() {
 
           {res && (
             <div className="mt-5 border-t border-borde pt-4">
-              <div className="markdown text-sm" dangerouslySetInnerHTML={{ __html: markdownAHtml(res.contenido) }} />
+              <VisorMaterial
+                tipo="supuesto" contenido={res.contenido}
+                titulo={`Supuesto práctico · ${materia.materia} ${materia.curso}`}
+                subtitulo={`${bloque.romano}. ${bloque.nombre}`}
+                alto="none"
+              />
               <p className="mt-3 rounded-lg border border-ambar/30 bg-ambar/5 px-3 py-2 text-[11px] text-suave">
-                Generado con {res.modelo}. Verifica siempre las citas textuales antes de darlas por buenas:
-                los modelos de lenguaje son propensos a reconstruirlas de memoria.
+                Verifica siempre las citas textuales antes de darlas por buenas: los modelos de lenguaje
+                tienden a reconstruirlas de memoria y suenan plausibles estando mal.
               </p>
             </div>
           )}

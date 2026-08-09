@@ -32,19 +32,23 @@
 }
 
 [data-tema="claro"] {
-  --fondo: #fbfaf7;
-  --fondo-2: #ffffff;
-  --fondo-3: #f1efe9;
-  --borde: #ddd8cd;
-  --texto: #1c1f1e;
-  --suave: #6b706d;
-  --jade: #0f7a5a;
-  --ambar: #9a6b12;
-  --coral: #b23a26;
-  --sub-amarillo: rgba(250,204,21,.45);
-  --sub-verde: rgba(34,197,94,.32);
-  --sub-rosa: rgba(244,114,182,.32);
-  --sub-azul: rgba(56,189,248,.32);
+  /* Papel cálido, no blanco de pantalla. Pensado para leer 20.000 palabras
+     seguidas sin que la vista se canse: el contraste con el texto ronda 12:1,
+     muy por encima del mínimo accesible, pero el fondo no llega al blanco puro
+     que rebota la luz. */
+  --fondo:   #f3efe6;
+  --fondo-2: #faf7f0;
+  --fondo-3: #e9e3d6;
+  --borde:   #d8d0be;
+  --texto:   #2b2a26;
+  --suave:   #6f6a5f;
+  --jade:    #1f6b52;
+  --ambar:   #8a5f14;
+  --coral:   #a33f28;
+  --sub-amarillo: rgba(232,190,90,.50);
+  --sub-verde:    rgba(120,180,140,.45);
+  --sub-rosa:     rgba(220,150,150,.45);
+  --sub-azul:     rgba(140,180,215,.45);
   color-scheme: light;
 }
 
@@ -60,8 +64,10 @@ html { transition: background-color .2s ease; }
 }
 [data-tema="claro"] .tarjeta {
   background: var(--fondo-2);
-  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  border-color: var(--borde);
+  box-shadow: 0 1px 3px rgba(70,60,40,.06);
 }
+[data-tema="claro"] .lectura { color: #24231f; }
 .serif { font-family: var(--font-serif); }
 
 /* ------------------------------- Lector ------------------------------- */
