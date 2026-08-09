@@ -9,6 +9,7 @@ import { ESTADOS, EstadoTema } from "@/lib/tipos";
 import { useLectura, estiloLectura, papelDe } from "@/lib/lectura";
 import AjustesLectura from "@/components/AjustesLectura";
 import PanelIA from "@/components/PanelIA";
+import Voz from "@/components/Voz";
 
 interface Subrayado { id: string; bloque: number; inicio: number; fin: number; texto: string; color: string }
 interface Anotacion { id: string; bloque: number; inicio: number | null; fin: number | null; texto_ancla: string | null; nota: string }
@@ -31,6 +32,8 @@ export default function LectorCliente({ numero }: { numero: number }) {
   const [zen, setZen] = useState(false);
   const [ajustes, setAjustes] = useState(false);
   const [avance, setAvance] = useState(0);
+  const [voz, setVoz] = useState(false);
+  const [bloqueSonando, setBloqueSonando] = useState<number | null>(null);
   const contenedor = useRef<HTMLDivElement>(null);
   const scroller = useRef<HTMLDivElement>(null);
 
@@ -64,6 +67,12 @@ export default function LectorCliente({ numero }: { numero: number }) {
     document.body.style.overflow = "hidden";
     return () => { document.removeEventListener("keydown", esc); document.body.style.overflow = ""; };
   }, [zen]);
+
+  const seguirVoz = useCallback((idx: number) => {
+    setBloqueSonando(idx);
+    const el = scroller.current?.querySelector(`[data-bloque="${idx}"]`);
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, []);
 
   const alScroll = useCallback(() => {
     const el = scroller.current;
@@ -184,6 +193,11 @@ export default function LectorCliente({ numero }: { numero: number }) {
           prefs.ancho === "ancho" ? "border-jade text-jade" : "border-borde text-suave hover:text-texto"}`}>
         {prefs.ancho === "ancho" ? "Normal" : "Ancho"}
       </button>
+      <button onClick={() => setVoz((v) => !v)} title="Escuchar el tema en voz alta"
+        className={`rounded-lg border bg-tinta-2/80 px-2.5 py-1 text-[11px] transition ${
+          voz ? "border-jade text-jade" : "border-borde text-suave hover:text-texto"}`}>
+        Escuchar
+      </button>
       <button onClick={() => setZen((z) => !z)} title="Modo zen (Escape para salir)"
         className={`rounded-lg border bg-tinta-2/80 px-2.5 py-1 text-[11px] transition ${
           zen ? "border-jade text-jade" : "border-borde text-suave hover:text-texto"}`}>
@@ -215,6 +229,8 @@ export default function LectorCliente({ numero }: { numero: number }) {
           <div className={`lectura mx-auto ${anchoTexto}`}>
             {bloques.map((b, i) => (
               <div key={i} data-bloque={i}
+                   className={bloqueSonando === i ? "rounded-md ring-2 ring-jade/45 transition" : undefined}
+                   style={bloqueSonando === i ? { background: "rgba(47,191,148,.09)", margin: "0 -.4em", padding: "0 .4em" } : undefined}
                    dangerouslySetInnerHTML={{ __html: aplicarMarcas(b, marcasPorBloque.get(i) ?? []) }} />
             ))}
             <p className="mt-16 border-t pt-6 text-center text-xs opacity-50"
@@ -258,6 +274,12 @@ export default function LectorCliente({ numero }: { numero: number }) {
             </button>
           </div>
         </div>
+        {voz && html && (
+          <div className="mb-2 shrink-0">
+            <Voz bloques={bloques} alCambiarBloque={seguirVoz}
+                 cerrar={() => { setVoz(false); setBloqueSonando(null); }} />
+          </div>
+        )}
         <div className="min-h-0 flex-1">{lectura}</div>
       </div>
     );
@@ -285,6 +307,12 @@ export default function LectorCliente({ numero }: { numero: number }) {
             cerca del texto que gobierna, sin invadir el margen de lectura. */}
         <div className="flex h-[calc(100vh-210px)] min-h-[440px] flex-col">
           <div className="mb-2 flex shrink-0 justify-end">{barra}</div>
+          {voz && html && (
+            <div className="mb-2 shrink-0">
+              <Voz bloques={bloques} alCambiarBloque={seguirVoz}
+                   cerrar={() => { setVoz(false); setBloqueSonando(null); }} />
+            </div>
+          )}
           <div className="min-h-0 flex-1">{lectura}</div>
         </div>
 

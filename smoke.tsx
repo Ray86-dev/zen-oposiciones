@@ -72,6 +72,7 @@ for (const [nombre, C] of PAGINAS) {
 // --- Lectura de la salida del modelo, que es lo que más se rompe ---
 import { leerTarjetas } from "./components/Flashcards";
 import { leerDiagrama } from "./components/Mermaid";
+import { trocearParaVoz, limpiarParaVoz } from "./lib/voz";
 
 const casos: [string, boolean][] = [
   ['[{"anverso":"a","reverso":"b"}]', true],
@@ -98,6 +99,28 @@ for (const [entrada, esperado] of diagramas) {
 console.log(fp === 0
   ? `Parseo de la salida del modelo: ${casos.length + diagramas.length}/${casos.length + diagramas.length} casos OK`
   : `${fp} casos de parseo fallan`);
+
+
+// --- Troceo del tema para la lectura en voz alta ---
+const bloquesPrueba = [
+  "<h2>1. El termino filosofia</h2>",
+  "<p>La significacion etimologica es <strong>amor a la sabiduria</strong>. A veces se traduce por amor al saber. Pero los griegos distinguian entre saber y sabiduria.</p>",
+  "<ul><li>Primer punto</li><li>Segundo punto</li></ul>",
+  "<p></p>",
+];
+const trozos = trocearParaVoz(bloquesPrueba);
+const compruebo: [string, boolean][] = [
+  ["trocea en frases", trozos.length >= 4],
+  ["el encabezado va suelto", trozos[0].texto.startsWith("1. El termino")],
+  ["no cuela HTML en la voz", trozos.every((t) => !t.texto.includes("<"))],
+  ["descarta los bloques vacios", trozos.every((t) => t.texto.trim().length > 1)],
+  ["cada trozo sabe su bloque", trozos.every((t) => t.bloque >= 0 && t.bloque < bloquesPrueba.length)],
+  ["limpia guiones y comillas", !limpiarParaVoz('texto - con «comillas»').includes("«")],
+];
+for (const [nombre, ok] of compruebo) {
+  if (!ok) { console.log("FALLO voz:", nombre); fp++; }
+}
+console.log(`Troceo para voz: ${compruebo.filter(([, o]) => o).length}/${compruebo.length} comprobaciones OK`);
 
 console.log(fallos + fp === 0 ? "\nTODO CORRECTO" : `\n${fallos + fp} PROBLEMAS`);
 process.exit(fallos + fp ? 1 : 0);
