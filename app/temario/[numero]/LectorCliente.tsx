@@ -6,14 +6,17 @@ import { useApp } from "@/components/Proveedor";
 import { db, temarioId } from "@/lib/supabase";
 import { partirEnBloques, aplicarMarcas, leerSeleccion, COLORES, Marca } from "@/lib/marcas";
 import { ESTADOS, EstadoTema } from "@/lib/tipos";
+import { useLectura, estiloLectura, papelDe } from "@/lib/lectura";
+import AjustesLectura from "@/components/AjustesLectura";
 import PanelIA from "@/components/PanelIA";
 
-interface Subrayado { id: string; bloque: number; inicio: number; fin: number; texto: string; color: string; }
-interface Anotacion { id: string; bloque: number; inicio: number | null; fin: number | null; texto_ancla: string | null; nota: string; }
+interface Subrayado { id: string; bloque: number; inicio: number; fin: number; texto: string; color: string }
+interface Anotacion { id: string; bloque: number; inicio: number | null; fin: number | null; texto_ancla: string | null; nota: string }
 
 export default function LectorCliente({ numero }: { numero: number }) {
   const { usuario, cargando: cargandoSesion } = useSesion();
   const { temario, estado, fijarEstadoTema } = useApp();
+  const { prefs, cambiar } = useLectura();
   const tema = temario.temas.find((t) => t.numero === numero);
 
   const [html, setHtml] = useState<string | null>(null);
@@ -25,9 +28,12 @@ export default function LectorCliente({ numero }: { numero: number }) {
   const [notaAbierta, setNotaAbierta] = useState<Anotacion | null>(null);
   const [borrador, setBorrador] = useState("");
   const [panel, setPanel] = useState<"notas" | "ia">("notas");
+  const [zen, setZen] = useState(false);
+  const [ajustes, setAjustes] = useState(false);
+  const [avance, setAvance] = useState(0);
   const contenedor = useRef<HTMLDivElement>(null);
+  const scroller = useRef<HTMLDivElement>(null);
 
-  // --- carga de contenido y marcas ---
   useEffect(() => {
     if (!usuario) return;
     let vivo = true;
@@ -35,7 +41,6 @@ export default function LectorCliente({ numero }: { numero: number }) {
       const c = db(); if (!c) return;
       const tid = await temarioId();
       if (!tid) { setError("No se encuentra el temario."); return; }
-
       const [{ data: cont, error: e1 }, { data: subs }, { data: anos }] = await Promise.all([
         c.from("tema_contenido").select("html").eq("temario_id", tid).eq("numero", numero).maybeSingle(),
         c.from("subrayados").select("*").eq("temario_id", tid).eq("tema_numero", numero),
@@ -50,6 +55,22 @@ export default function LectorCliente({ numero }: { numero: number }) {
     })();
     return () => { vivo = false; };
   }, [usuario, numero]);
+
+  // Salir del modo zen con Escape
+  useEffect(() => {
+    if (!zen) return;
+    const esc = (e: KeyboardEvent) => { if (e.key === "Escape") setZen(false); };
+    document.addEventListener("keydown", esc);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", esc); document.body.style.overflow = ""; };
+  }, [zen]);
+
+  const alScroll = useCallback(() => {
+    const el = scroller.current;
+    if (!el) return;
+    const total = el.scrollHeight - el.clientHeight;
+    setAvance(total > 0 ? Math.min(100, (el.scrollTop / total) * 100) : 0);
+  }, []);
 
   const bloques = useMemo(() => (html ? partirEnBloques(html) : []), [html]);
 
@@ -67,7 +88,6 @@ export default function LectorCliente({ numero }: { numero: number }) {
     return m;
   }, [subrayados, anotaciones]);
 
-  // --- selección de texto ---
   const alSoltar = useCallback((e: React.MouseEvent) => {
     const s = leerSeleccion();
     if (!s) { setMenu(null); setSeleccion(null); return; }
@@ -100,9 +120,7 @@ export default function LectorCliente({ numero }: { numero: number }) {
     }).select().single();
     if (!err && data) {
       setAnotaciones((v) => [...v, data as Anotacion]);
-      setNotaAbierta(data as Anotacion);
-      setBorrador("");
-      setPanel("notas");
+      setNotaAbierta(data as Anotacion); setBorrador(""); setPanel("notas"); setZen(false);
     }
     limpiar();
   };
@@ -116,7 +134,6 @@ export default function LectorCliente({ numero }: { numero: number }) {
     setAnotaciones((v) => v.map((a) => (a.id === notaAbierta.id ? { ...a, nota: borrador } : a)));
     setNotaAbierta(null);
   };
-
   const borrarSubrayado = async (id: string) => {
     const c = db(); if (!c) return;
     await c.from("subrayados").delete().eq("id", id);
@@ -130,7 +147,6 @@ export default function LectorCliente({ numero }: { numero: number }) {
   };
 
   if (!tema) return <p className="text-sm text-suave">No existe el tema {numero}.</p>;
-
   if (cargandoSesion) return <div className="tarjeta h-64 animate-pulse" />;
 
   if (!usuario) {
@@ -150,133 +166,186 @@ export default function LectorCliente({ numero }: { numero: number }) {
   }
 
   const estadoActual = (estado.progreso[numero]?.estado ?? "pendiente") as EstadoTema;
+  const papel = papelDe(prefs.papel);
+  const anchoTexto = prefs.ancho === "ancho" ? "max-w-none" : "max-w-[68ch]";
+
+  const lectura = (
+    <div
+      ref={contenedor}
+      className="relative flex h-full flex-col overflow-hidden rounded-xl border border-borde"
+      style={{ background: papel.fondo }}
+    >
+      <div className="h-0.5 shrink-0 bg-black/10">
+        <div className="h-full bg-jade transition-[width] duration-150" style={{ width: `${avance}%` }} />
+      </div>
+
+      <div
+        ref={scroller}
+        onScroll={alScroll}
+        onMouseUp={alSoltar}
+        className="flex-1 overflow-y-auto overscroll-contain px-6 py-8 sm:px-10"
+        style={estiloLectura(prefs)}
+      >
+        {!html && !error && <div className="h-96 animate-pulse rounded bg-black/5" />}
+        {html && (
+          <div className={`lectura mx-auto ${anchoTexto}`}>
+            {bloques.map((b, i) => (
+              <div key={i} data-bloque={i}
+                   dangerouslySetInnerHTML={{ __html: aplicarMarcas(b, marcasPorBloque.get(i) ?? []) }} />
+            ))}
+            <p className="mt-16 border-t pt-6 text-center text-xs opacity-50"
+               style={{ borderColor: "currentColor" }}>
+              Fin del tema {numero}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {menu && seleccion && (
+        <div className="absolute z-20 flex items-center gap-1 rounded-lg border border-borde bg-tinta-2 p-1 shadow-2xl"
+             style={{ left: Math.max(4, Math.min(menu.x - 90, (contenedor.current?.clientWidth ?? 400) - 210)), top: Math.max(4, menu.y) }}>
+          {COLORES.map((c) => (
+            <button key={c.id} title={c.nombre} onClick={() => subrayar(c.id)}
+              className="h-6 w-6 rounded border border-borde transition hover:scale-110"
+              style={{ background: c.css }} />
+          ))}
+          <button onClick={anotar} className="rounded px-2 py-1 text-xs text-jade hover:underline">Nota</button>
+          <button onClick={limpiar} className="rounded px-1.5 py-1 text-xs text-suave">✕</button>
+        </div>
+      )}
+    </div>
+  );
+
+  const barra = (
+    <div className="relative flex items-center gap-1">
+      <button onClick={() => setAjustes((a) => !a)} title="Tamaño, tipografía y papel"
+        className="rounded-lg border border-borde px-3 py-1.5 text-sm text-suave transition hover:text-texto">
+        <span className="text-xs">A</span><span className="text-base">A</span>
+      </button>
+      <button onClick={() => cambiar({ ancho: prefs.ancho === "normal" ? "ancho" : "normal" })}
+        title="Ancho de columna"
+        className={`rounded-lg border px-3 py-1.5 text-xs transition ${
+          prefs.ancho === "ancho" ? "border-jade text-jade" : "border-borde text-suave hover:text-texto"}`}>
+        {prefs.ancho === "ancho" ? "Ancho" : "Normal"}
+      </button>
+      <button onClick={() => setZen((z) => !z)} title="Modo zen (Escape para salir)"
+        className={`rounded-lg border px-3 py-1.5 text-xs transition ${
+          zen ? "border-jade text-jade" : "border-borde text-suave hover:text-texto"}`}>
+        Zen
+      </button>
+      {ajustes && <AjustesLectura prefs={prefs} cambiar={cambiar} cerrar={() => setAjustes(false)} />}
+    </div>
+  );
+
+  if (zen) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col p-3 sm:p-6" style={{ background: papel.fondo }}>
+        <div className="mb-2 flex shrink-0 items-center justify-between gap-3">
+          <p className="truncate text-xs" style={{ color: papel.texto, opacity: 0.6 }}>
+            Tema {numero}. {tema.titulo}
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="text-xs tabular-nums" style={{ color: papel.texto, opacity: 0.5 }}>
+              {Math.round(avance)}%
+            </span>
+            {barra}
+            <button onClick={() => setZen(false)}
+              className="rounded-lg border border-borde px-3 py-1.5 text-xs text-suave hover:text-texto">
+              Salir
+            </button>
+          </div>
+        </div>
+        <div className="min-h-0 flex-1">{lectura}</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4">
       <Cabecera tema={tema} />
 
-      <div className="flex flex-wrap items-center gap-1">
-        {ESTADOS.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => fijarEstadoTema(numero, s.id)}
-            className={`rounded px-2.5 py-1 text-[11px] transition ${
-              estadoActual === s.id ? "text-tinta" : "bg-tinta-3 text-suave hover:text-texto"
-            }`}
-            style={estadoActual === s.id ? { background: s.color } : undefined}
-          >
-            {s.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-1">
+          {ESTADOS.map((s) => (
+            <button key={s.id} onClick={() => fijarEstadoTema(numero, s.id)}
+              className={`rounded px-2.5 py-1 text-[11px] transition ${
+                estadoActual === s.id ? "text-tinta" : "bg-tinta-3 text-suave hover:text-texto"}`}
+              style={estadoActual === s.id ? { background: s.color } : undefined}>
+              {s.label}
+            </button>
+          ))}
+        </div>
+        {barra}
       </div>
 
       {error && <p className="rounded-lg border border-coral/40 bg-coral/10 px-4 py-3 text-sm text-coral">{error}</p>}
 
       <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
-        <article className="tarjeta relative p-6" ref={contenedor} onMouseUp={alSoltar}>
-          {!html && !error && <div className="h-96 animate-pulse rounded bg-tinta-3/40" />}
-          {html && (
-            <div className="lectura">
-              {bloques.map((b, i) => (
-                <div
-                  key={i}
-                  data-bloque={i}
-                  dangerouslySetInnerHTML={{ __html: aplicarMarcas(b, marcasPorBloque.get(i) ?? []) }}
-                />
-              ))}
-            </div>
-          )}
+        <div className="h-[calc(100vh-230px)] min-h-[420px]">{lectura}</div>
 
-          {menu && seleccion && (
-            <div
-              className="absolute z-20 flex items-center gap-1 rounded-lg border border-borde bg-tinta-2 p-1 shadow-xl"
-              style={{ left: Math.max(4, menu.x - 90), top: Math.max(4, menu.y) }}
-            >
-              {COLORES.map((c) => (
-                <button
-                  key={c.id} title={c.nombre} onClick={() => subrayar(c.id)}
-                  className="h-6 w-6 rounded border border-borde"
-                  style={{ background: c.css }}
-                />
-              ))}
-              <button onClick={anotar} className="rounded px-2 py-1 text-xs text-jade hover:underline">
-                Nota
-              </button>
-              <button onClick={limpiar} className="rounded px-1.5 py-1 text-xs text-suave">✕</button>
-            </div>
-          )}
-        </article>
-
-        <aside className="space-y-3">
-          <div className="flex gap-1 rounded-lg border border-borde p-1">
+        <aside className="flex h-[calc(100vh-230px)] min-h-[420px] flex-col gap-3">
+          <div className="flex shrink-0 gap-1 rounded-lg border border-borde p-1">
             {(["notas", "ia"] as const).map((p) => (
-              <button
-                key={p} onClick={() => setPanel(p)}
+              <button key={p} onClick={() => setPanel(p)}
                 className={`flex-1 rounded px-3 py-1.5 text-xs transition ${
-                  panel === p ? "bg-tinta-3 text-texto" : "text-suave hover:text-texto"
-                }`}
-              >
-                {p === "notas" ? `Marcas (${subrayados.length + anotaciones.length})` : "Generar con IA"}
+                  panel === p ? "bg-tinta-3 text-texto" : "text-suave hover:text-texto"}`}>
+                {p === "notas" ? `Marcas (${subrayados.length + anotaciones.length})` : "Generar"}
               </button>
             ))}
           </div>
 
-          {panel === "ia" ? (
-            <PanelIA numero={numero} titulo={tema.titulo} />
-          ) : (
-            <div className="space-y-2">
-              {notaAbierta && (
-                <div className="tarjeta p-3">
-                  <p className="text-xs text-suave">Nota sobre:</p>
-                  <p className="mt-1 border-l-2 border-jade pl-2 text-xs italic">
-                    {(notaAbierta.texto_ancla ?? "").slice(0, 120)}
-                  </p>
-                  <textarea
-                    value={borrador} onChange={(e) => setBorrador(e.target.value)}
-                    rows={4} autoFocus placeholder="Escribe tu anotación…"
-                    className="mt-2 w-full rounded-lg border border-borde bg-tinta-2 px-2 py-1.5 text-sm"
-                  />
-                  <div className="mt-2 flex gap-2">
-                    <button onClick={guardarNota} className="rounded bg-jade px-3 py-1 text-xs font-medium text-tinta">
-                      Guardar
-                    </button>
-                    <button onClick={() => setNotaAbierta(null)} className="rounded border border-borde px-3 py-1 text-xs text-suave">
-                      Cancelar
-                    </button>
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
+            {panel === "ia" ? (
+              <PanelIA numero={numero} titulo={tema.titulo} />
+            ) : (
+              <div className="space-y-2">
+                {notaAbierta && (
+                  <div className="tarjeta p-3">
+                    <p className="text-xs text-suave">Nota sobre:</p>
+                    <p className="mt-1 border-l-2 border-jade pl-2 text-xs italic">
+                      {(notaAbierta.texto_ancla ?? "").slice(0, 120)}
+                    </p>
+                    <textarea value={borrador} onChange={(e) => setBorrador(e.target.value)}
+                      rows={4} autoFocus placeholder="Escribe tu anotación…"
+                      className="mt-2 w-full rounded-lg border border-borde bg-tinta-2 px-2 py-1.5 text-sm" />
+                    <div className="mt-2 flex gap-2">
+                      <button onClick={guardarNota} className="rounded bg-jade px-3 py-1 text-xs font-medium text-tinta">Guardar</button>
+                      <button onClick={() => setNotaAbierta(null)} className="rounded border border-borde px-3 py-1 text-xs text-suave">Cancelar</button>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {anotaciones.filter((a) => a.nota).map((a) => (
-                <div key={a.id} className="tarjeta p-3">
-                  <p className="border-l-2 border-jade pl-2 text-[11px] italic text-suave">
-                    {(a.texto_ancla ?? "").slice(0, 90)}
-                  </p>
-                  <p className="mt-1.5 text-sm">{a.nota}</p>
-                  <div className="mt-1.5 flex gap-3 text-[11px]">
-                    <button onClick={() => { setNotaAbierta(a); setBorrador(a.nota); }} className="text-suave hover:text-texto">Editar</button>
-                    <button onClick={() => borrarNota(a.id)} className="text-suave hover:text-coral">Borrar</button>
+                {anotaciones.filter((a) => a.nota).map((a) => (
+                  <div key={a.id} className="tarjeta p-3">
+                    <p className="border-l-2 border-jade pl-2 text-[11px] italic text-suave">
+                      {(a.texto_ancla ?? "").slice(0, 90)}
+                    </p>
+                    <p className="mt-1.5 text-sm">{a.nota}</p>
+                    <div className="mt-1.5 flex gap-3 text-[11px]">
+                      <button onClick={() => { setNotaAbierta(a); setBorrador(a.nota); }} className="text-suave hover:text-texto">Editar</button>
+                      <button onClick={() => borrarNota(a.id)} className="text-suave hover:text-coral">Borrar</button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-              {subrayados.map((s) => (
-                <div key={s.id} className="tarjeta flex items-start gap-2 p-3">
-                  <span className="mt-1 h-3 w-3 shrink-0 rounded-sm"
-                        style={{ background: COLORES.find((c) => c.id === s.color)?.css }} />
-                  <p className="flex-1 text-xs">{s.texto.slice(0, 130)}</p>
-                  <button onClick={() => borrarSubrayado(s.id)} className="text-[11px] text-suave hover:text-coral">✕</button>
-                </div>
-              ))}
+                {subrayados.map((s) => (
+                  <div key={s.id} className="tarjeta flex items-start gap-2 p-3">
+                    <span className="mt-1 h-3 w-3 shrink-0 rounded-sm"
+                          style={{ background: COLORES.find((c) => c.id === s.color)?.css }} />
+                    <p className="flex-1 text-xs">{s.texto.slice(0, 130)}</p>
+                    <button onClick={() => borrarSubrayado(s.id)} className="text-[11px] text-suave hover:text-coral">✕</button>
+                  </div>
+                ))}
 
-              {!subrayados.length && !anotaciones.length && (
-                <p className="tarjeta p-4 text-xs text-suave">
-                  Selecciona texto en el tema para subrayarlo con cuatro colores o añadirle una nota.
-                  Todo queda guardado en tu cuenta.
-                </p>
-              )}
-            </div>
-          )}
+                {!subrayados.length && !anotaciones.length && (
+                  <p className="tarjeta p-4 text-xs text-suave">
+                    Selecciona texto en el tema para subrayarlo con cuatro colores o añadirle una nota.
+                    Todo queda guardado en tu cuenta.
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
         </aside>
       </div>
     </div>

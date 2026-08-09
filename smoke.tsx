@@ -22,23 +22,31 @@ Module._resolveFilename = function (req: string, ...rest: any[]) {
 };
 
 import { Proveedor } from "./components/Proveedor";
+import { ProveedorSesion } from "./components/Sesion";
+import { ProveedorTema } from "./components/Tema";
 import Panel from "./app/page";
 import PaginaTemario from "./app/temario/page";
 import PaginaCalendario from "./app/calendario/page";
 import PaginaSupuestos from "./app/supuestos/page";
+import PaginaMateriales from "./app/materiales/page";
+import LectorCliente from "./app/temario/[numero]/LectorCliente";
 import PaginaAjustes from "./app/ajustes/page";
 
 const PAGINAS: [string, any][] = [
   ["Panel", Panel], ["Temario", PaginaTemario], ["Calendario", PaginaCalendario],
   ["Supuestos", PaginaSupuestos], ["Ajustes", PaginaAjustes],
+  ["Materiales", PaginaMateriales],
+  ["Lector", () => React.createElement(LectorCliente, { numero: 1 })],
 ];
 
 const ESPERADO: Record<string, string[]> = {
   Panel: ["Quedan", "días", "Fase", "Hoy", "Probabilidad"],
-  Temario: ["Orden de 9 de septiembre de 1993", "Tema 71", "Historia de la filosofía", "Abrir en Drive"],
+  Temario: ["Orden de 9 de septiembre de 1993", "Tema 71", "Historia de la filosofía", "Leer y anotar"],
   Calendario: ["Cimientos", "Simulacros"],
   Supuestos: ["Leviatán", "Hobbes", "Ortega", "Empezar cronometrado"],
-  Ajustes: ["Ritmo semanal", "Mínimo para cerrar", "Fecha de la prueba"],
+  Ajustes: ["Ritmo semanal", "Mínimo para cerrar", "Fecha de la prueba", "Apariencia", "Cuenta"],
+  Materiales: ["Materiales"],
+  Lector: ["Tema 1", "La experiencia filosófica"],
 };
 
 let fallos = 0;
@@ -46,7 +54,13 @@ for (const [nombre, C] of PAGINAS) {
   const el = dom.window.document.createElement("div");
   dom.window.document.body.appendChild(el);
   const root = createRoot(el);
-  act(() => { root.render(React.createElement(Proveedor, null, React.createElement(C))); });
+  act(() => {
+    root.render(
+      React.createElement(ProveedorTema, null,
+        React.createElement(ProveedorSesion, null,
+          React.createElement(Proveedor, null, React.createElement(C)))),
+    );
+  });
   const txt = el.textContent || "";
   const faltan = ESPERADO[nombre].filter((s) => !txt.includes(s));
   const nodos = el.querySelectorAll("*").length;

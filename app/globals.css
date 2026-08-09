@@ -71,23 +71,31 @@ html { transition: background-color .2s ease; }
 .serif { font-family: var(--font-serif); }
 
 /* ------------------------------- Lector ------------------------------- */
-.lectura { font-family: var(--font-serif); font-size: 1.0625rem; line-height: 1.75; }
+/* La tipografía, el tamaño y el interlineado los fija el contenedor según las
+   preferencias del usuario: aquí solo se hereda y se define el ritmo vertical. */
+.lectura { font-family: inherit; font-size: inherit; line-height: inherit; }
 .lectura h2, .lectura h3, .lectura h4, .lectura h5 {
-  font-weight: 600; line-height: 1.3; margin: 1.6em 0 .5em;
+  font-weight: 700; line-height: 1.3; margin: 1.7em 0 .5em;
 }
-.lectura h2 { font-size: 1.5rem; color: var(--jade); }
-.lectura h3 { font-size: 1.25rem; }
-.lectura h4, .lectura h5 { font-size: 1.05rem; color: var(--suave); }
-.lectura p { margin: 0 0 1em; }
-.lectura ul { margin: 0 0 1em 1.2em; list-style: disc; }
-.lectura li { margin: .3em 0; }
+.lectura h2 { font-size: 1.45em; }
+.lectura h3 { font-size: 1.2em; }
+.lectura h4, .lectura h5 { font-size: 1.05em; opacity: .85; }
+.lectura p { margin: 0 0 1em; text-align: justify; hyphens: auto; }
+.lectura ul { margin: 0 0 1em 1.3em; list-style: disc; }
+.lectura li { margin: .35em 0; }
 .lectura strong { font-weight: 700; }
+.lectura em { font-style: italic; }
+.lectura ::selection { background: rgba(47,191,148,.30); }
 
-mark[data-color] { padding: .05em 0; border-radius: 2px; background: var(--sub-amarillo); }
-mark[data-color="verde"] { background: var(--sub-verde); }
-mark[data-color="rosa"]  { background: var(--sub-rosa); }
-mark[data-color="azul"]  { background: var(--sub-azul); }
-mark[data-nota="si"] { border-bottom: 2px solid var(--jade); cursor: pointer; }
+/* Los subrayados llevan color propio para verse igual sobre cualquier papel. */
+mark[data-color] {
+  padding: .08em 0; border-radius: 2px; color: inherit;
+  background: rgba(240,190,70,.42);
+}
+mark[data-color="verde"] { background: rgba(80,190,140,.38); }
+mark[data-color="rosa"]  { background: rgba(230,120,120,.34); }
+mark[data-color="azul"]  { background: rgba(110,170,225,.36); }
+mark[data-nota="si"] { border-bottom: 2px solid rgba(47,191,148,.9); cursor: pointer; }
 
 /* Markdown generado por la IA */
 .markdown { line-height: 1.7; }
