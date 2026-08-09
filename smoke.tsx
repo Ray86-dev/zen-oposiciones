@@ -24,6 +24,7 @@ Module._resolveFilename = function (req: string, ...rest: any[]) {
 import { Proveedor } from "./components/Proveedor";
 import { ProveedorSesion } from "./components/Sesion";
 import { ProveedorTema } from "./components/Tema";
+import { ProveedorVoz } from "./components/ProveedorVoz";
 import Panel from "./app/page";
 import PaginaTemario from "./app/temario/page";
 import PaginaCalendario from "./app/calendario/page";
@@ -58,7 +59,8 @@ for (const [nombre, C] of PAGINAS) {
     root.render(
       React.createElement(ProveedorTema, null,
         React.createElement(ProveedorSesion, null,
-          React.createElement(Proveedor, null, React.createElement(C)))),
+          React.createElement(Proveedor, null,
+            React.createElement(ProveedorVoz, null, React.createElement(C))))),
     );
   });
   const txt = el.textContent || "";

@@ -5,6 +5,8 @@ import Navegacion from "@/components/Navegacion";
 import { ProveedorSesion } from "@/components/Sesion";
 import { ProveedorTema } from "@/components/Tema";
 import Pomodoro from "@/components/Pomodoro";
+import { ProveedorVoz } from "@/components/ProveedorVoz";
+import MiniVoz from "@/components/MiniVoz";
 
 export const metadata: Metadata = {
   title: "Zen · Oposiciones de Filosofía",
@@ -18,9 +20,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ProveedorTema>
           <ProveedorSesion>
             <Proveedor>
-              <Navegacion />
-              <main className="mx-auto w-full max-w-5xl px-5 pb-24 pt-6">{children}</main>
-              <Pomodoro />
+              <ProveedorVoz>
+                <Navegacion />
+                <main className="mx-auto w-full max-w-5xl px-5 pb-24 pt-6">{children}</main>
+                <MiniVoz />
+                <Pomodoro />
+              </ProveedorVoz>
             </Proveedor>
           </ProveedorSesion>
         </ProveedorTema>
