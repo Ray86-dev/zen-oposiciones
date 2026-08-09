@@ -1,23 +1,42 @@
 /**
  * Sube a Supabase el índice de los 71 temas y el texto completo de cada uno.
  *
- * La clave de servicio NO se escribe en ningún archivo del repositorio:
- * se pasa por variable de entorno al ejecutar.
+ *   npm run subir-contenido
  *
- *   $env:SUPABASE_SERVICE_ROLE_KEY="..." ; node scripts/subir-contenido.mjs
+ * La clave se pide por teclado y no se muestra. Deliberadamente NO se lee de una
+ * variable de entorno puesta en la línea de comandos: PowerShell guarda cada
+ * orden en el historial de PSReadLine, que es un archivo de texto plano.
  */
 import { createClient } from "@supabase/supabase-js";
 import { readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createInterface } from "node:readline";
 
 const aqui = dirname(fileURLToPath(import.meta.url));
 const URL_SUPABASE = process.env.SUPABASE_URL ?? "https://hulbafouyprldwclyjsq.supabase.co";
-const CLAVE = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!CLAVE) {
-  console.error("Falta SUPABASE_SERVICE_ROLE_KEY.");
-  console.error("La encuentras en el panel de Supabase → Project Settings → API Keys → service_role.");
+/** Pide la clave sin dejar rastro en pantalla ni en el historial del shell. */
+async function pedirClave() {
+  if (process.env.SUPABASE_SECRET_KEY) return process.env.SUPABASE_SECRET_KEY;
+
+  console.log("Clave de servicio de Supabase (Project Settings → API Keys).");
+  console.log("Se pega y no se ve. Enter para continuar.\n");
+
+  const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: true });
+  const escribir = rl._writeToOutput?.bind(rl);
+  rl._writeToOutput = function (s) {
+    if (s.includes("\n") || s.includes("\r")) escribir?.(s);
+  };
+  const clave = await new Promise((res) => rl.question("clave: ", (r) => { rl.close(); res(r.trim()); }));
+  console.log();
+  return clave;
+}
+
+const CLAVE = await pedirClave();
+if (!CLAVE) { console.error("No has introducido ninguna clave."); process.exit(1); }
+if (!/^(sb_secret_|eyJ)/.test(CLAVE)) {
+  console.error("Eso no parece una clave de servicio de Supabase.");
   process.exit(1);
 }
 
