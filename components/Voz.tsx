@@ -3,9 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   trocearParaVoz, limpiarParaVoz, cargarPrefsVoz, guardarPrefsVoz, PrefsVoz, VOZ_POR_DEFECTO,
 } from "@/lib/voz";
-import { MotorKokoro, VOCES_KOKORO, EstadoKokoro, hayWebGPU } from "@/lib/kokoro";
-
-const ESTADO_INICIAL: EstadoKokoro = { fase: "apagado", pct: 0, mb: 0, device: "", mensaje: "" };
+import { VOCES_ES, EstadoVoz, sintetizar, descargarVoz, vocesDescargadas } from "@/lib/vozNeuronal";
 
 export default function Voz({
   bloques, alCambiarBloque, cerrar,
@@ -16,17 +14,18 @@ export default function Voz({
   const [ajustes, setAjustes] = useState(false);
   const [prefs, setPrefs] = useState<PrefsVoz>(VOZ_POR_DEFECTO);
   const [voces, setVoces] = useState<SpeechSynthesisVoice[]>([]);
-  const [kokoro, setKokoro] = useState<EstadoKokoro>(ESTADO_INICIAL);
+  const [neuronal, setNeuronal] = useState<EstadoVoz>({ fase: "apagado", pct: 0, mensaje: "" });
+  const [descargadas, setDescargadas] = useState<string[]>([]);
 
   const iRef = useRef(0);
   const sonandoRef = useRef(false);
-  const motor = useRef<MotorKokoro | null>(null);
   const audio = useRef<HTMLAudioElement | null>(null);
   const cache = useRef<Map<number, Blob>>(new Map());
 
   useEffect(() => { setPrefs(cargarPrefsVoz()); }, []);
   useEffect(() => { iRef.current = i; }, [i]);
   useEffect(() => { sonandoRef.current = sonando; }, [sonando]);
+  useEffect(() => { void vocesDescargadas().then(setDescargadas); }, []);
 
   useEffect(() => {
     const leer = () => {
@@ -45,13 +44,8 @@ export default function Voz({
     if (audio.current) { audio.current.pause(); audio.current.src = ""; }
   }, []);
 
-  useEffect(() => () => {
-    window.speechSynthesis.cancel();
-    motor.current?.destruir();
-    cache.current.forEach(() => {});
-  }, []);
+  useEffect(() => () => { window.speechSynthesis.cancel(); }, []);
 
-  // Chrome corta la síntesis del sistema a los ~15 s si nadie la toca.
   useEffect(() => {
     if (!sonando || prefs.motor !== "sistema") return;
     const t = setInterval(() => {
@@ -63,60 +57,60 @@ export default function Voz({
     return () => clearInterval(t);
   }, [sonando, prefs.motor]);
 
-  const cambiar = (p: Partial<PrefsVoz>) => {
-    const n = { ...prefs, ...p };
-    setPrefs(n); guardarPrefsVoz(n);
-    if (p.motor || p.vozKokoro) cache.current.clear();
-    if (sonandoRef.current) { detener(); setTimeout(() => reproducir(n), 60); }
-  };
-
-  // ---------------------------------------------------------------- Kokoro
-  const motorKokoro = useCallback(() => {
-    if (!motor.current) motor.current = new MotorKokoro((e) => setKokoro((v) => ({ ...v, ...e })));
-    return motor.current;
-  }, []);
-
-  const pedirAudio = useCallback(async (idx: number, p: PrefsVoz): Promise<Blob | null> => {
-    if (idx >= trozos.length) return null;
+  // ------------------------------------------------------------- neuronal
+  const pedirAudio = useCallback(async (idx: number, p: PrefsVoz): Promise<Blob> => {
     const guardado = cache.current.get(idx);
     if (guardado) return guardado;
-    try {
-      const b = await motorKokoro().generar(
-        limpiarParaVoz(trozos[idx].texto), p.vozKokoro, p.velocidad, p.calidad,
-      );
-      cache.current.set(idx, b);
-      // No dejamos crecer la caché sin límite.
-      if (cache.current.size > 40) {
-        const primera = cache.current.keys().next().value;
-        if (primera !== undefined) cache.current.delete(primera);
-      }
-      return b;
-    } catch { return null; }
-  }, [trozos, motorKokoro]);
+    const b = await sintetizar(limpiarParaVoz(trozos[idx].texto), p.vozNeuronal);
+    cache.current.set(idx, b);
+    if (cache.current.size > 40) {
+      const primera = cache.current.keys().next().value;
+      if (primera !== undefined) cache.current.delete(primera);
+    }
+    return b;
+  }, [trozos]);
 
-  const sonarKokoro = useCallback(async (idx: number, p: PrefsVoz) => {
-    const blob = await pedirAudio(idx, p);
+  const sonarNeuronal = useCallback(async (idx: number, p: PrefsVoz) => {
+    if (idx >= trozos.length) { detener(); return; }
+    let blob: Blob;
+    try {
+      blob = await pedirAudio(idx, p);
+    } catch (e) {
+      // Nunca fallar en silencio: fue el error que dejó a Kokoro mudo.
+      setNeuronal({ fase: "error", pct: 0, mensaje: e instanceof Error ? e.message : "No se pudo sintetizar." });
+      detener();
+      return;
+    }
     if (!sonandoRef.current) return;
-    if (!blob) { detener(); return; }
 
     if (!audio.current) audio.current = new Audio();
     const el = audio.current;
     el.src = URL.createObjectURL(blob);
+    el.playbackRate = p.velocidad;
     el.onended = () => {
       if (!sonandoRef.current) return;
       const sig = idx + 1;
       if (sig >= trozos.length) { detener(); return; }
       setI(sig);
       alCambiarBloque(trozos[sig].bloque);
-      void sonarKokoro(sig, p);
+      void sonarNeuronal(sig, p);
     };
-    await el.play().catch(() => detener());
-    // Adelanta la siguiente frase mientras suena esta: así no hay silencios.
-    void pedirAudio(idx + 1, p);
-    void pedirAudio(idx + 2, p);
+    try {
+      await el.play();
+    } catch (e) {
+      setNeuronal({
+        fase: "error", pct: 0,
+        mensaje: "El navegador ha bloqueado la reproducción. Vuelve a pulsar Escuchar.",
+      });
+      detener();
+      return;
+    }
+    // Adelanta las siguientes para que no haya silencios entre frases.
+    void pedirAudio(idx + 1, p).catch(() => {});
+    void pedirAudio(idx + 2, p).catch(() => {});
   }, [pedirAudio, trozos, alCambiarBloque, detener]);
 
-  // --------------------------------------------------------------- Sistema
+  // -------------------------------------------------------------- sistema
   const sonarSistema = useCallback((idx: number, p: PrefsVoz) => {
     const trozo = trozos[idx];
     if (!trozo) { detener(); return; }
@@ -141,10 +135,30 @@ export default function Voz({
     window.speechSynthesis.cancel();
     sonandoRef.current = true;
     setSonando(true);
+    setNeuronal((v) => (v.fase === "error" ? { fase: "apagado", pct: 0, mensaje: "" } : v));
     alCambiarBloque(trozos[iRef.current]?.bloque ?? 0);
-    if (p.motor === "kokoro") void sonarKokoro(iRef.current, p);
+    if (p.motor === "neuronal") void sonarNeuronal(iRef.current, p);
     else sonarSistema(iRef.current, p);
-  }, [prefs, trozos, alCambiarBloque, sonarKokoro, sonarSistema]);
+  }, [prefs, trozos, alCambiarBloque, sonarNeuronal, sonarSistema]);
+
+  const cambiar = (p: Partial<PrefsVoz>) => {
+    const n = { ...prefs, ...p };
+    setPrefs(n); guardarPrefsVoz(n);
+    if (p.motor || p.vozNeuronal) cache.current.clear();
+    if (sonandoRef.current) { detener(); setTimeout(() => reproducir(n), 60); }
+  };
+
+  const bajarVoz = async (vozId: string) => {
+    setNeuronal({ fase: "descargando", pct: 0, mensaje: "" });
+    try {
+      await descargarVoz(vozId, (pct) => setNeuronal({ fase: "descargando", pct, mensaje: "" }));
+      setNeuronal({ fase: "listo", pct: 100, mensaje: "" });
+      setDescargadas(await vocesDescargadas());
+      cambiar({ motor: "neuronal", vozNeuronal: vozId });
+    } catch (e) {
+      setNeuronal({ fase: "error", pct: 0, mensaje: e instanceof Error ? e.message : "Fallo al descargar." });
+    }
+  };
 
   const saltar = (d: number) => {
     const n = Math.max(0, Math.min(trozos.length - 1, iRef.current + d));
@@ -153,7 +167,7 @@ export default function Voz({
     if (sonandoRef.current) {
       window.speechSynthesis.cancel();
       audio.current?.pause();
-      if (prefs.motor === "kokoro") void sonarKokoro(n, prefs);
+      if (prefs.motor === "neuronal") void sonarNeuronal(n, prefs);
       else sonarSistema(n, prefs);
     }
   };
@@ -162,8 +176,8 @@ export default function Voz({
   const restante = Math.round(
     trozos.slice(i).reduce((a, t) => a + t.texto.length, 0) / (14 * prefs.velocidad) / 60,
   );
-  const kokoroListo = kokoro.fase === "listo";
-  const usandoKokoro = prefs.motor === "kokoro";
+  const usandoNeuronal = prefs.motor === "neuronal";
+  const vozActual = VOCES_ES.find((v) => v.id === prefs.vozNeuronal);
 
   if (!trozos.length) return null;
 
@@ -177,9 +191,9 @@ export default function Voz({
         <button onClick={() => saltar(-1)} title="Frase anterior"
           className="rounded-lg border border-borde px-2 py-1.5 text-xs text-suave hover:text-texto">⏮</button>
         <button onClick={() => (sonando ? detener() : reproducir())}
-          disabled={usandoKokoro && kokoro.fase === "cargando"}
+          disabled={neuronal.fase === "descargando"}
           className="rounded-lg bg-jade px-4 py-1.5 text-sm font-medium text-tinta disabled:opacity-50">
-          {sonando ? "Pausar" : usandoKokoro && kokoro.fase === "cargando" ? "Preparando…" : "Escuchar"}
+          {sonando ? "Pausar" : "Escuchar"}
         </button>
         <button onClick={() => saltar(1)} title="Frase siguiente"
           className="rounded-lg border border-borde px-2 py-1.5 text-xs text-suave hover:text-texto">⏭</button>
@@ -190,25 +204,23 @@ export default function Voz({
 
         <button onClick={() => setAjustes((a) => !a)}
           className="ml-auto rounded-lg border border-borde px-2 py-1.5 text-[11px] text-suave hover:text-texto">
-          {usandoKokoro ? (kokoroListo ? "Kokoro" : "Voz") : "Sistema"} · {prefs.velocidad}×
+          {usandoNeuronal ? (vozActual?.nombre ?? "Neuronal") : "Sistema"} · {prefs.velocidad}×
         </button>
         <button onClick={() => { detener(); cerrar(); }}
           className="rounded-lg border border-borde px-2 py-1.5 text-[11px] text-suave hover:text-texto">✕</button>
       </div>
 
-      {usandoKokoro && kokoro.fase === "cargando" && (
+      {neuronal.fase === "descargando" && (
         <div className="mt-2">
           <div className="h-1 overflow-hidden rounded bg-tinta-3">
-            <div className="h-full bg-jade transition-[width]" style={{ width: `${kokoro.pct}%` }} />
+            <div className="h-full bg-jade transition-[width]" style={{ width: `${neuronal.pct}%` }} />
           </div>
-          <p className="mt-1 text-[10px] text-suave">
-            Descargando el modelo de voz una sola vez · {kokoro.pct}% de {kokoro.mb} MB
-          </p>
+          <p className="mt-1 text-[10px] text-suave">Descargando la voz una sola vez · {neuronal.pct}%</p>
         </div>
       )}
-      {usandoKokoro && kokoro.fase === "error" && (
+      {neuronal.fase === "error" && (
         <p className="mt-2 rounded border border-coral/40 bg-coral/10 px-2 py-1.5 text-[11px] text-coral">
-          {kokoro.mensaje} Cambia a la voz del sistema para seguir escuchando.
+          {neuronal.mensaje}
         </p>
       )}
 
@@ -216,14 +228,44 @@ export default function Voz({
         <div className="mt-3 space-y-3 border-t border-borde pt-3">
           <div>
             <p className="mb-1 text-[10px] uppercase tracking-widest text-suave">Motor de voz</p>
+            <button onClick={() => cambiar({ motor: "sistema" })}
+              className={`w-full rounded-lg px-3 py-2 text-left transition ${
+                !usandoNeuronal ? "bg-tinta-3" : "hover:bg-tinta-3/60"}`}>
+              <span className="flex items-center gap-2 text-xs">
+                <span className={`h-1.5 w-1.5 rounded-full ${!usandoNeuronal ? "bg-jade" : "bg-borde"}`} />
+                Voz del sistema
+              </span>
+              <span className="mt-0.5 block pl-3.5 text-[10px] text-suave">
+                Instantánea. Es la voz de Windows.
+              </span>
+            </button>
+          </div>
+
+          <div>
+            <p className="mb-1 text-[10px] uppercase tracking-widest text-suave">
+              {usandoNeuronal ? "Voz neuronal" : "Voces neuronales · se descargan una vez"}
+            </p>
             <div className="space-y-1">
-              <BotonMotor activo={!usandoKokoro} onClick={() => cambiar({ motor: "sistema" })}
-                titulo="Voz del sistema" nota="Instantánea. Suena a robot de Windows." />
-              <BotonMotor activo={usandoKokoro} onClick={() => {
-                cambiar({ motor: "kokoro" });
-                if (kokoro.fase === "apagado") motorKokoro().cargar(prefs.calidad);
-              }}
-                titulo="Kokoro" nota={`Voz neuronal, mucho más natural. Se descarga una vez (~86 MB) y funciona sin conexión.${hayWebGPU() ? "" : " Tu navegador no tiene WebGPU: irá más lento."}`} />
+              {VOCES_ES.map((v) => {
+                const yaEsta = descargadas.includes(v.id);
+                const activa = usandoNeuronal && prefs.vozNeuronal === v.id;
+                return (
+                  <button key={v.id}
+                    onClick={() => (yaEsta ? cambiar({ motor: "neuronal", vozNeuronal: v.id }) : bajarVoz(v.id))}
+                    disabled={neuronal.fase === "descargando"}
+                    className={`w-full rounded-lg px-3 py-2 text-left transition disabled:opacity-50 ${
+                      activa ? "bg-tinta-3" : "hover:bg-tinta-3/60"}`}>
+                    <span className="flex items-center gap-2 text-xs">
+                      <span className={`h-1.5 w-1.5 rounded-full ${activa ? "bg-jade" : "bg-borde"}`} />
+                      {v.nombre}
+                      <span className="ml-auto text-[10px] text-suave">
+                        {yaEsta ? "descargada" : `${v.mb} MB`}
+                      </span>
+                    </span>
+                    <span className="mt-0.5 block pl-3.5 text-[10px] text-suave">{v.nota}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -240,50 +282,18 @@ export default function Voz({
             </div>
           </div>
 
-          <div>
-            <p className="mb-1 text-[10px] uppercase tracking-widest text-suave">Voz</p>
-            {usandoKokoro ? (
-              <div className="space-y-1">
-                {VOCES_KOKORO.map((v) => (
-                  <button key={v.id} onClick={() => cambiar({ vozKokoro: v.id })}
-                    className={`w-full rounded-lg px-3 py-1.5 text-left transition ${
-                      prefs.vozKokoro === v.id ? "bg-tinta-3" : "hover:bg-tinta-3/60"}`}>
-                    <span className="text-xs">{v.nombre}</span>
-                    <span className="block text-[10px] text-suave">{v.nota}</span>
-                  </button>
-                ))}
-              </div>
-            ) : (
+          {!usandoNeuronal && (
+            <div>
+              <p className="mb-1 text-[10px] uppercase tracking-widest text-suave">Voz del sistema</p>
               <select value={prefs.vozURI ?? ""} onChange={(e) => cambiar({ vozURI: e.target.value || null })}
                 className="w-full rounded-lg border border-borde bg-tinta-2 px-2 py-1.5 text-xs">
-                <option value="">Voz predeterminada del sistema</option>
+                <option value="">Predeterminada</option>
                 {voces.map((v) => <option key={v.voiceURI} value={v.voiceURI}>{v.name} · {v.lang}</option>)}
               </select>
-            )}
-          </div>
-
-          <p className="text-[10px] leading-relaxed text-suave">
-            {usandoKokoro
-              ? "Kokoro corre entero en tu navegador: sin claves, sin coste y sin límite de uso. La primera frase tarda unos segundos mientras carga el modelo; después va generando por delante para que no haya cortes."
-              : "Usa las voces instaladas en tu sistema. La lectura se detiene si cierras la pestaña."}
-          </p>
+            </div>
+          )}
         </div>
       )}
     </div>
-  );
-}
-
-function BotonMotor({ activo, onClick, titulo, nota }: {
-  activo: boolean; onClick: () => void; titulo: string; nota: string;
-}) {
-  return (
-    <button onClick={onClick}
-      className={`w-full rounded-lg px-3 py-2 text-left transition ${activo ? "bg-tinta-3" : "hover:bg-tinta-3/60"}`}>
-      <span className="flex items-center gap-2 text-xs">
-        <span className={`h-1.5 w-1.5 rounded-full ${activo ? "bg-jade" : "bg-borde"}`} />
-        {titulo}
-      </span>
-      <span className="mt-0.5 block pl-3.5 text-[10px] leading-relaxed text-suave">{nota}</span>
-    </button>
   );
 }

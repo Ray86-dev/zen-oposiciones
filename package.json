@@ -12,6 +12,7 @@
     "subir-contenido": "node scripts/subir-contenido.mjs"
   },
   "dependencies": {
+    "@diffusionstudio/vits-web": "^1.0.3",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.45.4",
     "docx": "^9.7.1",

@@ -37,16 +37,15 @@ export function limpiarParaVoz(t: string): string {
 }
 
 export interface PrefsVoz {
-  motor: "sistema" | "kokoro";
+  motor: "sistema" | "neuronal";
   vozURI: string | null;      // voz del sistema
-  vozKokoro: string;          // voz de Kokoro
-  calidad: "normal" | "alta";
+  vozNeuronal: string;        // modelo Piper descargado
   velocidad: number;
   tono: number;
 }
 export const VOZ_POR_DEFECTO: PrefsVoz = {
-  motor: "sistema", vozURI: null, vozKokoro: "ef_dora",
-  calidad: "normal", velocidad: 1, tono: 1,
+  motor: "sistema", vozURI: null,
+  vozNeuronal: "es_ES-sharvard-medium", velocidad: 1, tono: 1,
 };
 const CLAVE = "zen-voz";
 
