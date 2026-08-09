@@ -36,8 +36,18 @@ export function limpiarParaVoz(t: string): string {
     .trim();
 }
 
-export interface PrefsVoz { vozURI: string | null; velocidad: number; tono: number }
-export const VOZ_POR_DEFECTO: PrefsVoz = { vozURI: null, velocidad: 1, tono: 1 };
+export interface PrefsVoz {
+  motor: "sistema" | "kokoro";
+  vozURI: string | null;      // voz del sistema
+  vozKokoro: string;          // voz de Kokoro
+  calidad: "normal" | "alta";
+  velocidad: number;
+  tono: number;
+}
+export const VOZ_POR_DEFECTO: PrefsVoz = {
+  motor: "sistema", vozURI: null, vozKokoro: "ef_dora",
+  calidad: "normal", velocidad: 1, tono: 1,
+};
 const CLAVE = "zen-voz";
 
 export function cargarPrefsVoz(): PrefsVoz {
