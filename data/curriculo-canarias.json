@@ -1,0 +1,291 @@
+{
+  "fuente": "Currículos LOMLOE de la Comunidad Autónoma de Canarias (Decreto 30/2023 y Decreto 83/2022).",
+  "materias": [
+    {
+      "slug": "filosofia-eso",
+      "materia": "Filosofía",
+      "curso": "4.º ESO",
+      "competenciasEspecificas": [
+        {
+          "numero": 1,
+          "descripcion": "Investigar y seleccionar información significativa sobre interrogantes, problemas y conceptos fundamentales de la filosofía, para desarrollar una actitud indagadora y crítica que reconozca el papel del pensamiento filosófico como saber crítico que aspira a fundamentar y argumentar sobre los problemas de la vida y de la realidad, tanto desde una vertiente teórica como práctica. Descriptores operativos de las competencias clave. Perfil de salida CCL2, CCL3, STEM1, CD1, CD2"
+        },
+        {
+          "numero": 2,
+          "descripcion": "Dialogar, debatir y argumentar de forma rigurosa, tolerante y empática a través de coloquios u otras actividades para resolver supuestos prácticos contextualizados en los que se apliquen sus deliberaciones, evitando modos dogmáticos y falaces, intercambiando ideas y desarrollando un criterio propio para el ejercicio de una ciudadanía activa y democrática. Descriptores operativos de las competencias clave. Perfil de salida CCL1, CCL5, CP3, CD3, CPSAA3, CPSAA4, CC3, CE1"
+        },
+        {
+          "numero": 3,
+          "descripcion": "Investigar acerca de los principales interrogantes de la filosofía política, atendiendo a la utilidad del pensamiento utópico y los conceptos de justicia, libertad y creatividad, a través de la creación de proyectos o afrontando retos y problemas de interés personal y colectivo, para valorar la dimensión práctica de la razón como orientadora de la acción humana y de la libertad como condición básica de la capacidad creadora. Descriptores operativos de las competencias clave. Perfil de salida CCL"
+        }
+      ],
+      "bloques": [
+        {
+          "romano": "I",
+          "nombre": "La Filosofía y sus preguntas",
+          "saberes": [
+            "La pregunta por la realidad. Conocimiento e identificación de las soluciones de",
+            "Análisis y disertación entorno a las interpretaciones del ser humano y la sociedad en",
+            "Identificación de las relaciones entre ciencia y filosofía. Las pseudociencias."
+          ]
+        },
+        {
+          "romano": "II",
+          "nombre": "Identidad y socialización",
+          "saberes": [
+            "Reconocimiento de las aportaciones de la filosofía a la definición del ser humano. La",
+            "Explicación de algunas teorías psicológicas y filosóficas sobre la personalidad. Análisis",
+            "Naturaleza y cultura. Análisis de las diferencias entre esencialismo y constructivismo.",
+            "Las emociones. Identificación de las teorías de la personalidad, emociones, inteligencia",
+            "Socialización.",
+            "Reflexión sobre las nociones referidas a la relación individuo-sociedad y el proceso de",
+            "Origen de la sociedad. Análisis de las diferencias entre naturalismo y contractualismo.",
+            "Reflexión crítica sobre el papel de la cultura y las tecnologías digitales, así como el del"
+          ]
+        },
+        {
+          "romano": "III",
+          "nombre": "Pensamiento y transformación. Filosofía práctica",
+          "saberes": [
+            "Identificación del concepto de justicia y de los regímenes políticos totalitarios.",
+            "Investigación sobre las utopías y las distopías, las utopías feministas, la mujer en las",
+            "Estética. Valoración de los cánones de belleza. Identificación de la creatividad.",
+            "Valoración del arte como expresión de las ideas filosóficas."
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "filosofia-bach",
+      "materia": "Filosofía",
+      "curso": "1.º Bachillerato",
+      "competenciasEspecificas": [
+        {
+          "numero": 1,
+          "descripcion": "Identificar problemas y formular preguntas acerca del fundamento, valor y sentido de la realidad y la existencia humana, a partir del análisis e interpretación de textos y otras formas de expresión filosófica y cultural, para reconocer la radicalidad y trascendencia de tales cuestiones, así como la necesidad de afrontarlos para desarrollar una vida reflexiva y consciente de sí. Descriptores operativos de las competencias clave CCL2, CCL3, STEM1, CD1, CD2, CPSAA1.1, CPSAA1.2, CPSAA4, CC1, CC3, CC"
+        },
+        {
+          "numero": 2,
+          "descripcion": "Buscar, gestionar, interpretar, producir y transmitir correctamente informaci ón relativa a cuestiones filos óficas, a partir del empleo contrastado y seguro de fuentes, el uso y an álisis riguroso de las mismas, y el empleo de procedimientos elementales de investigación y comunicación, para desarrollar una actitud indagadora, aut ónoma, rigurosa y creativa en el ámbito de la reflexión filosófica. Descriptores operativos de las competencias clave CCL1, CCL2, CCL3, STEM1, CD1, CD2, CD3, CPSAA1.1,"
+        },
+        {
+          "numero": 3,
+          "descripcion": "Usar y valorar adecuadamente argumentos y estructuras argumentales, a partir de su an álisis tanto formal como informal, para producir y apreciar distintos tipos de discurso de forma rigurosa, y evitar modos dogmáticos, falaces y sesgados de sostener opiniones e hipótesis. Descriptores operativos de las competencias clave CCL1, CCL5, STEM1, CC3"
+        },
+        {
+          "numero": 4,
+          "descripcion": "Practicar el ejercicio del diálogo filosófico de manera rigurosa, crítica, tolerante y empática, interiorizando las pautas éticas y formales que este requiere, mediante la participación en actividades grupales y a través del planteamiento dialógico de las cuestiones filosóficas, para promover el contraste e intercambio de ideas y el ejercicio de una ciudadanía activa y democrática. Descriptores operativos de las competencias clave CCL1, CCL5, STEM1, CPSAA3.1, CPSAA3.2, CC2, CC3, CCEC1, CCEC4.1"
+        },
+        {
+          "numero": 5,
+          "descripcion": "Reconocer el carácter plural de las concepciones, ideas y argumentos en torno a cada uno de los problemas fundamentales de la filosofía, mediante el análisis crítico y dialéctico de las diversas tesis filosóficamente relevantes y relativas a los mismos, para generar una concepción compleja y no dogmática de dichas cuestiones e ideas, promoviendo una actitud abierta, tolerante, y comprometida con la resolución racional y pacífica de los conflictos. Descriptores operativos de las competencias clav"
+        },
+        {
+          "numero": 6,
+          "descripcion": "Comprender las principales ideas y teorías filosóficas de los más importantes pensadores y pensadoras, mediante el examen crítico y dialéctico de dichas ideas y teorías y de los problemas fundamentales a los que responden, para generar un concepción rigurosa y crítica de la riqueza e influencia de la filosofía como parte esencial del patrimonio cultural común. Descriptores operativos de las competencias clave CCL2, CC1, CC3, CCEC2"
+        },
+        {
+          "numero": 7,
+          "descripcion": "Adquirir una perspectiva global, sistémica y transdisciplinar en el planteamiento de cuestiones fundamentales y de actualidad, analizando y categorizando sus múltiples aspectos, distinguiendo lo substancial de lo accidental, e integrando información e ideas de distintos ámbitos disciplinares, desde la perspectiva fundamental de la filosofía, para poder tratar cuestiones complejas de modo creativo, emprendedor y transformador de la realidad. Descriptores operativos de las competencias clave CCL2,"
+        },
+        {
+          "numero": 8,
+          "descripcion": "Analizar problemas éticos y políticos mediante la exposición crítica y dialéctica de todas las posiciones filosóficamente pertinentes en la interpretación y resolución de los mismos, para desarrollar el juicio propio y la autonomía moral. Descriptores operativos de las competencias clave CCL1, CCL5, CPSAA1.1, CPSAA2, CC1, CC2, CC3, CC4, CE1, CCEC1"
+        }
+      ],
+      "bloques": [
+        {
+          "romano": "I",
+          "nombre": "La filosofía y el ser humano",
+          "saberes": [
+            "Aproximación a la filosofía y su propuesta como problema.",
+            "Identificación de las circunstancias que rodean el origen y condiciones del nacimiento",
+            "Comprensión de las características y concepciones del saber filosófico.",
+            "Establecimiento de relaciones de la filosofía en relación con otros campos del saber y la",
+            "Reconocimiento de los diversos métodos filosóficos.",
+            "Desarrollo del debate en torno a la vigencia y utilidad de la filosofía.",
+            "1. Reconocimiento de la discriminación social, de género, etnia y edad en la",
+            "2. Reflexión crítica sobre la discriminación de la mujer en la historia de la filosofía.",
+            "3. Identificación de la oposición entre la actitud filosófica y las diversas formas de",
+            "El ser humano como sujeto de la experiencia filosófica.",
+            "Interrelación entre las aportaciones de la filosofía y el valor y sentido de la existencia",
+            "Comprensión de las diferentes concepciones filosóficas acerca del ser humano.",
+            "Reconocimiento de la estructura psicosomática de la personalidad.",
+            "Establecimiento de las relaciones entre conciencia y lenguaje.",
+            "Formulación del problema de la identidad personal."
+          ]
+        },
+        {
+          "romano": "II",
+          "nombre": "El conocimiento y la realidad",
+          "saberes": [
+            "Planteamiento del problema sobre el conocimiento.",
+            "Identificación y comprensión de las diversas formas de conceptualizar la verdad.",
+            "Análisis del fenómeno de la desinformación y la posverdad, y detección y",
+            "Interpretación y ejemplificación de las principales teorías del conocimiento y búsqueda",
+            "Conocimiento de las reglas del razonamiento correcto y la argumentación.",
+            "Identificación y desarrollo ejemplificado de la argumentación formal e informal.",
+            "La Filosofía de la ciencia.",
+            "1. Enumeración y explicación de los pasos del método científico.",
+            "2. Participación dialogada y debatida acerca de la naturaleza, problemas y límites del",
+            "3. Identificación de las conexiones y relaciones del conocimiento científico con otros",
+            "4. Conocimiento y debate acerca de la problemática sobre la posibilidad del saber",
+            "5. Identificación de la dimensión social y política del conocimiento en el contexto",
+            "6. Elaboración de proyectos colaborativos sobre el papel de la mujer en la ciencia y",
+            "El problema filosófico de la naturaleza y la realidad.",
+            "Observación y distinción, desde la cotidianeidad, de los ámbitos de lo real y lo aparente.",
+            "Planteamiento de la pregunta por la naturaleza.",
+            "Elaboración de presentaciones colaborativas de los principales sistemas cosmológicos.",
+            "Comprensión y explicación del problema entre la unidad y pluralidad.",
+            "Presentación, en lenguaje audiovisual y variadas expresiones artísticas, del problema",
+            "Elaboración colaborativa de cuadros comparativos de las explicaciones monistas,",
+            "Discusión y debate sobre la inteligencia artificial, desde el uso de las reglas básicas para",
+            "Dramatización debatida entre determinismo versus indeterminismo.",
+            "Identificación de las posiciones teístas, ateístas y agnósticas."
+          ]
+        },
+        {
+          "romano": "III",
+          "nombre": "Acción y creación",
+          "saberes": [
+            "Definición del problema ético.",
+            "1. Análisis y diferenciación entre ser y deber ser.",
+            "2. Descripción y dramatización sobre la deliberación moral y el diálogo ético.",
+            "Diferenciación entre cognitivismo, emotivismo y relativismo moral.",
+            "Formulación de la ética universal de mínimos.",
+            "Elaboración de mapas mentales de las principales respuestas al problema ético.",
+            "1. Identificación de las éticas de la virtud.",
+            "2. Reconocimiento de las éticas del deber.",
+            "3. Valoración de las éticas del cuidado.",
+            "4. Formación colaborativo-ejemplificativa de algunas teorías éticas aplicadas.",
+            "5. Planteamiento del problema de las morales tradicionales, y discusión acerca de la",
+            "Identificación de las distintas generaciones de La Declaración Universal de Los",
+            "Establecimiento de los grandes problemas éticos de nuestro tiempo",
+            "1. Debate en torno a la desigualdad y pobreza.",
+            "2. Elaboración de proyectos colaborativos sobre la guerra y otras formas de",
+            "3. Investigación y presentación de trabajos acerca de la lucha por la igualdad entre",
+            "4. Identificación de las actitudes de discriminación y del respeto a las minorías.",
+            "5. Investigación y elaboración de dosieres informativos en torno a los problemas",
+            "Establecimiento de las cuestiones más relevantes acerca de la reflexión filosófica y la",
+            ".Búsqueda de información sobre la condición social del ser humano",
+            "1. Comprensión de los conceptos de legalidad, legitimidad y definición de lo",
+            "2. Elaboración de infografías que resumen las principales formas de organización",
+            "3. Identificación de las tesis contractualistas en los textos filosóficos.",
+            "4. Reflexión filosófica en torno a la democracia.",
+            "Establecimiento de las relaciones entre individuo y Estado.",
+            "Debate en torno al problema de la igualdad y la libertad.",
+            "Elaboración de tareas de investigación sobre el concepto de trabajo, el derecho a la",
+            "El debate político contemporáneo.",
+            "1. Clasificación y conceptualización del liberalismo, utilitarismo y comunitarismo.",
+            "2. Reconocimiento, en diversos documentos y formatos, de los ideales, utopías y",
+            "3. Búsqueda de información sobre feminismo y perspectiva de género en filosofía.",
+            "La reflexión filosófica en torno a la creación artística.",
+            "Conceptualización de los problemas de la estética: arte, belleza y gusto, por medio de la",
+            "Elaboración de mapas mentales de algunas de las más importantes teorías acerca de la",
+            "Debate en torno a la imagen y la cultura audiovisual.",
+            "Realización de trabajos de investigación en torno a la relación entre lo estético y lo"
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "hfilosofia-bach",
+      "materia": "Historia de la Filosofía",
+      "curso": "2.º Bachillerato",
+      "competenciasEspecificas": [
+        {
+          "numero": 1,
+          "descripcion": "Buscar, analizar, interpretar, producir y transmitir informaci ón relativa a hechos hist órico- filosóficos, a partir del uso cr ítico y seguro de fuentes y el dominio de técnicas b ásicas de investigación, para generar conocimientos y producciones propias acerca de la historia de los problemas e ideas filosóficos. Descriptores operativos de las competencias clave CCL1, CCL2, CCL3, CD1, CD3, CPSAA5, CC3, CE3"
+        },
+        {
+          "numero": 2,
+          "descripcion": "Reconocer las normas y pautas de la argumentaci ón y el di álogo filos óficos, mediante la identificación y an álisis de las mismas en distintos soportes y a través de diversas actividades, para aplicarlas con rigor en la construcci ón y exposici ón de argumentos y en el ejercicio del diálogo con los demás. Descriptores operativos de las competencias clave CCL1, CCL5, STEM1, CD3, CPSAA4, CC1, CC2, CC3, CCEC1, CCEC2, CCEC3.2"
+        },
+        {
+          "numero": 3,
+          "descripcion": "Comprender y expresar diferentes concepciones filos óficas históricamente dadas, mediante el acercamiento a sus fuentes y el trabajo crítico sobre las mismas, para desarrollar el conocimiento de un acervo que constituye parte esencial del patrimonio cultural común y del bagaje intelectual de una ciudadanía ilustrada Descriptores operativos de las competencias clave CCL1, CCL2, CC1, CC2, CC3, CCEC1"
+        },
+        {
+          "numero": 4,
+          "descripcion": "Reconocer la naturaleza esencialmente plural y diversa de las concepciones filosóficas históricamente dadas, mediante su puesta en relación dialéctica, de confrontación y complementariedad, para generar una concepción compleja y dinámica de la historia del pensamiento, y promover una actitud tolerante y comprometida con la resoluci ón racional y dialogada de los conflictos. Descriptores operativos de las competencias clave CCL2, CC1, CC2, CC3"
+        },
+        {
+          "numero": 5,
+          "descripcion": "Reconocer el modo en que se han planteado sucesivamente, a través de distintas épocas y concepciones filosóficas, los mismos problemas filos óficos, mediante el an álisis e interpretaci ón de textos y otros modos de expresi ón filos ófica o más ampliamente cultural históricamente dados, para afrontar tales problemas a partir de la reflexi ón crítica sobre el conocimiento de lo aportado por la tradición. Descriptores operativos de las competencias clave CCL1, CCL2, CC1, CC2, CC3, CCEC1"
+        },
+        {
+          "numero": 6,
+          "descripcion": "Reconocer las formas diversas en que los interrogantes filos óficos y sus intentos de respuesta se han presentado históricamente en otros ámbitos de la cultura, mediante el análisis interpretativo de textos y otras manifestaciones pertenecientes a esos ámbitos, para promover una concepci ón sistem ática, relacional y compleja de la historia de la cultura occidental y del papel de las ideas filosóficas en ella. Descriptores operativos de las competencias clave CCL2, CC1, CC2, CC3, CE1, CCEC1"
+        },
+        {
+          "numero": 7,
+          "descripcion": "Analizar desde un punto de vista filosófico problemas fundamentales y de actualidad, mediante la exposición cr ítica de distintas posiciones histórico-filosóficas con respecto a los mismos, para desarrollar la autonomía de juicio y promover actitudes y acciones cívica y éticamente consecuentes Descriptores operativos de las competencias clave CCL1, CCL2, CPSAA4, CC1, CC2, CC3, CC4, CE1, CCEC1"
+        }
+      ],
+      "bloques": [
+        {
+          "romano": "I",
+          "nombre": "Del origen de la Filosofía en Grecia hasta el fin de la Antigüedad",
+          "saberes": [
+            "Comprobación del surgimiento de la filosofía occidental en Grecia.",
+            "Reconocimiento de la cosmovisión mítica y clasificación de las primeras teorías",
+            "Identificación y análisis sobre el problema de la realidad en los presocráticos.",
+            "Comparación y elaboración de disertaciones sobre las aportaciones de Sócrates y los",
+            "Elaboración de presentaciones e indagación sobre la importancia de Aspasia de Mileto y",
+            "Reconocimiento de los conceptos de idea y naturaleza, y de conocimiento y realidad en",
+            "Identificación de la noción de justicia como objeto de la filosofía de Platón.",
+            "1. Comprensión y reflexión crítica acerca de la discusión ética del intelectualismo",
+            "2. Identificación y análisis de la teoría de las virtudes en Platón.",
+            "3. Valoración del proyecto político de Platón y diálogo argumentativo y comparativo",
+            "Reconocimiento del estudio de la naturaleza en Aristóteles.",
+            "1. Identificación y comentarios críticos sobre la metafísica y la física aristotélica.",
+            "2. Comparación y valoración de la ética y la política de Aristóteles.",
+            "Reconocimiento del paso de las polis griegas al imperio de Alejandro Magno.",
+            "Indagación de las relaciones entre filosofía, ciencia y cultura en el helenismo.",
+            "Identificación y clasificación de las escuelas filosóficas.",
+            "Investigación y presentaciones sobre el Museo de Alejandría y la figura de Hipatia de"
+          ]
+        },
+        {
+          "romano": "II",
+          "nombre": "De la Edad Media a la Modernidad Europea",
+          "saberes": [
+            "Comparación y clasificación de los aspectos principales de las teorías de Agustín de",
+            "Reconocimiento de la personalidad polifacética de Hildegard von Bingen.",
+            "Descripción de la filosofía árabe y judía.",
+            "Valoración de la asimilación de la filosofía griega por la teología medieval.",
+            "Análisis crítico del problema de la relación entre fe y razón.",
+            "Reconocimiento del nacimiento de la modernidad europea.",
+            "Valoración de las aportaciones de la revolución científica en el Renacimiento.",
+            "Diálogo crítico sobre el protestantismo.",
+            "Identificación y valoración del debate metafísico moderno, y clasificación y contraste",
+            "Clarificación y debate acerca del origen y fundamento de la sociedad y el poder.",
+            "Análisis comparativo del pensamiento político medieval y la teoría del contrato social"
+          ]
+        },
+        {
+          "romano": "III",
+          "nombre": "De la Modernidad a la Postmodernidad",
+          "saberes": [
+            "Reconocimiento de los Derechos del Hombre.",
+            "Identificación y valoración de la primera ola feminista: Mary Wollstonecraft y Olympe",
+            "Análisis y comentarios acerca de la filosofía crítica de Immanuel Kant y el problema de",
+            "Comparación y ejemplificación de las éticas de la felicidad y éticas del deber.",
+            "Valoración crítica y actual de la ética kantiana frente al utilitarismo.",
+            "Búsqueda de información y presentaciones sobre la Ilustración en Canarias.",
+            "Identificación de la crítica del capitalismo.",
+            "Análisis y contraste del pensamiento revolucionario de Karl Marx a Rosa Luxemburgo.",
+            "Reconocimiento de la dialéctica de la Ilustración en la Escuela de Fráncfort.",
+            "Identificación del análisis del totalitarismo en Hannah Arendt.",
+            "Conocimiento del desarrollo de la deconstrucción en la tradición occidental.",
+            "Análisis y comentario crítico sobre Friedrich Nietzsche y la herencia posmoderna.",
+            "Reconocimiento y diálogo argumentativo sobre los problemas filosóficos a la luz del",
+            "Identificación y presentación sobre el existencialismo de Martin Heidegger y Jean Paul",
+            "Reconocimiento y valoración sobre la razón vital y la razón poética en José Ortega y",
+            "Análisis y valoración crítica sobre el desarrollo contemporáneo del feminismo y la"
+          ]
+        }
+      ]
+    }
+  ]
+}

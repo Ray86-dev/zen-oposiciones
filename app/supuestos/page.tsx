@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useApp } from "@/components/Proveedor";
 import supuestosJson from "@/data/supuestos.json";
 import rubricasJson from "@/data/rubricas.json";
+import GeneradorSupuestos from "@/components/GeneradorSupuestos";
 
 type Supuesto = (typeof supuestosJson)["supuestos"][number];
 const RUBRICA_A = rubricasJson.partes.find((p) => p.id === "A")!;
@@ -26,6 +27,9 @@ export default function PaginaSupuestos() {
         {supuestosJson.fuente} — {rubricasJson.aviso}
       </p>
 
+      <GeneradorSupuestos />
+
+      <h2 className="serif pt-2 text-lg">Supuestos oficiales</h2>
       <ul className="space-y-3">
         {supuestosJson.supuestos.map((s) => (
           <li key={s.id} className="tarjeta p-5">

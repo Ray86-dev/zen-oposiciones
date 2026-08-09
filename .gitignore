@@ -11,3 +11,7 @@ next-env.d.ts
 
 # Enlaces a Google Drive: privados, nunca en el repositorio
 public/enlaces.local.json
+
+# Contenido completo de los temas: material propio, no va al repo publico
+public/temas/
+*temas-html.json

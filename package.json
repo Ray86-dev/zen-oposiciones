@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "smoke": "tsx smoke.tsx",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "subir-contenido": "node scripts/subir-contenido.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

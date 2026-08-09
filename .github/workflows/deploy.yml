@@ -25,6 +25,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          # La clave publicable es publica por diseno: lo que protege los datos es
+          # el RLS de Supabase. Las claves de DeepSeek y Gemini NO estan aqui:
+          # viven como secretos en las Edge Functions.
+          NEXT_PUBLIC_SUPABASE_URL: https://hulbafouyprldwclyjsq.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: sb_publishable_cWzx7wDwiJFlV2DDj88vcw_F0Fh39jq
       - name: Blindar la salida
         run: |
           # Los enlaces privados a Drive nunca deben publicarse.

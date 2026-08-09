@@ -2,11 +2,16 @@
 import { useApp } from "@/components/Proveedor";
 import { NOMBRE_DIA, formatoLargo, diasEntre } from "@/lib/fechas";
 import { fases, ritmoMinimoSemanal } from "@/lib/plan";
+import { useTema } from "@/components/Tema";
+import { useSesion } from "@/components/Sesion";
+import Link from "next/link";
 
 const ORDEN = [1, 2, 3, 4, 5, 6, 0]; // lunes → domingo
 
 export default function PaginaAjustes() {
   const { estado, actualizar, temario, resumen, listo } = useApp();
+  const { modo, fijar } = useTema();
+  const { usuario } = useSesion();
   if (!listo) return <div className="tarjeta h-64 animate-pulse" />;
 
   const d = estado.disponibilidad;
@@ -30,6 +35,43 @@ export default function PaginaAjustes() {
           El plan se recalcula solo cada vez que cambias algo aquí.
         </p>
       </div>
+
+      <section className="tarjeta p-6">
+        <h2 className="serif text-lg">Apariencia</h2>
+        <p className="mt-1 text-sm text-suave">
+          El modo oscuro es el predeterminado. El claro va mejor con luz de día o para imprimir.
+        </p>
+        <div className="mt-3 inline-flex rounded-lg border border-borde p-1">
+          {([["oscuro", "Oscuro"], ["claro", "Claro"]] as const).map(([id, etiqueta]) => (
+            <button
+              key={id}
+              onClick={() => fijar(id)}
+              className={`rounded px-4 py-1.5 text-sm transition ${
+                modo === id ? "bg-jade text-tinta" : "text-suave hover:text-texto"
+              }`}
+            >
+              {etiqueta}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="tarjeta p-6">
+        <h2 className="serif text-lg">Cuenta</h2>
+        {usuario ? (
+          <p className="mt-2 text-sm text-suave">
+            Sesión iniciada como <span className="text-texto">{usuario.email}</span>. Tu progreso,
+            subrayados y anotaciones se guardan en la nube y te siguen a cualquier dispositivo.{" "}
+            <Link href="/entrar" className="text-jade underline">Gestionar</Link>
+          </p>
+        ) : (
+          <p className="mt-2 text-sm text-suave">
+            Estás en modo local: el progreso vive solo en este navegador y no hay lector de temas
+            ni generación con IA.{" "}
+            <Link href="/entrar" className="text-jade underline">Crear cuenta o entrar</Link>
+          </p>
+        )}
+      </section>
 
       <section className="tarjeta p-6">
         <h2 className="serif text-lg">Ritmo semanal</h2>

@@ -39,6 +39,9 @@
     "node_modules",
     "smoke.tsx",
     "test-stubs",
-    ".next"
+    ".next",
+    "out",
+    "supabase",
+    "scripts"
   ]
 }

@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSesion } from "@/components/Sesion";
 
 const ENLACES = [
   { href: "/", label: "Hoy" },
@@ -12,6 +13,7 @@ const ENLACES = [
 
 export default function Navegacion() {
   const ruta = usePathname();
+  const { usuario } = useSesion();
   return (
     <header className="sticky top-0 z-20 border-b border-borde bg-tinta/85 backdrop-blur">
       <nav className="mx-auto flex w-full max-w-5xl items-center gap-1 overflow-x-auto px-5 py-3">
@@ -30,6 +32,15 @@ export default function Navegacion() {
             </Link>
           );
         })}
+        <Link
+          href="/entrar"
+          className={`ml-auto shrink-0 rounded-lg px-3 py-1.5 text-sm transition ${
+            ruta === "/entrar" ? "bg-tinta-3 text-texto" : "text-suave hover:text-texto"
+          }`}
+          title={usuario?.email ?? "Sin sesión"}
+        >
+          {usuario ? "Mi cuenta" : "Entrar"}
+        </Link>
       </nav>
     </header>
   );

@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useApp } from "@/components/Proveedor";
 import { ESTADOS, EstadoTema } from "@/lib/tipos";
 import { useEnlaces } from "@/lib/enlaces";
+import Link from "next/link";
 
 export default function PaginaTemario() {
   const { temario, estado, fijarEstadoTema, listo } = useApp();
@@ -82,11 +83,14 @@ export default function PaginaTemario() {
               <div className="flex items-start gap-3">
                 <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: color }} />
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm">
-                    <span className="tabular-nums text-suave">Tema {t.numero}.</span> {t.titulo}
-                  </p>
+                  <Link href={`/temario/${t.numero}`} className="group block">
+                    <p className="text-sm group-hover:text-jade">
+                      <span className="tabular-nums text-suave">Tema {t.numero}.</span> {t.titulo}
+                    </p>
+                  </Link>
                   <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-suave">
                     <span>{t.bloque}</span>
+                    <Link href={`/temario/${t.numero}`} className="text-jade underline">Leer y anotar</Link>
                     {enlaces[String(t.numero)]?.[0] && (
                       <a
                         href={enlaces[String(t.numero)][0].url}
