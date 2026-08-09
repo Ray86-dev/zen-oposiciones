@@ -1,0 +1,72 @@
+{
+  "fuente": "Comisión de Coordinación de Filosofía — Procedimientos selectivos 2024 (Canarias). Plantillas de corrección oficiales.",
+  "aviso": "En la convocatoria 2025 la Parte A pasó a ser un SUPUESTO PRÁCTICO (análisis histórico-semántico o comentario de texto + intervención didáctica). Las plantillas de cada año se publican en el Portal del Aspirante 24 h antes de la prueba. Verificar en la convocatoria de 2027.",
+  "prueba": {
+    "duracionParteAMin": 150,
+    "temasSorteados": 5,
+    "totalTemas": 71,
+    "material": "Bolígrafo azul indeleble. Prohibido lápiz, bolígrafo borrable, relojes y cualquier dispositivo electrónico.",
+    "anonimato": "Sin marcas identificativas. Rectificar entre paréntesis y tachado. Paginado abajo a la derecha."
+  },
+  "partes": [
+    {
+      "id": "A",
+      "nombre": "Parte A — Desarrollo del tema / Supuesto práctico",
+      "puntos": 10,
+      "apartados": [
+        { "id": "A1", "nombre": "Estructura y organización del tema", "puntos": 1.5, "items": [
+          { "texto": "Inclusión de un índice bien estructurado y una introducción", "puntos": 0.5 },
+          { "texto": "Adecuada estructuración del tema y tratamiento equilibrado de todos los apartados en función de su relevancia", "puntos": 0.5 },
+          { "texto": "Presencia y adecuada coherencia en la interrelación de todos los apartados desarrollados y secuenciación lógica y clara", "puntos": 0.5 } ] },
+        { "id": "A2", "nombre": "Desarrollo, planteamiento del contenido y rigor científico", "puntos": 6, "items": [
+          { "texto": "Exposición y argumentación, con precisión y rigor científico, de los contenidos más relevantes, demostrando un conocimiento profundo y actualizado del tema", "puntos": 2 },
+          { "texto": "Utilización de un vocabulario técnico adecuado: precisión terminológica", "puntos": 2 },
+          { "texto": "Conclusión personal y coherente con el desarrollo", "puntos": 0.75 },
+          { "texto": "Cita aspectos históricos, autores o autoras", "puntos": 1 },
+          { "texto": "Referencias bibliográficas y webs relacionadas con el tema", "puntos": 0.25 } ] },
+        { "id": "A3", "nombre": "Competencia comunicativa", "puntos": 1, "items": [
+          { "texto": "Correcta presentación, orden, claridad y legibilidad del contenido escrito", "puntos": 0.25 },
+          { "texto": "Corrección ortográfica", "puntos": 0.25 },
+          { "texto": "Coherencia y cohesión sintáctica y semántica", "puntos": 0.25 },
+          { "texto": "Adecuación y riqueza léxica", "puntos": 0.25 } ] },
+        { "id": "A4", "nombre": "Originalidad en el planteamiento", "puntos": 1.5, "items": [
+          { "texto": "Planteamiento original o innovador que enriquece la exposición del tema", "puntos": 0.75 },
+          { "texto": "Conexión del tema con problemas contemporáneos o tendencias actuales", "puntos": 0.75 } ] }
+      ]
+    },
+    {
+      "id": "B",
+      "nombre": "Parte B — Unidad Didáctica o Situación de Aprendizaje",
+      "puntos": 10,
+      "apartados": [
+        { "id": "Ba", "nombre": "Relación con el currículo y contextualización", "puntos": 1, "items": [
+          { "texto": "Apropiada justificación de la unidad didáctica o situación de aprendizaje", "puntos": 0.25 },
+          { "texto": "Contextualización teniendo en cuenta alumnado, centro y entorno; relación con el proyecto educativo y la PGA", "puntos": 0.5 },
+          { "texto": "Relación del curso elegido con el currículo correspondiente", "puntos": 0.25 } ] },
+        { "id": "Bb", "nombre": "Fundamentación curricular", "puntos": 1, "items": [
+          { "texto": "Inclusión idónea de competencias específicas, criterios de evaluación, competencias clave y saberes básicos", "puntos": 0.75 },
+          { "texto": "Presencia e idoneidad de aprendizajes, recursos o contextos referidos a la Comunidad Autónoma de Canarias", "puntos": 0.25 } ] },
+        { "id": "Bc", "nombre": "Fundamentación metodológica, atención a la diversidad y otros aspectos", "puntos": 4, "items": [
+          { "texto": "Coherencia entre metodología, secuencia de actividades, criterios de evaluación y saberes básicos", "puntos": 1 },
+          { "texto": "Adecuada elección de la temporalización y número de sesiones", "puntos": 0.2 },
+          { "texto": "Agrupamientos, recursos, espacios", "puntos": 0.2 },
+          { "texto": "Justificación de principios y estrategias para favorecer el trabajo colaborativo", "puntos": 0.6 },
+          { "texto": "Integración de las TIC como recurso didáctico", "puntos": 0.3 },
+          { "texto": "Relación con otras materias", "puntos": 0.2 },
+          { "texto": "Adaptación de las actividades a un posible escenario telemático", "puntos": 0.2 },
+          { "texto": "Atención a la diversidad desde un modelo inclusivo, acorde al Diseño Universal para el Aprendizaje (DUA)", "puntos": 0.8 },
+          { "texto": "Tratamiento de los elementos transversales (educación en valores, desarrollo sostenible, igualdad, no discriminación, acoso y ciberacoso)", "puntos": 0.4 },
+          { "texto": "Inclusión de las fuentes consultadas y utilizadas para el diseño", "puntos": 0.1 } ] },
+        { "id": "Bd", "nombre": "Evaluación", "puntos": 2, "items": [
+          { "texto": "Inclusión de criterios de evaluación, competencias asociadas, contenidos y vinculación con el resto de elementos del currículo", "puntos": 0.6 },
+          { "texto": "Tipos de evaluación por momento (inicial, continua, final), finalidad (formativa, criterial, integral) y agente (hetero, co, autoevaluación)", "puntos": 0.6 },
+          { "texto": "Procedimientos e instrumentos de evaluación para establecer los criterios de calificación (rúbricas, indicadores de logro, escalas)", "puntos": 0.7 },
+          { "texto": "Adecuación de los instrumentos de evaluación a un posible escenario telemático", "puntos": 0.1 } ] },
+        { "id": "Be", "nombre": "Competencia comunicativa (defensa oral)", "puntos": 2, "items": [
+          { "texto": "Orden, claridad, coherencia y cohesión sintáctica y semántica", "puntos": 0.75 },
+          { "texto": "Precisión terminológica, riqueza léxica y fluidez", "puntos": 1 },
+          { "texto": "Distribución apropiada del tiempo de la exposición", "puntos": 0.25 } ] }
+      ]
+    }
+  ]
+}

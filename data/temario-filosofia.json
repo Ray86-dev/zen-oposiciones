@@ -1,0 +1,796 @@
+{
+  "especialidad": {
+    "codigo": "201",
+    "nombre": "Filosofía",
+    "cuerpo": "590",
+    "cuerpoNombre": "Profesores de Enseñanza Secundaria",
+    "comunidad": "Canarias",
+    "normaTemario": "Orden de 9 de septiembre de 1993 (BOE-A-1993-23257)",
+    "numeroTemas": 71,
+    "temasSorteados": 5
+  },
+  "bloques": [
+    {
+      "id": "B1",
+      "nombre": "Naturaleza y sentido de la filosofía",
+      "desde": 1,
+      "hasta": 2,
+      "numTemas": 2
+    },
+    {
+      "id": "B2",
+      "nombre": "Lenguaje y lógica",
+      "desde": 3,
+      "hasta": 7,
+      "numTemas": 5
+    },
+    {
+      "id": "B3",
+      "nombre": "Filosofía de la ciencia",
+      "desde": 8,
+      "hasta": 10,
+      "numTemas": 3
+    },
+    {
+      "id": "B4",
+      "nombre": "Teoría del conocimiento",
+      "desde": 11,
+      "hasta": 13,
+      "numTemas": 3
+    },
+    {
+      "id": "B5",
+      "nombre": "Metafísica y ontología",
+      "desde": 14,
+      "hasta": 21,
+      "numTemas": 8
+    },
+    {
+      "id": "B6",
+      "nombre": "Estética y evolución",
+      "desde": 22,
+      "hasta": 23,
+      "numTemas": 2
+    },
+    {
+      "id": "B7",
+      "nombre": "Antropología y psicología",
+      "desde": 24,
+      "hasta": 30,
+      "numTemas": 7
+    },
+    {
+      "id": "B8",
+      "nombre": "Sociología y filosofía social y política",
+      "desde": 31,
+      "hasta": 36,
+      "numTemas": 6
+    },
+    {
+      "id": "B9",
+      "nombre": "Ética y filosofía moral",
+      "desde": 37,
+      "hasta": 45,
+      "numTemas": 9
+    },
+    {
+      "id": "B10",
+      "nombre": "Historia de la filosofía",
+      "desde": 46,
+      "hasta": 71,
+      "numTemas": 26
+    }
+  ],
+  "temas": [
+    {
+      "numero": 1,
+      "titulo": "La experiencia filosófica y sus formas: las concepciones de la filosofía.",
+      "bloqueId": "B1",
+      "bloque": "Naturaleza y sentido de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 61303,
+      "ultimaActualizacion": "2023-01-01"
+    },
+    {
+      "numero": 2,
+      "titulo": "La función de la filosofía en el conjunto de la cultura. La relación del saber filosófico con el saber científico y otros saberes.",
+      "bloqueId": "B1",
+      "bloque": "Naturaleza y sentido de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 57335,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 3,
+      "titulo": "La comunicación humana y el lenguaje: lenguaje natural y lenguajes formales.",
+      "bloqueId": "B2",
+      "bloque": "Lenguaje y lógica",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 51326,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 4,
+      "titulo": "Sentido y referencia. Teorías del significado.",
+      "bloqueId": "B2",
+      "bloque": "Lenguaje y lógica",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 85185,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 5,
+      "titulo": "De la lógica clásica a la lógica simbólica.",
+      "bloqueId": "B2",
+      "bloque": "Lenguaje y lógica",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 52140,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 6,
+      "titulo": "El cálculo de proposiciones y de predicados.",
+      "bloqueId": "B2",
+      "bloque": "Lenguaje y lógica",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 47350,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 7,
+      "titulo": "La Lógica como sistema formal axiomático; los límites de los sistemas formales axiomáticos.",
+      "bloqueId": "B2",
+      "bloque": "Lenguaje y lógica",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 35660,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 8,
+      "titulo": "La verdad en las matemáticas y en las ciencias empíricas (sociales y naturales).",
+      "bloqueId": "B3",
+      "bloque": "Filosofía de la ciencia",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 67922,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 9,
+      "titulo": "Naturaleza de las leyes, las teorías y los modelos científicos. El contexto de la justificación científica y el contexto del descubrimiento científico.",
+      "bloqueId": "B3",
+      "bloque": "Filosofía de la ciencia",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 100529,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 10,
+      "titulo": "La construcción científica de la realidad; determinismo e indeterminismo; el postulado de la objetividad.",
+      "bloqueId": "B3",
+      "bloque": "Filosofía de la ciencia",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 59669,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 11,
+      "titulo": "Conocimiento y lenguaje: el problema de los conceptos universales.",
+      "bloqueId": "B4",
+      "bloque": "Teoría del conocimiento",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 50350,
+      "ultimaActualizacion": "2021-07-31"
+    },
+    {
+      "numero": 12,
+      "titulo": "Los elementos a priori en el conocimiento.",
+      "bloqueId": "B4",
+      "bloque": "Teoría del conocimiento",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 52940,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 13,
+      "titulo": "Los límites del conocimiento humano y el problema de lo irracional.",
+      "bloqueId": "B4",
+      "bloque": "Teoría del conocimiento",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 53705,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 14,
+      "titulo": "La Metafísica como problema.",
+      "bloqueId": "B5",
+      "bloque": "Metafísica y ontología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 85639,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 15,
+      "titulo": "Formación y sentido de la idea de ente.",
+      "bloqueId": "B5",
+      "bloque": "Metafísica y ontología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 39643,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 16,
+      "titulo": "Los primeros principios y su valor ontológico.",
+      "bloqueId": "B5",
+      "bloque": "Metafísica y ontología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 34708,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 17,
+      "titulo": "Las categorías y los diversos sistemas categoriales.",
+      "bloqueId": "B5",
+      "bloque": "Metafísica y ontología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 44987,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 18,
+      "titulo": "Los distintos planteamientos en torno al concepto de sustancia. Valoración crítica del principio de causalidad.",
+      "bloqueId": "B5",
+      "bloque": "Metafísica y ontología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 42141,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 19,
+      "titulo": "La realidad personal y el problema de la libertad.",
+      "bloqueId": "B5",
+      "bloque": "Metafísica y ontología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 49916,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 20,
+      "titulo": "El debate histórico en torno a la relación entre la fe y la razón.",
+      "bloqueId": "B5",
+      "bloque": "Metafísica y ontología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 67346,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 21,
+      "titulo": "Ontologismo, agnosticismo y ateísmo.",
+      "bloqueId": "B5",
+      "bloque": "Metafísica y ontología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 37996,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 22,
+      "titulo": "La reflexión filosófica sobre la belleza.",
+      "bloqueId": "B6",
+      "bloque": "Estética y evolución",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 52152,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 23,
+      "titulo": "La evolución y sus implicaciones filosóficas.",
+      "bloqueId": "B6",
+      "bloque": "Estética y evolución",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 70085,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 24,
+      "titulo": "La antropología como campo de estudio. Diversas concepciones de la antropología.",
+      "bloqueId": "B7",
+      "bloque": "Antropología y psicología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 45547,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 25,
+      "titulo": "La antropogénesis: naturaleza y cultura.",
+      "bloqueId": "B7",
+      "bloque": "Antropología y psicología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 52015,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 26,
+      "titulo": "Las distintas concepciones de la Psicología como ciencia.",
+      "bloqueId": "B7",
+      "bloque": "Antropología y psicología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 39052,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 27,
+      "titulo": "La actividad perceptiva y representativa en la persona humana.",
+      "bloqueId": "B7",
+      "bloque": "Antropología y psicología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 38066,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 28,
+      "titulo": "El carácter simbólico del ser humano: pensamiento y lenguaje. El cognitivismo.",
+      "bloqueId": "B7",
+      "bloque": "Antropología y psicología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 60342,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 29,
+      "titulo": "La motivación humana y la vida afectiva.",
+      "bloqueId": "B7",
+      "bloque": "Antropología y psicología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 30052,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 30,
+      "titulo": "El aprendizaje y la conducta humana.",
+      "bloqueId": "B7",
+      "bloque": "Antropología y psicología",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 46606,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 31,
+      "titulo": "Las distintas concepciones de la sociología como ciencia.",
+      "bloqueId": "B8",
+      "bloque": "Sociología y filosofía social y política",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 41601,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 32,
+      "titulo": "Origen y naturaleza de la sociedad.",
+      "bloqueId": "B8",
+      "bloque": "Sociología y filosofía social y política",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 41608,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 33,
+      "titulo": "Formas de organización política.",
+      "bloqueId": "B8",
+      "bloque": "Sociología y filosofía social y política",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 48687,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 34,
+      "titulo": "Fundamentos filosóficos del derecho y la justicia.",
+      "bloqueId": "B8",
+      "bloque": "Sociología y filosofía social y política",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 56193,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 35,
+      "titulo": "Conflicto y cambio social: factores típicos.",
+      "bloqueId": "B8",
+      "bloque": "Sociología y filosofía social y política",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 34826,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 36,
+      "titulo": "El desarrollo de la técnica y sus implicaciones en la sociedad contemporánea.",
+      "bloqueId": "B8",
+      "bloque": "Sociología y filosofía social y política",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 53464,
+      "ultimaActualizacion": "2026-03-18"
+    },
+    {
+      "numero": 37,
+      "titulo": "Bases antropológicas de la conducta moral.",
+      "bloqueId": "B9",
+      "bloque": "Ética y filosofía moral",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 60131,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 38,
+      "titulo": "La génesis de los valores morales: naturaleza y convención.",
+      "bloqueId": "B9",
+      "bloque": "Ética y filosofía moral",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 61971,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 39,
+      "titulo": "El lenguaje moral. Forma y justificación de los juicios morales.",
+      "bloqueId": "B9",
+      "bloque": "Ética y filosofía moral",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 67730,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 40,
+      "titulo": "Bien y valor.",
+      "bloqueId": "B9",
+      "bloque": "Ética y filosofía moral",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 51826,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 41,
+      "titulo": "Éticas materiales y éticas formales.",
+      "bloqueId": "B9",
+      "bloque": "Ética y filosofía moral",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 41139,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 42,
+      "titulo": "Ética y política.",
+      "bloqueId": "B9",
+      "bloque": "Ética y filosofía moral",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 51797,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 43,
+      "titulo": "Principales problemas éticos en la actividad científica y técnica y en la convivencia social de nuestro tiempo.",
+      "bloqueId": "B9",
+      "bloque": "Ética y filosofía moral",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 77041,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 44,
+      "titulo": "Ética y derecho: los derechos humanos.",
+      "bloqueId": "B9",
+      "bloque": "Ética y filosofía moral",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 45454,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 45,
+      "titulo": "El estado de bienestar: alienación y libertad en las sociedades tecnificadas.",
+      "bloqueId": "B9",
+      "bloque": "Ética y filosofía moral",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 63206,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 46,
+      "titulo": "La historia de la filosofía como problema filosófico.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 41569,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 47,
+      "titulo": "Los modelos de explicación racional en los presocráticos.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 44687,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 48,
+      "titulo": "El debate ético-político en Sócrates y los sofistas.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 53618,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 49,
+      "titulo": "La justicia en la Polis como objetivo de la filosofía de Platón.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 33486,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 50,
+      "titulo": "La Naturaleza en Aristóteles.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 44807,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 51,
+      "titulo": "El desarrollo de la ciencia en el pensamiento helenístico.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 38379,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 52,
+      "titulo": "La síntesis escolástica de Santo Tomás de Aquino.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 44946,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 53,
+      "titulo": "El nominalismo y la ciencia del siglo XIV.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 45941,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 54,
+      "titulo": "La revolución científica. Galileo y Newton.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 57145,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 55,
+      "titulo": "El método cartesiano.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 50611,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 56,
+      "titulo": "El sujeto ético-político en Spinoza.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 37212,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 57,
+      "titulo": "Ciencia y conocimiento en Leibniz.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 54940,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 58,
+      "titulo": "El empirismo y las ciencias morales: Locke y Hume.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 46935,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 59,
+      "titulo": "El uso teórico de la razón en Kant.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 70912,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 60,
+      "titulo": "El uso práctico de la razón en Kant.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 40538,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 61,
+      "titulo": "La filosofía de Hegel: sujeto, sistema y estado.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 60963,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 62,
+      "titulo": "El positivismo y el avance científico del siglo XIX.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 48585,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 63,
+      "titulo": "La crítica de Marx al capitalismo y su influjo en la historia del pensamiento occidental.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 70933,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 64,
+      "titulo": "Nietzsche y la crisis de la cultura occidental.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 77164,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 65,
+      "titulo": "La fenomenología de E. Husserl.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 51229,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 66,
+      "titulo": "Freud: el psicoanálisis como crítica de la cultura occidental.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 49609,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 67,
+      "titulo": "El problema del ser en Heidegger y en las filosofías de la existencia.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 87455,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 68,
+      "titulo": "L. Wittgenstein y B. Russell: la corriente analítica de la filosofía.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 78309,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 69,
+      "titulo": "Razón y sociedad en la escuela de Frankfurt y en K. R. Popper.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 70463,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 70,
+      "titulo": "Ortega y Gasset y la filosofía del exilio español.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 63401,
+      "ultimaActualizacion": "2021-08-01"
+    },
+    {
+      "numero": 71,
+      "titulo": "La filosofía de \"fin de siglo\": hermenéutica y postmodernidad.",
+      "bloqueId": "B10",
+      "bloque": "Historia de la filosofía",
+      "tieneMaterial": true,
+      "material": [],
+      "bytesTexto": 66611,
+      "ultimaActualizacion": "2021-08-01"
+    }
+  ]
+}

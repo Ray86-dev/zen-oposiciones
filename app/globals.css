@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  --color-tinta: #0b0d0e;
+  --color-tinta-2: #131719;
+  --color-tinta-3: #1b2124;
+  --color-borde: #262d31;
+  --color-texto: #e7ecea;
+  --color-suave: #94a3a0;
+  --color-jade: #2fbf94;
+  --color-jade-osc: #14624a;
+  --color-ambar: #d9a441;
+  --color-coral: #e0705a;
+  --font-serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+}
+
+html, body { background: var(--color-tinta); color: var(--color-texto); }
+body { -webkit-font-smoothing: antialiased; }
+::selection { background: color-mix(in oklab, var(--color-jade) 35%, transparent); }
+
+.tarjeta {
+  background: linear-gradient(180deg, var(--color-tinta-2), var(--color-tinta));
+  border: 1px solid var(--color-borde);
+  border-radius: 14px;
+}
+.serif { font-family: var(--font-serif); }

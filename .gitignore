@@ -1,0 +1,13 @@
+node_modules/
+.next/
+out/
+dev.log
+*.tsbuildinfo
+next-env.d.ts
+
+# Variables de entorno
+.env.local
+.env*.local
+
+# Enlaces a Google Drive: privados, nunca en el repositorio
+public/enlaces.local.json

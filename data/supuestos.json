@@ -1,0 +1,66 @@
+{
+  "fuente": "Enunciados oficiales de los supuestos prácticos — Comisión de Filosofía, Canarias 2025 (Parte A de la primera prueba).",
+  "estructura": {
+    "tipos": ["analisis-historico-semantico", "comentario-de-texto"],
+    "siempreIncluye": "Intervención didáctica: contexto de aula real (materia, curso, nº de estudiantes, alumnado NEAE) + bloque de saberes básicos + encargo del centro. Hay que elaborar una propuesta didáctica.",
+    "duracionMin": 150
+  },
+  "guionesOficiales": {
+    "analisis-historico-semantico": [
+      "Analice el término secuenciando las distintas interpretaciones históricamente dadas.",
+      "Profundice en al menos tres de las definiciones establecidas, situando cada una en un período histórico (Edad Antigua, Edad Moderna y Edad Contemporánea).",
+      "Relacione las distintas concepciones del término habidas a lo largo de la historia de la filosofía.",
+      "Valore y reflexione críticamente sobre la actualidad filosófica del término."
+    ],
+    "comentario-de-texto": [
+      "Explique las ideas fundamentales del texto.",
+      "Relacione las ideas del texto con el conjunto de la obra del autor.",
+      "Establezca relaciones de semejanza y diferencia con otras concepciones filosóficas.",
+      "Valore y reflexione críticamente sobre la actualidad filosófica de las ideas del texto y del autor."
+    ]
+  },
+  "supuestos": [
+    {
+      "id": "2025-01", "anio": 2025, "oficial": true,
+      "tipo": "analisis-historico-semantico",
+      "termino": "SUJETO",
+      "enunciado": "Realice un análisis histórico-semántico del término SUJETO.",
+      "temasRelacionados": [19, 55, 59, 61, 64, 67, 71],
+      "intervencion": {
+        "materia": "Historia de la Filosofía", "curso": "2º Bachillerato",
+        "modalidad": "Ciencias y Tecnología", "numEstudiantes": 27,
+        "neae": ["1 alumno TEA", "1 alumna TEA + ALCAIN"],
+        "bloque": "Bloque III — De la modernidad a la postmodernidad",
+        "encargo": "Elaborar una propuesta didáctica."
+      }
+    },
+    {
+      "id": "2025-02", "anio": 2025, "oficial": true,
+      "tipo": "comentario-de-texto",
+      "autor": "Thomas Hobbes", "obra": "Leviatán (1983, pp. 227-228, Editora Nacional, Madrid)",
+      "texto": "Y dado que la condición del hombre (como se ha declarado en el capítulo precedente) es condición de guerra de todos contra todos, en la que cada cual es gobernado por su propia razón, sin que haya nada que pueda servirle de ayuda para preservar su vida contra sus enemigos, se sigue que en una tal condición todo hombre tiene derecho a todo, incluso al cuerpo de los demás. Y, por tanto, mientras persista este derecho natural de todo hombre a toda cosa no puede haber seguridad para hombre alguno (por muy fuerte o sabio que sea) de vivir todo el tiempo que la naturaleza concede ordinariamente a los hombres para vivir. Y es por consiguiente un precepto, o regla general de la razón, que todo hombre debiera esforzarse por la paz, en la medida en que espere obtenerla, y que cuando no puede obtenerla, puede entonces buscar y usar toda la ayuda y las ventajas de la guerra, de cuya regla la primera rama contiene la primera y fundamental ley de la naturaleza, que es buscar la paz, y seguirla, la segunda, la suma del derecho natural, que es defendernos por todos los medios que podamos.",
+      "temasRelacionados": [32, 33, 34, 42, 44],
+      "intervencion": {
+        "materia": "Filosofía", "curso": "4º ESO",
+        "modalidad": "Distintas opciones", "numEstudiantes": 16,
+        "neae": ["1 alumno TDAH", "1 alumno INTARSE senegalés sin castellano, francés elemental"],
+        "bloque": "Bloque II — Identidad y socialización",
+        "encargo": "Participar en los actos del «Día escolar de la no violencia y la paz» (30 de enero)."
+      }
+    },
+    {
+      "id": "2025-03", "anio": 2025, "oficial": true,
+      "tipo": "comentario-de-texto",
+      "autor": "José Ortega y Gasset", "obra": "Obras completas, Tomo II (2005, pp. 59-60, Taurus, Madrid)",
+      "texto": "…contenidos de las obras artísticas: hay tantas realidades como puntos de vista. El punto de vista crea el panorama. Hay una realidad de todos los días formada por un sistema de relaciones laxas, aproximadas, vagas, que basta para los usos del vivir cotidiano. Hay una realidad científica forjada en un sistema de relaciones exactas, impuesto por la necesidad de exactitud.",
+      "temasRelacionados": [10, 22, 70, 71],
+      "intervencion": {
+        "materia": "Filosofía", "curso": "1º Bachillerato",
+        "modalidad": "Humanidades y Ciencias Sociales", "numEstudiantes": 30,
+        "neae": ["1 alumno DEA (dislexia)", "1 alumna con discapacidad motora (DM)"],
+        "bloque": "Bloque II — El conocimiento y la realidad",
+        "encargo": "Aportación del Departamento de Filosofía al eje temático de Comunicación Lingüística, Bibliotecas y Radios Escolares."
+      }
+    }
+  ]
+}
