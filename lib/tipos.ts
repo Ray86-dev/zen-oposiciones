@@ -9,13 +9,11 @@ export const ESTADOS: { id: EstadoTema; label: string; peso: number; color: stri
   { id: "dominado",      label: "Dominado",      peso: 1,    color: "#059669" },
 ];
 
-export interface MaterialTema {
-  driveId: string; titulo: string; bytes: number; modificado: string; url: string;
-}
 export interface Tema {
   numero: number; titulo: string; bloqueId: string; bloque: string;
-  tieneMaterial: boolean; material: MaterialTema[];
-  bytesTexto: number; ultimaActualizacion: string | null;
+  /** Extensión del tema redactado. Sirve para estimar el esfuerzo de estudio. */
+  palabras: number;
+  ultimaActualizacion: string | null;
 }
 export interface Bloque {
   id: string; nombre: string; desde: number; hasta: number; numTemas: number;

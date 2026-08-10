@@ -75,7 +75,6 @@ export default function PaginaTemario() {
         {temas.map((t) => {
           const e = (estado.progreso[t.numero]?.estado ?? "pendiente") as EstadoTema;
           const color = ESTADOS.find((x) => x.id === e)!.color;
-          const viejo = !!t.ultimaActualizacion && t.ultimaActualizacion < "2023-01-01";
           return (
             <li key={t.numero} className="tarjeta p-4">
               <div className="flex items-start gap-3">
@@ -89,10 +88,8 @@ export default function PaginaTemario() {
                   <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-suave">
                     <span>{t.bloque}</span>
                     <Link href={`/temario/${t.numero}`} className="text-jade underline">Leer y anotar</Link>
-                    {viejo && (
-                      <span className="text-ambar">
-                        material de {t.ultimaActualizacion!.slice(0, 4)} · revisar
-                      </span>
+                    {t.palabras > 0 && (
+                      <span className="tabular-nums">{t.palabras.toLocaleString("es-ES")} palabras</span>
                     )}
                   </p>
                 </div>

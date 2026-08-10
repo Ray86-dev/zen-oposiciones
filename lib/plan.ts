@@ -7,11 +7,14 @@ export const DISPONIBILIDAD_POR_DEFECTO: Disponibilidad = {
   excepciones: {},
 };
 
-/** Minutos de estudio estimados para la primera vuelta de un tema. */
+/**
+ * Minutos estimados para la primera vuelta de un tema: leerlo con atención,
+ * esquematizarlo y darle una primera pasada de memorización.
+ * Unas 22 palabras por minuto de trabajo real sobre texto académico.
+ */
 export function esfuerzoTema(t: Tema): number {
-  const base = 120;
-  const porLongitud = Math.round(t.bytesTexto / 900);
-  return Math.min(300, Math.max(90, base + porLongitud));
+  const base = 40;
+  return Math.min(300, Math.max(90, base + Math.round(t.palabras / 22)));
 }
 
 /**
