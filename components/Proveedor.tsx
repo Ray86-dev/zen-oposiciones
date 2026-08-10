@@ -19,6 +19,7 @@ interface Ctx {
   fijarEstadoTema: (numero: number, estado: EstadoTema) => void;
   fijarConfianza: (numero: number, confianza: number) => void;
   registrarSesion: (minutos: number, tipo: string, tema?: number) => void;
+  recargarProgreso: () => Promise<void>;
 }
 
 const C = createContext<Ctx | null>(null);
@@ -105,6 +106,23 @@ export function Proveedor({ children }: { children: ReactNode }) {
 
   const valor: Ctx = {
     estado, temario, plan, resumen, listo,
+    recargarProgreso: async () => {
+      if (!usuario) return;
+      const c = db(); const tid = await temarioId();
+      if (!c || !tid) return;
+      const { data } = await c.from("progreso_temas").select("*").eq("temario_id", tid);
+      setEstado((e) => {
+        const progreso = { ...e.progreso };
+        for (const f of data ?? []) {
+          progreso[f.tema_numero] = {
+            numero: f.tema_numero, estado: f.estado, vueltas: f.vueltas,
+            ultimoRepaso: f.ultimo_repaso, minutosInvertidos: f.minutos_invertidos,
+            confianza: f.confianza ?? 0, notas: f.notas ?? "",
+          };
+        }
+        return { ...e, progreso };
+      });
+    },
     actualizar: (parcial) => setEstado((e) => {
       const nuevo = { ...e, ...parcial };
       if (parcial.fechaInicio || parcial.fechaPrueba || parcial.disponibilidad) {

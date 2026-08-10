@@ -9,6 +9,7 @@ import { ESTADOS, EstadoTema } from "@/lib/tipos";
 import { useLectura, estiloLectura, papelDe } from "@/lib/lectura";
 import AjustesLectura from "@/components/AjustesLectura";
 import PanelIA from "@/components/PanelIA";
+import PanelEvaluacion from "@/components/PanelEvaluacion";
 import Voz from "@/components/Voz";
 import { useVoz } from "@/components/ProveedorVoz";
 
@@ -29,7 +30,7 @@ export default function LectorCliente({ numero }: { numero: number }) {
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const [notaAbierta, setNotaAbierta] = useState<Anotacion | null>(null);
   const [borrador, setBorrador] = useState("");
-  const [panel, setPanel] = useState<"notas" | "ia">("notas");
+  const [panel, setPanel] = useState<"notas" | "ia" | "evaluacion">("notas");
   const [zen, setZen] = useState(false);
   const [ajustes, setAjustes] = useState(false);
   const [avance, setAvance] = useState(0);
@@ -300,14 +301,25 @@ export default function LectorCliente({ numero }: { numero: number }) {
       <Cabecera tema={tema} />
 
       <div className="flex flex-wrap items-center gap-1">
-        {ESTADOS.map((e) => (
-          <button key={e.id} onClick={() => fijarEstadoTema(numero, e.id)}
-            className={`rounded px-2.5 py-1 text-[11px] transition ${
-              estadoActual === e.id ? "text-tinta" : "bg-tinta-3 text-suave hover:text-texto"}`}
-            style={estadoActual === e.id ? { background: e.color } : undefined}>
-            {e.label}
-          </button>
-        ))}
+        {ESTADOS.map((e) => {
+          // Memorizado y dominado se ganan con la prueba, no se declaran:
+          // si no, la probabilidad del panel es una cifra que uno se inventa.
+          const seGana = e.id === "memorizado" || e.id === "dominado";
+          const activo = estadoActual === e.id;
+          return (
+            <button key={e.id}
+              onClick={() => { if (seGana) setPanel("evaluacion"); else fijarEstadoTema(numero, e.id); }}
+              title={seGana ? "Se consigue superando la prueba de la pestaña Evaluar" : undefined}
+              className={`rounded px-2.5 py-1 text-[11px] transition ${
+                activo ? "text-tinta" : seGana
+                  ? "border border-dashed border-borde text-suave hover:text-texto"
+                  : "bg-tinta-3 text-suave hover:text-texto"}`}
+              style={activo ? { background: e.color } : undefined}>
+              {seGana && !activo && <span className="mr-1 opacity-60">🔒</span>}
+              {e.label}
+            </button>
+          );
+        })}
       </div>
 
       {error && <p className="rounded-lg border border-coral/40 bg-coral/10 px-4 py-3 text-sm text-coral">{error}</p>}
@@ -326,17 +338,20 @@ export default function LectorCliente({ numero }: { numero: number }) {
         <aside className={`flex flex-col gap-3 ${
           modoAncho ? "max-h-[60vh]" : "h-[calc(100vh-210px)] min-h-[440px]"}`}>
           <div className="flex shrink-0 gap-1 rounded-lg border border-borde p-1">
-            {(["notas", "ia"] as const).map((p) => (
+            {(["notas", "ia", "evaluacion"] as const).map((p) => (
               <button key={p} onClick={() => setPanel(p)}
-                className={`flex-1 rounded px-3 py-1.5 text-xs transition ${
+                className={`flex-1 rounded px-2 py-1.5 text-xs transition ${
                   panel === p ? "bg-tinta-3 text-texto" : "text-suave hover:text-texto"}`}>
-                {p === "notas" ? `Marcas (${subrayados.length + anotaciones.length})` : "Generar"}
+                {p === "notas" ? `Marcas (${subrayados.length + anotaciones.length})`
+                  : p === "ia" ? "Generar" : "Evaluar"}
               </button>
             ))}
           </div>
 
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
-            {panel === "ia" ? (
+            {panel === "evaluacion" ? (
+              <PanelEvaluacion numero={numero} titulo={tema.titulo} />
+            ) : panel === "ia" ? (
               <PanelIA numero={numero} titulo={tema.titulo} />
             ) : (
               <div className="space-y-2">

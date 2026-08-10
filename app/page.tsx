@@ -30,6 +30,12 @@ export default function Panel() {
     return a + (ESTADOS.find((x) => x.id === e)?.peso ?? 0);
   }, 0) / temario.temas.length;
 
+  // Dominados sin prueba reciente: se avisa antes de que caduquen.
+  const caducando = progresos.filter((p) => {
+    if (p.estado !== "dominado" || !p.ultimoRepaso) return false;
+    return diasEntre(p.ultimoRepaso, h) > 45;
+  }).length;
+
   const p1 = probabilidadAlMenosUno(preparados);
   const p2 = probabilidadAlMenos(2, preparados);
   const para90 = temasParaProbabilidad(0.9);
@@ -82,6 +88,15 @@ export default function Panel() {
         <p className="rounded-lg border border-ambar/30 bg-ambar/5 px-4 py-3 text-sm text-suave">
           Con <b className="text-texto">{para90} temas</b> consolidados alcanzas el 90 % de probabilidad de que
           salga al menos uno. Te faltan <b className="text-texto">{para90 - preparados}</b>.
+        </p>
+      )}
+
+      {caducando > 0 && (
+        <p className="rounded-lg border border-ambar/30 bg-ambar/5 px-4 py-3 text-sm text-suave">
+          <b className="text-texto">{caducando}</b>{" "}
+          {caducando === 1 ? "tema dominado lleva" : "temas dominados llevan"} más de 45 días sin
+          prueba. A los 60 vuelven a «memorizado»: el dominio se mantiene, no se archiva.{" "}
+          <Link href="/temario" className="text-jade underline">Repasarlos</Link>
         </p>
       )}
 
