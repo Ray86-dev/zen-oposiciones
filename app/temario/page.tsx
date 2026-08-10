@@ -95,18 +95,33 @@ export default function PaginaTemario() {
                 </div>
               </div>
               <div className="mt-3 flex flex-wrap gap-1">
-                {ESTADOS.map((s) => (
-                  <button
-                    key={s.id}
-                    onClick={() => fijarEstadoTema(t.numero, s.id)}
-                    className={`rounded px-2 py-1 text-[11px] transition ${
-                      e === s.id ? "text-tinta" : "bg-tinta-3 text-suave hover:text-texto"
-                    }`}
-                    style={e === s.id ? { background: s.color } : undefined}
-                  >
-                    {s.label}
-                  </button>
-                ))}
+                {ESTADOS.map((s) => {
+                  // Memorizado y dominado se ganan superando la prueba, no se
+                  // declaran: si se pudieran marcar a mano, la probabilidad del
+                  // panel sería una cifra inventada.
+                  const seGana = s.id === "memorizado" || s.id === "dominado";
+                  const activo = e === s.id;
+                  const clases = `rounded px-2 py-1 text-[11px] transition ${
+                    activo ? "text-tinta"
+                      : seGana ? "border border-dashed border-borde text-suave hover:text-texto"
+                      : "bg-tinta-3 text-suave hover:text-texto"}`;
+                  if (seGana && !activo) {
+                    return (
+                      <Link key={s.id} href={`/temario/${t.numero}#evaluar`} className={clases}
+                        title="Se consigue superando la prueba de la pestaña Evaluar">
+                        <span className="mr-1 opacity-60">🔒</span>{s.label}
+                      </Link>
+                    );
+                  }
+                  return (
+                    <button key={s.id} disabled={seGana}
+                      onClick={() => { if (!seGana) fijarEstadoTema(t.numero, s.id); }}
+                      className={clases}
+                      style={activo ? { background: s.color } : undefined}>
+                      {s.label}
+                    </button>
+                  );
+                })}
               </div>
             </li>
           );

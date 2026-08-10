@@ -62,6 +62,11 @@ export default function LectorCliente({ numero }: { numero: number }) {
     return () => { vivo = false; };
   }, [usuario, numero]);
 
+  // Llegar desde el listado con #evaluar abre directamente esa pestaña.
+  useEffect(() => {
+    if (window.location.hash === "#evaluar") setPanel("evaluacion");
+  }, []);
+
   // Salir del modo zen con Escape
   useEffect(() => {
     if (!zen) return;
@@ -308,7 +313,10 @@ export default function LectorCliente({ numero }: { numero: number }) {
           const activo = estadoActual === e.id;
           return (
             <button key={e.id}
-              onClick={() => { if (seGana) setPanel("evaluacion"); else fijarEstadoTema(numero, e.id); }}
+              onClick={() => {
+                if (seGana) { setPanel("evaluacion"); setVoz(false); }
+                else fijarEstadoTema(numero, e.id);
+              }}
               title={seGana ? "Se consigue superando la prueba de la pestaña Evaluar" : undefined}
               className={`rounded px-2.5 py-1 text-[11px] transition ${
                 activo ? "text-tinta" : seGana
