@@ -1,6 +1,12 @@
 import { Temario, Tema, Disponibilidad, SesionPlan, Fase, ProgresoTema } from "./tipos";
 import { iso, parse, sumaDias, diasEntre, diaSemana } from "./fechas";
 
+/**
+ * Por debajo de esta duración una sesión no compensa: sacar el tema, situarse y
+ * recoger se come el rato. Los restos más cortos se absorben en la sesión previa.
+ */
+export const MIN_SESION = 30;
+
 export const DISPONIBILIDAD_POR_DEFECTO: Disponibilidad = {
   // dom, lun, mar, mié, jue, vie, sáb
   porDiaSemana: [90, 60, 60, 60, 60, 0, 150],
@@ -160,7 +166,7 @@ export function generarPlan(o: OpcionesPlan): SesionPlan[] {
       }
 
       // 4) temas nuevos con el tiempo que quede
-      while (restante >= 25) {
+      while (restante >= MIN_SESION) {
         if (!cola.length) {
           // Primera vuelta terminada: se abre una vuelta nueva sobre todo el
           // temario, más rápida, priorizando lo que hace más tiempo que no se toca.
@@ -170,7 +176,11 @@ export function generarPlan(o: OpcionesPlan): SesionPlan[] {
         }
         const n = cola[0];
         const t = porNumero.get(n)!;
-        const asignado = Math.min(restanteTemaActual, restante);
+        let asignado = Math.min(restanteTemaActual, restante);
+        // Si al tema le fuera a quedar un resto ridículo, se termina hoy aunque
+        // el día se pase un poco: vale más eso que una sesión de trece minutos.
+        const sobraria = restanteTemaActual - asignado;
+        if (sobraria > 0 && sobraria < MIN_SESION) asignado = restanteTemaActual;
         const total = costeTema(n);
         const yaHecho = total - restanteTemaActual;
         const parte = yaHecho > 0 ? " (continuación)" : "";
