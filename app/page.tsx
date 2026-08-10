@@ -60,7 +60,6 @@ export default function Panel() {
             <p>{temario.especialidad.numeroTemas} temas · se sortean {temario.especialidad.temasSorteados}</p>
           </div>
         </div>
-        <p className="mt-4 border-l-2 border-jade/40 pl-3 text-sm text-suave">{fase.objetivo}</p>
       </section>
 
       <section className="grid gap-4 sm:grid-cols-3">

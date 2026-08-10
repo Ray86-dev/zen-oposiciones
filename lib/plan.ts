@@ -52,7 +52,7 @@ export function fases(inicio: string, prueba: string): Fase[] {
   const c = (f: number) => sumaDias(inicio, Math.round(total * f));
   return [
     { id: "F1", nombre: "Cimientos", desde: inicio, hasta: c(0.18),
-      objetivo: "Actualizar el material a la LOMLOE, fijar método de estudio y arrancar la primera vuelta." },
+      objetivo: "Fijar el método de estudio y arrancar la primera vuelta." },
     { id: "F2", nombre: "Primera vuelta", desde: sumaDias(c(0.18), 1), hasta: c(0.58),
       objetivo: "Recorrer el temario completo: leer, esquematizar y hacer el primer resumen de cada tema." },
     { id: "F3", nombre: "Programación y UD", desde: sumaDias(c(0.58), 1), hasta: c(0.80),
