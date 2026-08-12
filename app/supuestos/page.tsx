@@ -4,6 +4,7 @@ import { useApp } from "@/components/Proveedor";
 import supuestosJson from "@/data/supuestos.json";
 import rubricasJson from "@/data/rubricas.json";
 import GeneradorSupuestos from "@/components/GeneradorSupuestos";
+import Aparece from "@/components/efectos/Aparece";
 
 type Supuesto = (typeof supuestosJson)["supuestos"][number];
 const RUBRICA_A = rubricasJson.partes.find((p) => p.id === "A")!;
@@ -31,8 +32,8 @@ export default function PaginaSupuestos() {
 
       <h2 className="serif pt-2 text-lg">Supuestos oficiales</h2>
       <ul className="space-y-3">
-        {supuestosJson.supuestos.map((s) => (
-          <li key={s.id} className="tarjeta p-5">
+        {supuestosJson.supuestos.map((s, i) => (
+          <Aparece as="li" key={s.id} className="tarjeta p-5" retardo={Math.min(i, 6) * 55}>
             <div className="flex flex-wrap items-center gap-2 text-xs text-suave">
               <span className="rounded bg-coral/15 px-2 py-0.5 uppercase tracking-wide text-coral">
                 {s.tipo === "comentario-de-texto" ? "Comentario de texto" : "Análisis histórico-semántico"}
@@ -59,7 +60,7 @@ export default function PaginaSupuestos() {
                 Temas relacionados: {s.temasRelacionados.join(", ")}
               </span>
             </div>
-          </li>
+          </Aparece>
         ))}
       </ul>
     </div>

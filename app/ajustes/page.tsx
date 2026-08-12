@@ -3,6 +3,7 @@ import { useApp } from "@/components/Proveedor";
 import { NOMBRE_DIA, formatoLargo, diasEntre } from "@/lib/fechas";
 import { fases, ritmoMinimoSemanal } from "@/lib/plan";
 import { useTema } from "@/components/Tema";
+import { useEfectos, type NivelEfecto } from "@/components/Efectos";
 import { useSesion } from "@/components/Sesion";
 import Link from "next/link";
 
@@ -11,6 +12,7 @@ const ORDEN = [1, 2, 3, 4, 5, 6, 0]; // lunes → domingo
 export default function PaginaAjustes() {
   const { estado, actualizar, temario, resumen, listo } = useApp();
   const { modo, fijar } = useTema();
+  const { nivel, fijar: fijarEfectos } = useEfectos();
   const { usuario } = useSesion();
   if (!listo) return <div className="tarjeta h-64 animate-pulse" />;
 
@@ -51,6 +53,34 @@ export default function PaginaAjustes() {
               }`}
             >
               {etiqueta}
+            </button>
+          ))}
+        </div>
+
+        <h3 className="mt-6 text-sm font-medium">Efectos visuales</h3>
+        <p className="mt-1 text-sm text-suave">
+          El fondo en movimiento, el indicador líquido de la navegación y las chispas al cerrar
+          un bloque. Nada de esto toca al lector de temas. Si tu sistema pide menos animación,
+          Zen arranca en «ninguno».
+        </p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          {([
+            ["pleno", "Pleno", "Todo encendido, con el fondo bien visible."],
+            ["sutil", "Sutil", "Lo justo para que se note el cuidado. Recomendado."],
+            ["ninguno", "Ninguno", "Interfaz quieta. Menos batería."],
+          ] as const).map(([id, etiqueta, ayuda]) => (
+            <button
+              key={id}
+              onClick={() => fijarEfectos(id as NivelEfecto)}
+              title={ayuda}
+              className={`rounded-lg border px-4 py-2 text-left text-sm transition ${
+                nivel === id
+                  ? "border-jade bg-jade/10 text-texto"
+                  : "border-borde text-suave hover:text-texto"
+              }`}
+            >
+              <span className="block">{etiqueta}</span>
+              <span className="mt-0.5 block max-w-[15rem] text-[11px] text-suave">{ayuda}</span>
             </button>
           ))}
         </div>

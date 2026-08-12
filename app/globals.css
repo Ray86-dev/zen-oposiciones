@@ -112,3 +112,188 @@ mark[data-nota="si"] { border-bottom: 2px solid rgba(47,191,148,.9); cursor: poi
 .markdown strong { font-weight: 700; }
 .markdown table { width: 100%; border-collapse: collapse; margin-bottom: .8em; font-size: .92em; }
 .markdown th, .markdown td { border: 1px solid var(--borde); padding: .4em .6em; text-align: left; }
+
+/* ============================ Capa de efectos ============================ */
+/* Todo lo visual "de más" vive aquí y se apaga entero con [data-fx="ninguno"].
+   Regla de oro: nada de esto puede tocar la legibilidad del temario. */
+
+/* El fondo lo pinta <html> para que la aurora quepa entre él y el contenido. */
+body { background: transparent; }
+
+.zen-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* ------------------------------- Aurora -------------------------------- */
+.zen-aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  animation: zen-entrar-fondo 1.6s ease .2s forwards;
+}
+/* Si no hay WebGL, un degradado quieto: se pierde el movimiento, no el color. */
+.zen-aurora--css {
+  background:
+    radial-gradient(60% 45% at 18% 12%, color-mix(in oklab, var(--jade) 18%, transparent), transparent 70%),
+    radial-gradient(55% 40% at 84% 8%, color-mix(in oklab, var(--ambar) 14%, transparent), transparent 70%),
+    radial-gradient(70% 50% at 50% 108%, color-mix(in oklab, var(--coral) 12%, transparent), transparent 72%);
+}
+@keyframes zen-entrar-fondo { to { opacity: 1; } }
+
+[data-fx="ninguno"] .zen-aurora { display: none; }
+
+/* ------------------------- Chispas de celebración ----------------------- */
+.zen-chispas {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ------------------------------ Revelado ------------------------------- */
+/* Sin [data-fx] (JS apagado, primer pintado) el contenido ya es visible. */
+[data-fx="pleno"] .zen-aparece,
+[data-fx="sutil"] .zen-aparece {
+  opacity: 0;
+  transform: translateY(10px);
+  filter: blur(6px);
+  transition: opacity .55s ease, transform .55s cubic-bezier(.22, 1, .36, 1), filter .55s ease;
+  will-change: opacity, transform;
+}
+[data-fx="sutil"] .zen-aparece { transform: translateY(6px); filter: blur(3px); }
+[data-fx] .zen-aparece.es-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  will-change: auto;
+}
+
+/* ------------------------ Brillo bajo el puntero ------------------------ */
+/* En @layer base a propósito: las utilidades de Tailwind viven en una capa
+   posterior, así que un `.tarjeta sticky` conserva su position:sticky en vez
+   de quedarse en relative. Fuera de capa, esta regla ganaría y rompería la
+   barra pegajosa de /supuestos. */
+@layer base {
+  .tarjeta { position: relative; isolation: isolate; }
+}
+[data-fx="pleno"] .tarjeta::before,
+[data-fx="sutil"] .tarjeta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .35s ease;
+  background: radial-gradient(
+    16rem 16rem at var(--bx, 50%) var(--by, 50%),
+    color-mix(in oklab, var(--jade) 13%, transparent),
+    transparent 62%
+  );
+}
+[data-fx="sutil"] .tarjeta::before {
+  background: radial-gradient(
+    13rem 13rem at var(--bx, 50%) var(--by, 50%),
+    color-mix(in oklab, var(--jade) 8%, transparent),
+    transparent 60%
+  );
+}
+[data-fx] .tarjeta[data-brillo]::before { opacity: 1; }
+[data-tema="claro"] .tarjeta::before { mix-blend-mode: multiply; }
+
+/* --------------------- Navegación: indicador líquido -------------------- */
+.zen-nav { position: relative; }
+.zen-nav > * { position: relative; z-index: 1; }
+.zen-nav-goo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  filter: url(#zen-goo);
+}
+.zen-burbuja {
+  position: absolute;
+  top: var(--y, 0);
+  left: 0;
+  height: var(--h, 32px);
+  width: var(--w, 0);
+  border-radius: 12px;
+  background: var(--fondo-3);
+  transform: translateX(var(--x, 0));
+  opacity: var(--o, 0);
+  transition:
+    transform .38s cubic-bezier(.34, 1.32, .5, 1),
+    width .38s cubic-bezier(.34, 1.32, .5, 1),
+    opacity .25s ease;
+}
+/* La estela va un pelo por detrás: es lo que estira la gota al desplazarse. */
+.zen-burbuja--estela {
+  transition:
+    transform .58s cubic-bezier(.22, 1, .36, 1),
+    width .58s cubic-bezier(.22, 1, .36, 1),
+    opacity .3s ease;
+}
+
+/* -------------------------- Botón con lustre --------------------------- */
+.zen-lustre { position: relative; overflow: hidden; }
+[data-fx="pleno"] .zen-lustre::after,
+[data-fx="sutil"] .zen-lustre::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, .34) 50%,
+    transparent 62%
+  );
+  transform: translateX(-120%);
+  transition: transform .75s cubic-bezier(.22, 1, .36, 1);
+}
+[data-fx] .zen-lustre:hover::after { transform: translateX(120%); }
+
+/* ------------------------ Barras de progreso vivas ---------------------- */
+.zen-barra { position: relative; overflow: hidden; }
+.zen-barra > span { position: relative; display: block; height: 100%; overflow: hidden; }
+[data-fx="pleno"] .zen-barra > span::after,
+[data-fx="sutil"] .zen-barra > span::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .45), transparent);
+  transform: translateX(-100%);
+  animation: zen-corriente 2.6s linear infinite;
+}
+@keyframes zen-corriente { to { transform: translateX(200%); } }
+
+/* ---------------------------- Respiración ------------------------------ */
+/* Para el punto que marca "esto está en marcha": late, no parpadea. */
+[data-fx="pleno"] .zen-respira,
+[data-fx="sutil"] .zen-respira { animation: zen-respira 3.2s ease-in-out infinite; }
+@keyframes zen-respira {
+  0%, 100% { opacity: .55; transform: scale(.9); }
+  50% { opacity: 1; transform: scale(1.12); }
+}
+
+/* --------------------------- Anillo con gota ---------------------------- */
+.zen-anillo-arco { transition: stroke-dasharray .9s cubic-bezier(.22, 1, .36, 1); }
+.zen-anillo-gota { transition: transform .9s cubic-bezier(.22, 1, .36, 1); }
+[data-fx="pleno"] .zen-anillo-halo, [data-fx="sutil"] .zen-anillo-halo { opacity: .5; }
+.zen-anillo-halo { opacity: 0; transition: opacity .6s ease; }
+
+/* --------------------------- Accesibilidad ----------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .zen-aparece, .zen-burbuja, .zen-anillo-arco, .zen-anillo-gota, .zen-lustre::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  .zen-aparece { opacity: 1 !important; transform: none !important; filter: none !important; }
+  .zen-respira, .zen-barra > span::after { animation: none !important; }
+  .zen-aurora { animation: none; opacity: 1; }
+}

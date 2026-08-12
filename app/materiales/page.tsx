@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSesion } from "@/components/Sesion";
 import { db, temarioId } from "@/lib/supabase";
 import VisorMaterial, { NOMBRES } from "@/components/VisorMaterial";
+import Aparece from "@/components/efectos/Aparece";
 import temarioJson from "@/data/temario-filosofia.json";
 
 interface Material {
@@ -141,8 +142,8 @@ export default function PaginaMateriales() {
             className="w-full rounded-lg border border-borde bg-tinta-2 px-3 py-2 text-sm placeholder:text-suave/60" />
 
           <ul className="space-y-2">
-            {visibles.map((m) => (
-              <li key={m.id}>
+            {visibles.map((m, i) => (
+              <Aparece as="li" key={m.id} retardo={Math.min(i, 8) * 45}>
                 <button onClick={() => setAbierto(m)}
                   className="tarjeta flex w-full items-center gap-3 p-4 text-left transition hover:border-jade/40">
                   <span className="shrink-0 rounded bg-jade/15 px-2 py-0.5 text-[10px] uppercase tracking-wide text-jade">
@@ -161,7 +162,7 @@ export default function PaginaMateriales() {
                   </span>
                   <span className="shrink-0 text-suave">→</span>
                 </button>
-              </li>
+              </Aparece>
             ))}
           </ul>
           {visibles.length === 0 && <p className="text-sm text-suave">Nada con ese filtro.</p>}

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSesion } from "@/components/Sesion";
+import Aparece from "@/components/efectos/Aparece";
 
 export default function Entrar() {
   const { entrar, registrar, usuario, salir, hayNube } = useSesion();
@@ -56,7 +57,7 @@ export default function Entrar() {
   };
 
   return (
-    <div className="tarjeta mx-auto max-w-md p-6">
+    <Aparece className="tarjeta mx-auto max-w-md p-6">
       <h1 className="serif text-2xl">{modo === "entrar" ? "Entrar" : "Crear cuenta"}</h1>
       <p className="mt-1 text-sm text-suave">
         Con una cuenta, tu progreso y tus anotaciones te siguen a cualquier dispositivo.
@@ -74,7 +75,7 @@ export default function Entrar() {
 
         <button
           type="submit" disabled={ocupado}
-          className="w-full rounded-lg bg-jade px-4 py-2.5 text-sm font-medium text-tinta disabled:opacity-50"
+          className="zen-lustre w-full rounded-lg bg-jade px-4 py-2.5 text-sm font-medium text-tinta disabled:opacity-50"
         >
           {ocupado ? "Un momento…" : modo === "entrar" ? "Entrar" : "Crear cuenta"}
         </button>
@@ -86,7 +87,7 @@ export default function Entrar() {
       >
         {modo === "entrar" ? "No tengo cuenta todavía" : "Ya tengo cuenta"}
       </button>
-    </div>
+    </Aparece>
   );
 }
 

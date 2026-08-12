@@ -3,9 +3,12 @@ import { useMemo, useState } from "react";
 import { useApp } from "@/components/Proveedor";
 import { ESTADOS, EstadoTema } from "@/lib/tipos";
 import Link from "next/link";
+import Aparece from "@/components/efectos/Aparece";
+import { useEfectos } from "@/components/Efectos";
 
 export default function PaginaTemario() {
   const { temario, estado, fijarEstadoTema, listo } = useApp();
+  const { celebrar } = useEfectos();
   const [bloque, setBloque] = useState<string>("todos");
   const [filtro, setFiltro] = useState<string>("todos");
   const [busca, setBusca] = useState("");
@@ -72,11 +75,11 @@ export default function PaginaTemario() {
       </div>
 
       <ul className="space-y-2">
-        {temas.map((t) => {
+        {temas.map((t, i) => {
           const e = (estado.progreso[t.numero]?.estado ?? "pendiente") as EstadoTema;
           const color = ESTADOS.find((x) => x.id === e)!.color;
           return (
-            <li key={t.numero} className="tarjeta p-4">
+            <Aparece as="li" key={t.numero} className="tarjeta p-4" retardo={Math.min(i, 8) * 45}>
               <div className="flex items-start gap-3">
                 <span className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: color }} />
                 <div className="min-w-0 flex-1">
@@ -115,7 +118,16 @@ export default function PaginaTemario() {
                   }
                   return (
                     <button key={s.id} disabled={seGana}
-                      onClick={() => { if (!seGana) fijarEstadoTema(t.numero, s.id); }}
+                      onClick={(ev) => {
+                        if (seGana) return;
+                        fijarEstadoTema(t.numero, s.id);
+                        // Solo el último escalón que se puede marcar a mano: si
+                        // celebrase cada clic, la celebración dejaría de valer.
+                        if (s.id === "esquematizado" && e !== "esquematizado") {
+                          const r = ev.currentTarget.getBoundingClientRect();
+                          celebrar(r.left + r.width / 2, r.top + r.height / 2, s.color);
+                        }
+                      }}
                       className={clases}
                       style={activo ? { background: s.color } : undefined}>
                       {s.label}
@@ -123,7 +135,7 @@ export default function PaginaTemario() {
                   );
                 })}
               </div>
-            </li>
+            </Aparece>
           );
         })}
       </ul>

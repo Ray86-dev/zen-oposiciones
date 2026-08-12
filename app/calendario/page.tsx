@@ -2,6 +2,7 @@
 import { useMemo, useState } from "react";
 import { useApp } from "@/components/Proveedor";
 import Pastilla from "@/components/Pastilla";
+import Aparece from "@/components/efectos/Aparece";
 import { hoy } from "@/lib/almacen";
 import { iso, diasEntre, NOMBRE_MES, formatoLargo } from "@/lib/fechas";
 import { fases } from "@/lib/plan";
@@ -64,7 +65,7 @@ export default function PaginaCalendario() {
         ))}
       </div>
 
-      <div className="tarjeta p-3">
+      <Aparece className="tarjeta p-3">
         <div className="grid grid-cols-7 gap-1 text-center text-[10px] uppercase tracking-wide text-suave">
           {["L", "M", "X", "J", "V", "S", "D"].map((d, i) => <div key={i} className="py-1">{d}</div>)}
         </div>
@@ -105,10 +106,10 @@ export default function PaginaCalendario() {
             );
           })}
         </div>
-      </div>
+      </Aparece>
 
       {sel && (
-        <section className="tarjeta p-5">
+        <Aparece as="section" className="tarjeta p-5">
           <h2 className="text-sm text-suave">{formatoLargo(sel)}</h2>
           {sesionesSel.length === 0 ? (
             <p className="mt-3 text-sm text-suave">Sin sesiones programadas.</p>
@@ -131,7 +132,7 @@ export default function PaginaCalendario() {
               Faltan {diasEntre(sel, estado.fechaPrueba)} días para la prueba.
             </p>
           )}
-        </section>
+        </Aparece>
       )}
     </div>
   );

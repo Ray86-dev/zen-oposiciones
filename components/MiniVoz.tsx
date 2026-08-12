@@ -16,8 +16,8 @@ export default function MiniVoz() {
 
   return (
     <div className="fixed bottom-4 left-1/2 z-40 w-[min(94vw,430px)] -translate-x-1/2 overflow-hidden rounded-xl border border-borde bg-tinta-2/95 shadow-2xl backdrop-blur">
-      <div className="h-0.5 bg-tinta-3">
-        <div className="h-full bg-jade transition-[width]" style={{ width: `${pct}%` }} />
+      <div className="zen-barra h-0.5 bg-tinta-3">
+        <span className="bg-jade transition-[width]" style={{ width: `${pct}%` }} />
       </div>
       <div className="flex items-center gap-3 px-3 py-2">
         <Transporte compacto />

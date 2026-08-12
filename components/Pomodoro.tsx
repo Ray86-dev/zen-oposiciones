@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSesion } from "@/components/Sesion";
 import { db, temarioId } from "@/lib/supabase";
+import { useEfectos } from "@/components/Efectos";
 
 type Fase = "enfoque" | "corto" | "largo";
 
@@ -42,10 +43,13 @@ function campana(agudo = false) {
 
 export default function Pomodoro() {
   const { usuario } = useSesion();
+  const { celebrar, activo } = useEfectos();
   const [e, setE] = useState<Guardado>(INICIAL);
   const [listo, setListo] = useState(false);
   const arrastre = useRef<{ x: number; y: number; px: number; py: number } | null>(null);
   const tituloOriginal = useRef("");
+  const caja = useRef<HTMLDivElement | null>(null);
+  const bloquesPrevios = useRef<number | null>(null);
 
   useEffect(() => {
     tituloOriginal.current = document.title;
@@ -120,6 +124,18 @@ export default function Pomodoro() {
     return () => { document.title = tituloOriginal.current; };
   }, [e.corriendo, e.restante, e.fase, listo]);
 
+  // Cerrar un bloque de enfoque merece algo más que una campana: las chispas
+  // salen del propio temporizador, allá donde el usuario lo haya arrastrado.
+  useEffect(() => {
+    if (!listo) return;
+    if (bloquesPrevios.current === null) { bloquesPrevios.current = e.completados; return; }
+    if (e.completados > bloquesPrevios.current) {
+      const r = caja.current?.getBoundingClientRect();
+      if (r) celebrar(r.left + r.width / 2, r.top + r.height / 2, "#2fbf94");
+    }
+    bloquesPrevios.current = e.completados;
+  }, [e.completados, listo, celebrar]);
+
   const arrancar = () => {
     if (typeof Notification !== "undefined" && Notification.permission === "default") {
       void Notification.requestPermission();
@@ -151,7 +167,12 @@ export default function Pomodoro() {
         title="Temporizador de estudio"
         className="fixed bottom-4 right-4 z-40 rounded-full border border-borde bg-tinta-2/95 px-4 py-2.5 text-xs text-suave shadow-xl backdrop-blur transition hover:text-texto"
       >
-        {e.corriendo ? <span className="tabular-nums text-jade">{fmt(e.restante)}</span> : "Temporizador"}
+        {e.corriendo
+          ? <span className="tabular-nums text-jade">
+              {activo && <span className="zen-respira mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-jade align-middle" />}
+              {fmt(e.restante)}
+            </span>
+          : "Temporizador"}
       </button>
     );
   }
@@ -162,6 +183,7 @@ export default function Pomodoro() {
 
   return (
     <div
+      ref={caja}
       className="fixed bottom-4 right-4 z-40 select-none rounded-xl border border-borde bg-tinta-2/95 shadow-2xl backdrop-blur"
       style={{ transform: `translate(${e.x}px, ${e.y}px)`, width: e.minimizado ? 168 : 232 }}
     >
@@ -185,13 +207,13 @@ export default function Pomodoro() {
           {fmt(e.restante)}
         </p>
 
-        <div className="mt-2 h-1 overflow-hidden rounded bg-tinta-3">
-          <div className="h-full transition-[width]" style={{ width: `${pct}%`, background: color }} />
+        <div className="zen-barra mt-2 h-1 overflow-hidden rounded bg-tinta-3">
+          <span className="transition-[width]" style={{ width: `${pct}%`, background: color }} />
         </div>
 
         <div className="mt-3 flex gap-1.5">
           <button onClick={() => (e.corriendo ? setE((v) => ({ ...v, corriendo: false, desde: null })) : arrancar())}
-            className="flex-1 rounded-lg py-1.5 text-xs font-medium text-tinta" style={{ background: color }}>
+            className="zen-lustre flex-1 rounded-lg py-1.5 text-xs font-medium text-tinta" style={{ background: color }}>
             {e.corriendo ? "Pausar" : e.restante === DURACION[e.fase] ? "Empezar" : "Seguir"}
           </button>
           <button onClick={() => setE((v) => ({ ...v, restante: DURACION[v.fase], corriendo: false, desde: null }))}
@@ -209,11 +231,15 @@ export default function Pomodoro() {
         {!e.minimizado && (
           <div className="mt-2.5 flex items-center justify-between text-[10px] text-suave">
             <span className="flex gap-1" title={`${e.completados} bloques hoy`}>
-              {[0, 1, 2, 3].map((k) => (
-                <span key={k} className="h-1.5 w-1.5 rounded-full"
-                  style={{ background: e.completados % 4 > k || (e.completados > 0 && e.completados % 4 === 0)
-                    ? "#2fbf94" : "var(--borde)" }} />
-              ))}
+              {[0, 1, 2, 3].map((k) => {
+                const hecho = e.completados % 4 > k || (e.completados > 0 && e.completados % 4 === 0);
+                const enCurso = !hecho && e.completados % 4 === k && e.corriendo && e.fase === "enfoque";
+                return (
+                  <span key={k}
+                    className={`h-1.5 w-1.5 rounded-full ${enCurso ? "zen-respira" : ""}`}
+                    style={{ background: hecho || enCurso ? "#2fbf94" : "var(--borde)" }} />
+                );
+              })}
             </span>
             <span className="tabular-nums">
               {e.completados} · {Math.round((e.completados * 25) / 60 * 10) / 10} h

@@ -9,6 +9,7 @@ import { ESTADOS } from "@/lib/tipos";
 import { consejoDe } from "@/lib/consejos";
 import Anillo from "@/components/Anillo";
 import Pastilla from "@/components/Pastilla";
+import Aparece from "@/components/efectos/Aparece";
 
 export default function Panel() {
   const { estado, temario, plan, resumen, listo } = useApp();
@@ -44,7 +45,7 @@ export default function Panel() {
 
   return (
     <div className="space-y-6">
-      <section className="tarjeta p-6">
+      <Aparece as="section" className="tarjeta p-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-widest text-suave">Fase {fase.id} · {fase.nombre}</p>
@@ -60,9 +61,9 @@ export default function Panel() {
             <p>{temario.especialidad.numeroTemas} temas · se sortean {temario.especialidad.temasSorteados}</p>
           </div>
         </div>
-      </section>
+      </Aparece>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <Aparece as="section" className="grid gap-4 sm:grid-cols-3" retardo={90}>
         <div className="tarjeta flex flex-col items-center p-5">
           <Anillo valor={avance} etiqueta={`${Math.round(avance * 100)}%`} sub="del temario" />
           <p className="mt-3 text-center text-xs text-suave">
@@ -81,7 +82,7 @@ export default function Panel() {
             Poder elegir entre dos temas preparados es lo que sube la nota
           </p>
         </div>
-      </section>
+      </Aparece>
 
       {preparados < para90 && (
         <p className="rounded-lg border border-ambar/30 bg-ambar/5 px-4 py-3 text-sm text-suave">
@@ -109,7 +110,7 @@ export default function Panel() {
         </p>
       )}
 
-      <section className="tarjeta p-6">
+      <Aparece as="section" className="tarjeta p-6" retardo={60}>
         <h2 className="serif text-xl">Hoy</h2>
         <p className="text-xs text-suave">{formatoLargo(h)}</p>
         {deHoy.length === 0 ? (
@@ -153,9 +154,9 @@ export default function Panel() {
         <p className="mt-5 border-l-2 border-jade/40 pl-3 text-sm italic text-suave">
           {consejoDe(fase.id, new Date().getDate())}
         </p>
-      </section>
+      </Aparece>
 
-      <section className="tarjeta p-6">
+      <Aparece as="section" className="tarjeta p-6" retardo={110}>
         <h2 className="serif text-xl">A continuación</h2>
         <ul className="mt-3 space-y-1.5">
           {proximas.map((s, i) => (
@@ -181,7 +182,7 @@ export default function Panel() {
         <Link href="/calendario" className="mt-4 inline-block text-sm text-jade underline">
           Ver el calendario completo
         </Link>
-      </section>
+      </Aparece>
     </div>
   );
 }
