@@ -1,0 +1,19 @@
+# Configuración de la CLI de Supabase.
+#
+# Existe sobre todo para que el despliegue de las funciones sea determinista:
+# sin este fichero, `supabase functions deploy` aplica los valores por defecto
+# y basta con que uno cambie para que la API deje de aceptar las llamadas del
+# navegador. verify_jwt = true es obligatorio aquí: lib/supabase.ts manda el
+# access_token del usuario en la cabecera Authorization, y cada función vuelve
+# a comprobar la identidad por su cuenta con usuarioDe(req).
+
+project_id = "hulbafouyprldwclyjsq"
+
+[functions.generar-supuesto]
+verify_jwt = true
+
+[functions.generar-material]
+verify_jwt = true
+
+[functions.evaluar]
+verify_jwt = true

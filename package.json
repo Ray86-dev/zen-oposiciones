@@ -9,7 +9,8 @@
     "lint": "next lint",
     "smoke": "tsx smoke.tsx",
     "seed": "tsx scripts/seed.ts",
-    "subir-contenido": "node scripts/subir-contenido.mjs"
+    "subir-contenido": "node scripts/subir-contenido.mjs",
+    "desplegar-funciones": "supabase functions deploy generar-supuesto generar-material evaluar --project-ref hulbafouyprldwclyjsq"
   },
   "dependencies": {
     "@diffusionstudio/vits-web": "^1.0.3",
@@ -28,6 +29,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "jsdom": "^25.0.1",
+    "supabase": "^2.114.0",
     "tailwindcss": "^4.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
