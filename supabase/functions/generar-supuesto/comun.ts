@@ -63,17 +63,38 @@ export async function registrarUso(
 }
 
 // ---------------------------------------------------------------- DeepSeek
-export async function deepseek(sistema: string, usuario: string, maxTokens = 8000) {
+/**
+ * Cuánto se le deja pensar al modelo antes de responder.
+ *
+ * deepseek-v4-flash razona por defecto, y su presupuesto de razonamiento sale
+ * del mismo `max_tokens` que la respuesta. Con 6000 se gastó los 6000 pensando
+ * (reasoning_tokens: 6000) y devolvió el contenido vacío con finish_reason
+ * "length": dos minutos de espera para nada. Redactar un enunciado con un
+ * formato fijo no necesita cadena de pensamiento, así que por defecto va
+ * apagada; quien la necesite, que la pida.
+ */
+export type Pensar = "no" | "poco" | "normal";
+
+export async function deepseek(
+  sistema: string,
+  usuario: string,
+  maxTokens = 8000,
+  pensar: Pensar = "no",
+) {
   const clave = Deno.env.get("DEEPSEEK_API_KEY");
   if (!clave) throw new Error("Falta el secreto DEEPSEEK_API_KEY");
   const modelo = Deno.env.get("DEEPSEEK_MODEL") ?? "deepseek-v4-flash";
+
+  const pensamiento = pensar === "no"
+    ? { type: "disabled" }
+    : { type: "enabled", reasoning_effort: pensar === "poco" ? "low" : "high" };
 
   // La pasarela de Supabase corta la función a los ~150 s y devuelve un 504:
   // un error mudo, sin traza, que no dice si el modelo tardó, se atascó o no
   // existe. Mejor rendirse antes por nuestra cuenta y contarlo.
   const ESPERA_MAXIMA = 75_000;
 
-  const pedir = async (tope: number) => {
+  const pedir = async (tope: number, conPensamiento = true) => {
     const aborto = new AbortController();
     const reloj = setTimeout(() => aborto.abort(), ESPERA_MAXIMA);
     let r: Response;
@@ -89,6 +110,7 @@ export async function deepseek(sistema: string, usuario: string, maxTokens = 800
           ],
           temperature: 0.4,
           max_tokens: tope,
+          ...(conPensamiento ? { thinking: pensamiento } : {}),
         }),
         signal: aborto.signal,
       });
@@ -103,7 +125,17 @@ export async function deepseek(sistema: string, usuario: string, maxTokens = 800
     } finally {
       clearTimeout(reloj);
     }
-    if (!r.ok) throw new Error(`DeepSeek ${r.status}: ${(await r.text()).slice(0, 300)}`);
+    if (!r.ok) {
+      const cuerpo = (await r.text()).slice(0, 300);
+      // Red de seguridad: si esta cuenta o este modelo aún no aceptan el
+      // parámetro `thinking`, se repite sin él antes de dar la tarde por
+      // perdida. Se pierde el control del razonamiento, no el servicio.
+      if (r.status === 400 && conPensamiento && /thinking|reasoning/i.test(cuerpo)) {
+        clearTimeout(reloj);
+        return await pedir(tope, false);
+      }
+      throw new Error(`DeepSeek ${r.status}: ${cuerpo}`);
+    }
     const j = await r.json();
     const eleccion = j.choices?.[0];
     return {
