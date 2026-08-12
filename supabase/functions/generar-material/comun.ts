@@ -68,22 +68,55 @@ export async function deepseek(sistema: string, usuario: string, maxTokens = 800
   if (!clave) throw new Error("Falta el secreto DEEPSEEK_API_KEY");
   const modelo = Deno.env.get("DEEPSEEK_MODEL") ?? "deepseek-v4-flash";
 
-  const r = await fetch("https://api.deepseek.com/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${clave}` },
-    body: JSON.stringify({
-      model: modelo,
-      messages: [
-        { role: "system", content: sistema },
-        { role: "user", content: usuario },
-      ],
-      temperature: 0.4,
-      max_tokens: maxTokens,
-    }),
-  });
-  if (!r.ok) throw new Error(`DeepSeek ${r.status}: ${(await r.text()).slice(0, 300)}`);
-  const j = await r.json();
-  return { texto: j.choices?.[0]?.message?.content ?? "", modelo };
+  const pedir = async (tope: number) => {
+    const r = await fetch("https://api.deepseek.com/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${clave}` },
+      body: JSON.stringify({
+        model: modelo,
+        messages: [
+          { role: "system", content: sistema },
+          { role: "user", content: usuario },
+        ],
+        temperature: 0.4,
+        max_tokens: tope,
+      }),
+    });
+    if (!r.ok) throw new Error(`DeepSeek ${r.status}: ${(await r.text()).slice(0, 300)}`);
+    const j = await r.json();
+    const eleccion = j.choices?.[0];
+    return {
+      texto: (eleccion?.message?.content ?? "") as string,
+      motivo: (eleccion?.finish_reason ?? "sin finish_reason") as string,
+      // Los modelos con cadena de pensamiento la devuelven en un campo aparte.
+      razonando: Boolean(eleccion?.message?.reasoning_content),
+      uso: j.usage ?? null,
+      claves: Object.keys(j ?? {}).join(","),
+    };
+  };
+
+  let res = await pedir(maxTokens);
+
+  // Un modelo razonador puede gastarse el tope entero pensando y devolver el
+  // contenido vacío con finish_reason "length". Antes eso llegaba a la interfaz
+  // como «El modelo devolvió una respuesta vacía», que no dice nada de por qué.
+  // Un reintento con el doble de margen suele bastar.
+  if (!res.texto.trim() && (res.motivo === "length" || res.razonando)) {
+    res = await pedir(Math.min(maxTokens * 2, 16000));
+  }
+
+  if (!res.texto.trim()) {
+    const detalle = [
+      `modelo ${modelo}`,
+      `finish_reason: ${res.motivo}`,
+      res.razonando ? "devolvió cadena de pensamiento pero no respuesta" : null,
+      res.uso ? `tokens: ${JSON.stringify(res.uso)}` : null,
+      res.motivo === "sin finish_reason" ? `claves de la respuesta: ${res.claves}` : null,
+    ].filter(Boolean).join(" · ");
+    throw new Error(`El modelo no devolvió texto (${detalle}).`);
+  }
+
+  return { texto: res.texto, modelo };
 }
 
 // ------------------------------------------------------------------ Gemini

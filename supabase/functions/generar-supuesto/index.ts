@@ -140,7 +140,9 @@ Deno.serve(async (req) => {
       "(un solo bloque siguiendo la plantilla literal: «Imparte usted clase de la materia de … a un grupo de N estudiantes de la modalidad de … El grupo cuenta con … Está usted abordando una situación de aprendizaje relacionada con los saberes básicos del bloque …, «…». <encargo del centro>. Tiene usted que elaborar una propuesta didáctica.»)",
     ].filter(Boolean).join("\n");
 
-    const { texto, modelo } = await deepseek(SISTEMA, prompt, 3500);
+    // 6000 y no 3500: si el modelo configurado razona antes de responder, el tope
+    // se lo come la cadena de pensamiento y el contenido llega vacío.
+    const { texto, modelo } = await deepseek(SISTEMA, prompt, 6000);
     if (!texto.trim()) return json({ error: "El modelo devolvió una respuesta vacía." }, 502);
 
     await admin.from("materiales_ia").insert({
