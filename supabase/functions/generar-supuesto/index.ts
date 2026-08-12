@@ -4,6 +4,36 @@
 import {
   CORS, json, clienteAdmin, usuarioDe, dentroDelCupo, registrarUso, deepseek,
 } from "./comun.ts";
+import corpus from "../../../data/textos-comentario.json" with { type: "json" };
+
+/**
+ * El fragmento del comentario de texto NO lo escribe el modelo.
+ *
+ * Se le pidió por prompt que no inventara citas y las inventó igual: pegó una
+ * frase de los Manuscritos de 1844 a una paráfrasis de El Capital y lo firmó
+ * como «Trabajo asalariado y capital» (1849), una obra donde la palabra
+ * plusvalía todavía no podía aparecer. A un modelo no se le pide que no
+ * alucine; se le quita la ocasión. Aquí elegimos nosotros de un corpus
+ * transcrito y verificado, y él solo redacta la intervención didáctica.
+ *
+ * El rango de longitud imita el de los enunciados oficiales de 2025.
+ */
+interface TextoCorpus {
+  id: string; autor: string; obra: string; localizacion: string;
+  referencia: string; periodo: string; texto: string; palabras: number;
+}
+
+const TEXTOS: TextoCorpus[] = (corpus.textos as TextoCorpus[])
+  .filter((t) => t.palabras >= 70 && t.palabras <= 230);
+
+function elegirTexto(): TextoCorpus {
+  return TEXTOS[Math.floor(Math.random() * TEXTOS.length)];
+}
+
+function citar(t: TextoCorpus) {
+  const partes = [t.autor, t.obra, t.localizacion].filter(Boolean).join(", ");
+  return t.referencia ? `${partes}. ${t.referencia}` : partes;
+}
 
 const SISTEMA = `
 Eres miembro de la Comisión de Coordinación de Filosofía de los procedimientos
@@ -73,10 +103,10 @@ Reglas innegociables:
   nombra como BLOQUE (número romano y título), no como un saber básico suelto. Los
   saberes concretos orientan el contenido, pero lo que se cita en el enunciado es el
   bloque al que pertenecen.
-- Si generas un comentario de texto, el fragmento debe ser una cita REAL y verificable
-  de una obra publicada, con su referencia bibliográfica. Si no puedes garantizar la
-  literalidad de una cita, elige un autor y una obra que domines, y señala la referencia
-  con precisión. Jamás inventes una cita atribuyéndola a un autor.
+- En el comentario de texto, el fragmento y su referencia TE LOS DAMOS NOSOTROS, ya
+  verificados contra la fuente. Tu única obligación con ellos es copiarlos palabra por
+  palabra. No elijas otro texto, no lo abrevies, no lo modernices, no corrijas sus
+  erratas ni cambies su puntuación. Jamás cites de memoria.
 - Escribe en español de España, con el registro administrativo propio de estos documentos.
 - No añadas soluciones, orientaciones ni comentarios: solo el enunciado.`;
 
@@ -114,9 +144,25 @@ Deno.serve(async (req) => {
       }
     }
 
+    const elegido = tipo === "comentario-de-texto" ? elegirTexto() : null;
+
     const prompt = [
       `Redacta UN supuesto práctico completo del tipo: ${tipo}.`,
       anclaje,
+      elegido
+        ? [
+            "",
+            "EL FRAGMENTO YA ESTÁ ELEGIDO. No lo sustituyas, no lo recortes, no lo",
+            "reescribas y no lo 'mejores': cópialo palabra por palabra tal y como",
+            "aparece aquí, y debajo la referencia exacta. Está verificado contra su",
+            "fuente; cualquier retoque tuyo lo convertiría en una cita falsa.",
+            "",
+            "TEXTO:",
+            elegido.texto,
+            "",
+            `REFERENCIA (cópiala tal cual): ${citar(elegido)}`,
+          ].join("\n")
+        : "",
       "",
       "CONTEXTO CURRICULAR OBLIGATORIO",
       `Materia: ${materia}`,
@@ -133,7 +179,7 @@ Deno.serve(async (req) => {
       "FORMATO DE SALIDA (Markdown, sin vallas de código):",
       "## SUPUESTO PRÁCTICO",
       tipo === "comentario-de-texto"
-        ? "(frase marco: «Realice el siguiente comentario de texto y a continuación desarrolle la intervención didáctica propuesta:»)\n\n### Comentario de texto\n«Realice un comentario de texto teniendo en cuenta las siguientes indicaciones:» + guion literal de cuatro apartados\n\n> (fragmento real, entre 90 y 160 palabras)\n\n(referencia bibliográfica completa)"
+        ? "(frase marco: «Realice el siguiente comentario de texto y a continuación desarrolle la intervención didáctica propuesta:»)\n\n### Comentario de texto\n«Realice un comentario de texto teniendo en cuenta las siguientes indicaciones:» + guion literal de cuatro apartados\n\n> (el fragmento que se te ha dado, copiado literalmente)\n\n(la referencia que se te ha dado, copiada literalmente)"
         : "(frase marco: «Realice el siguiente análisis histórico-semántico y a continuación desarrolle la intervención didáctica propuesta:»)\n\n### Análisis histórico-semántico\n«Realice un análisis histórico-semántico del término TÉRMINO teniendo en cuenta las siguientes indicaciones:» (término en mayúsculas) + guion literal de cuatro apartados",
       "",
       "### Intervención didáctica",
@@ -150,7 +196,11 @@ Deno.serve(async (req) => {
       user_id: usuario.id, temario_id: temario!.id,
       tema_numero: Number.isInteger(temaNumero) ? temaNumero : null,
       tipo: "supuesto", modelo, contenido: texto,
-      metadatos: { tipoSupuesto: tipo, materia, curso, bloque, dificultad: dificultad ?? "normal" },
+      metadatos: {
+        tipoSupuesto: tipo, materia, curso, bloque,
+        dificultad: dificultad ?? "normal",
+        textoId: elegido?.id ?? null,
+      },
     });
     await registrarUso(admin, usuario.id, "examen", `supuesto-${Date.now()}`);
 
