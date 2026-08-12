@@ -13,6 +13,17 @@ del Cuerpo 590, especialidad 201.
 
 Formato real de la convocatoria de 2025, que debes reproducir con exactitud:
 
+0. El enunciado ABRE SIEMPRE con la frase marco del tribunal, en imperativo:
+   - «Realice el siguiente análisis histórico-semántico y a continuación desarrolle la
+     intervención didáctica propuesta:»
+   - «Realice el siguiente comentario de texto y a continuación desarrolle la intervención
+     didáctica propuesta:»
+   Y la consigna del ejercicio va también en imperativo y en segunda persona de cortesía:
+   - «Realice un análisis histórico-semántico del término TÉRMINO teniendo en cuenta las
+     siguientes indicaciones:»
+   - «Realice un comentario de texto teniendo en cuenta las siguientes indicaciones:»
+   No uses nunca fórmulas impersonales del tipo «A continuación se presenta el término…».
+
 1. Un ejercicio de análisis, que puede ser de dos tipos:
    a) ANÁLISIS HISTÓRICO-SEMÁNTICO de un término filosófico, con este guion literal:
       a) Analice el término secuenciando las distintas interpretaciones históricamente dadas.
@@ -29,16 +40,39 @@ Formato real de la convocatoria de 2025, que debes reproducir con exactitud:
       d) Valore y reflexione críticamente sobre la actualidad filosófica de las ideas del texto
          y del autor.
 
-2. Una INTERVENCIÓN DIDÁCTICA con un contexto de aula concreto: materia, curso,
-   modalidad, número de estudiantes, alumnado NEAE con sus siglas oficiales, bloque
-   de saberes básicos del currículo canario y un encargo del centro (una efeméride,
-   una petición de vicedirección, una aportación a un eje temático o a un proyecto).
-   Termina siempre con: «Tiene usted que elaborar una propuesta didáctica.»
+2. Una INTERVENCIÓN DIDÁCTICA, redactada con esta plantilla literal, en segunda persona
+   de cortesía y en presente:
+
+   «Imparte usted clase de la materia de {MATERIA} de {CURSO} a un grupo de {N}
+   estudiantes de la modalidad de {MODALIDAD}. El grupo cuenta con {ALUMNADO NEAE}.
+   Está usted abordando una situación de aprendizaje relacionada con los saberes básicos
+   del bloque {ROMANO}, «{NOMBRE DEL BLOQUE}». {ENCARGO DEL CENTRO}. Tiene usted que
+   elaborar una propuesta didáctica.»
+
+   El encargo del centro es una efeméride, una petición de la vicedirección, una
+   aportación a un eje temático o a un proyecto de centro.
+   La expresión «situación de aprendizaje» es terminología LOMLOE y no se sustituye.
 
 Reglas innegociables:
-- El contexto de aula debe ser verosímil: ratios reales, siglas NEAE correctas
-  (TEA, TDAH, DEA, ALCAIN, INTARSE, DM, ECOPHE), y una casuística coherente con el curso.
-- El bloque de saberes básicos debe ser exactamente uno de los que se te faciliten.
+- Siglas NEAE de Canarias. Si desarrollas una sigla, usa EXACTAMENTE esta denominación;
+  jamás inventes el desarrollo:
+    NEE     Necesidades Educativas Especiales
+    TEA     Trastorno del Espectro del Autismo
+    TDAH    Trastorno por Déficit de Atención e Hiperactividad
+    DEA     Dificultades Específicas de Aprendizaje
+    ECOPHE  Especiales Condiciones Personales o de Historia Escolar
+    ALCAIN  Altas Capacidades Intelectuales
+    INTARSE Incorporación Tardía al Sistema Educativo
+    DM      Discapacidad Motora
+  Lo habitual en el documento oficial es citarlas en seco («un alumno TEA», «1 alumno
+  DEA (dislexia)»), sin desplegarlas.
+- Densidad de NEAE realista: UNO O DOS casos por grupo. Los tres supuestos oficiales de
+  2025 tenían exactamente dos cada uno, sobre grupos de 16, 27 y 30 estudiantes. Nunca
+  más de tres: un aula con siete perfiles no es una convocatoria real, es otra prueba.
+- El bloque de saberes básicos debe ser exactamente uno de los que se te faciliten, y se
+  nombra como BLOQUE (número romano y título), no como un saber básico suelto. Los
+  saberes concretos orientan el contenido, pero lo que se cita en el enunciado es el
+  bloque al que pertenecen.
 - Si generas un comentario de texto, el fragmento debe ser una cita REAL y verificable
   de una obra publicada, con su referencia bibliográfica. Si no puedes garantizar la
   literalidad de una cita, elige un autor y una obra que domines, y señala la referencia
@@ -99,11 +133,11 @@ Deno.serve(async (req) => {
       "FORMATO DE SALIDA (Markdown, sin vallas de código):",
       "## SUPUESTO PRÁCTICO",
       tipo === "comentario-de-texto"
-        ? "### Comentario de texto\n(guion literal de cuatro apartados)\n\n> (fragmento real, entre 90 y 160 palabras)\n\n(referencia bibliográfica completa)"
-        : "### Análisis histórico-semántico\n(término en mayúsculas y guion literal de cuatro apartados)",
+        ? "(frase marco: «Realice el siguiente comentario de texto y a continuación desarrolle la intervención didáctica propuesta:»)\n\n### Comentario de texto\n«Realice un comentario de texto teniendo en cuenta las siguientes indicaciones:» + guion literal de cuatro apartados\n\n> (fragmento real, entre 90 y 160 palabras)\n\n(referencia bibliográfica completa)"
+        : "(frase marco: «Realice el siguiente análisis histórico-semántico y a continuación desarrolle la intervención didáctica propuesta:»)\n\n### Análisis histórico-semántico\n«Realice un análisis histórico-semántico del término TÉRMINO teniendo en cuenta las siguientes indicaciones:» (término en mayúsculas) + guion literal de cuatro apartados",
       "",
       "### Intervención didáctica",
-      "(párrafo con materia, curso, modalidad, número de estudiantes y alumnado NEAE; párrafo con el bloque de saberes y el encargo del centro; cierre con «Tiene usted que elaborar una propuesta didáctica.»)",
+      "(un solo bloque siguiendo la plantilla literal: «Imparte usted clase de la materia de … a un grupo de N estudiantes de la modalidad de … El grupo cuenta con … Está usted abordando una situación de aprendizaje relacionada con los saberes básicos del bloque …, «…». <encargo del centro>. Tiene usted que elaborar una propuesta didáctica.»)",
     ].filter(Boolean).join("\n");
 
     const { texto, modelo } = await deepseek(SISTEMA, prompt, 3500);

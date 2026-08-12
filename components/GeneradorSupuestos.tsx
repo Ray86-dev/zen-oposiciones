@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { llamarFuncion } from "@/lib/supabase";
 import VisorMaterial from "@/components/VisorMaterial";
 import { useSesion } from "@/components/Sesion";
@@ -18,12 +18,21 @@ export default function GeneradorSupuestos() {
   const [cargando, setCargando] = useState(false);
   const [res, setRes] = useState<Respuesta | null>(null);
   const [error, setError] = useState("");
+  const [segundos, setSegundos] = useState(0);
 
   const materia = curriculo.materias[iMateria];
   const bloque = useMemo(() => materia.bloques[Math.min(iBloque, materia.bloques.length - 1)], [materia, iBloque]);
 
+  // Un contador honesto vale mas que una barra que finge saber el porcentaje:
+  // la generacion tarda lo que tarde y el usuario merece verlo avanzar.
+  useEffect(() => {
+    if (!cargando) return;
+    const t = setInterval(() => setSegundos((n) => n + 1), 1000);
+    return () => clearInterval(t);
+  }, [cargando]);
+
   const generar = async () => {
-    setCargando(true); setError(""); setRes(null);
+    setCargando(true); setError(""); setRes(null); setSegundos(0);
     try {
       setRes(await llamarFuncion<Respuesta>("generar-supuesto", {
         tipo,
@@ -84,10 +93,39 @@ export default function GeneradorSupuestos() {
 
           <button
             onClick={generar} disabled={cargando}
-            className="mt-4 rounded-lg bg-jade px-4 py-2 text-sm font-medium text-tinta disabled:opacity-50"
+            aria-busy={cargando}
+            className="zen-lustre mt-4 inline-flex items-center gap-2 rounded-lg bg-jade px-4 py-2 text-sm font-medium text-tinta disabled:opacity-60"
           >
+            {cargando && (
+              <svg className="zen-girando" width="14" height="14" viewBox="0 0 14 14" aria-hidden>
+                <circle cx="7" cy="7" r="5.5" fill="none" stroke="currentColor"
+                  strokeWidth="2" strokeOpacity=".25" />
+                <path d="M7 1.5a5.5 5.5 0 0 1 5.5 5.5" fill="none" stroke="currentColor"
+                  strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            )}
             {cargando ? "Redactando el supuesto…" : "Generar supuesto"}
           </button>
+
+          {cargando && (
+            <div className="mt-4" role="status" aria-live="polite">
+              <div className="zen-indeterminada h-1 overflow-hidden rounded bg-tinta-3" />
+              <p className="mt-2 text-xs text-suave">
+                Escribiendo el enunciado con el formato del tribunal ·{" "}
+                <span className="tabular-nums">{segundos}s</span>
+                {segundos > 45 && " · está tardando más de lo normal, pero sigue en marcha"}
+              </p>
+              <div className="mt-4 space-y-2.5" aria-hidden>
+                <div className="zen-esqueleto h-4 w-1/3" />
+                <div className="zen-esqueleto h-3 w-full" />
+                <div className="zen-esqueleto h-3 w-11/12" />
+                <div className="zen-esqueleto h-3 w-4/5" />
+                <div className="zen-esqueleto mt-4 h-4 w-2/5" />
+                <div className="zen-esqueleto h-3 w-full" />
+                <div className="zen-esqueleto h-3 w-3/4" />
+              </div>
+            </div>
+          )}
 
           {error && <p className="mt-3 rounded-lg border border-coral/40 bg-coral/10 px-3 py-2 text-sm text-coral">{error}</p>}
 
