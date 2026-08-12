@@ -330,8 +330,23 @@ body { background: transparent; }
 }
 @keyframes zen-esqueleto { to { background-position: -200% 0; } }
 
+/* Latido de opacidad: no hay desplazamiento, así que no marea. */
+@keyframes zen-latido { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+
 @media (prefers-reduced-motion: reduce) {
-  .zen-indeterminada::after { animation: none; width: 100%; opacity: .3; }
-  .zen-girando { animation: none; }
-  .zen-esqueleto { animation: none; background: var(--fondo-3); }
+  /* Los indicadores de espera son LA excepción de toda la hoja: aquí el
+     movimiento no decora, informa. Congelarlos deja al usuario mirando una
+     pantalla muerta durante minuto y medio sin saber si sigue vivo. Lo que se
+     quita es el desplazamiento (que es lo que provoca mareo), no la señal:
+     todo pasa a latir en opacidad, y el giro se ralentiza. */
+  .zen-indeterminada::after {
+    width: 100%;
+    transform: none;
+    animation: zen-latido 1.8s ease-in-out infinite;
+  }
+  .zen-girando { animation: zen-giro 2.4s linear infinite; }
+  .zen-esqueleto {
+    background: var(--fondo-3);
+    animation: zen-latido 1.8s ease-in-out infinite;
+  }
 }

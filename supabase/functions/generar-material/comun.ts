@@ -68,20 +68,41 @@ export async function deepseek(sistema: string, usuario: string, maxTokens = 800
   if (!clave) throw new Error("Falta el secreto DEEPSEEK_API_KEY");
   const modelo = Deno.env.get("DEEPSEEK_MODEL") ?? "deepseek-v4-flash";
 
+  // La pasarela de Supabase corta la función a los ~150 s y devuelve un 504:
+  // un error mudo, sin traza, que no dice si el modelo tardó, se atascó o no
+  // existe. Mejor rendirse antes por nuestra cuenta y contarlo.
+  const ESPERA_MAXIMA = 75_000;
+
   const pedir = async (tope: number) => {
-    const r = await fetch("https://api.deepseek.com/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${clave}` },
-      body: JSON.stringify({
-        model: modelo,
-        messages: [
-          { role: "system", content: sistema },
-          { role: "user", content: usuario },
-        ],
-        temperature: 0.4,
-        max_tokens: tope,
-      }),
-    });
+    const aborto = new AbortController();
+    const reloj = setTimeout(() => aborto.abort(), ESPERA_MAXIMA);
+    let r: Response;
+    try {
+      r = await fetch("https://api.deepseek.com/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${clave}` },
+        body: JSON.stringify({
+          model: modelo,
+          messages: [
+            { role: "system", content: sistema },
+            { role: "user", content: usuario },
+          ],
+          temperature: 0.4,
+          max_tokens: tope,
+        }),
+        signal: aborto.signal,
+      });
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") {
+        throw new Error(
+          `El modelo ${modelo} no respondió en ${ESPERA_MAXIMA / 1000} s. ` +
+          `Comprueba el secreto DEEPSEEK_MODEL y el saldo de la cuenta.`,
+        );
+      }
+      throw e;
+    } finally {
+      clearTimeout(reloj);
+    }
     if (!r.ok) throw new Error(`DeepSeek ${r.status}: ${(await r.text()).slice(0, 300)}`);
     const j = await r.json();
     const eleccion = j.choices?.[0];
@@ -95,15 +116,10 @@ export async function deepseek(sistema: string, usuario: string, maxTokens = 800
     };
   };
 
-  let res = await pedir(maxTokens);
-
-  // Un modelo razonador puede gastarse el tope entero pensando y devolver el
-  // contenido vacío con finish_reason "length". Antes eso llegaba a la interfaz
-  // como «El modelo devolvió una respuesta vacía», que no dice nada de por qué.
-  // Un reintento con el doble de margen suele bastar.
-  if (!res.texto.trim() && (res.motivo === "length" || res.razonando)) {
-    res = await pedir(Math.min(maxTokens * 2, 16000));
-  }
+  // Sin reintento: duplicar el tope duplicaba la espera y era lo que hacía
+  // saltar el 504 de la pasarela. Antes de reintentar hay que saber por qué
+  // vino vacío, y para eso está el detalle de abajo.
+  const res = await pedir(maxTokens);
 
   if (!res.texto.trim()) {
     const detalle = [

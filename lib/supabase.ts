@@ -27,17 +27,39 @@ export async function llamarFuncion<T>(nombre: string, cuerpo: unknown): Promise
   const { data: sesion } = await c.auth.getSession();
   if (!sesion.session) throw new Error("Necesitas iniciar sesión.");
 
-  const r = await fetch(`${URL_SUPABASE}/functions/v1/${nombre}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${sesion.session.access_token}`,
-      apikey: CLAVE_SUPABASE,
-    },
-    body: JSON.stringify(cuerpo),
-  });
+  // Sin tope, un fallo de la pasarela deja la interfaz girando para siempre.
+  const aborto = new AbortController();
+  const reloj = setTimeout(() => aborto.abort(), 150_000);
+
+  let r: Response;
+  try {
+    r = await fetch(`${URL_SUPABASE}/functions/v1/${nombre}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sesion.session.access_token}`,
+        apikey: CLAVE_SUPABASE,
+      },
+      body: JSON.stringify(cuerpo),
+      signal: aborto.signal,
+    });
+  } catch (e) {
+    if (e instanceof DOMException && e.name === "AbortError") {
+      throw new Error("La generación ha tardado demasiado y se ha cancelado. Vuelve a intentarlo.");
+    }
+    throw e;
+  } finally {
+    clearTimeout(reloj);
+  }
+
   const j = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(j.error ?? `Error ${r.status}`);
+  if (!r.ok) {
+    // Un 504 lo devuelve la pasarela, no la función: ahí no hay j.error.
+    if (r.status === 504) {
+      throw new Error("El servidor ha cortado la generación por tiempo (504). El modelo tardó demasiado en responder.");
+    }
+    throw new Error(j.error ?? `Error ${r.status}`);
+  }
   return j as T;
 }
 
