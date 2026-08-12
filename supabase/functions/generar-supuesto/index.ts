@@ -26,8 +26,65 @@ interface TextoCorpus {
 const TEXTOS: TextoCorpus[] = (corpus.textos as TextoCorpus[])
   .filter((t) => t.palabras >= 70 && t.palabras <= 230);
 
-function elegirTexto(): TextoCorpus {
-  return TEXTOS[Math.floor(Math.random() * TEXTOS.length)];
+/**
+ * Solo Historia de la Filosofía tiene bloques cronológicos; en Filosofía de 4.º
+ * y de 1.º son temáticos y cualquier época encaja.
+ */
+const PERIODOS_POR_BLOQUE: Record<string, string[]> = {
+  I: ["antigua"],
+  II: ["medieval", "moderna"],
+  III: ["moderna", "contemporanea"],
+};
+
+/**
+ * Elegir al azar entre los 46 textos daba supuestos incoherentes: un fragmento
+ * de Althusser dentro del bloque «Del origen de la Filosofía en Grecia hasta el
+ * fin de la Antigüedad». El azar acertaba a veces, y eso es peor que fallar
+ * siempre, porque esconde el fallo.
+ *
+ * Se estrecha el pozo en dos pasos, y cada uno solo se aplica si deja algo
+ * dentro: primero la época que corresponde al bloque, después el autor del tema
+ * anclado («La Naturaleza en Aristóteles» pide a Aristóteles).
+ */
+const ADJETIVOS: [RegExp, string][] = [
+  [/cartesian/i, "descartes"],
+  [/kantian/i, "kant"],
+  [/aristot(é|e)lic/i, "aristóteles"],
+  [/plat(ó|o)nic/i, "platón"],
+  [/tomist/i, "tomás"],
+  [/marxist/i, "marx"],
+  [/nietzschean/i, "nietzsche"],
+  [/humean/i, "hume"],
+  [/spinozist|espinos/i, "spinoza"],
+];
+
+function elegirTexto(materia: string, bloque: string, tituloTema: string): TextoCorpus {
+  let pozo = TEXTOS;
+
+  if (/historia de la filosof/i.test(materia)) {
+    const romano = (bloque.match(/^\s*(I{1,3})\b/) ?? [])[1];
+    const permitidos = romano ? PERIODOS_POR_BLOQUE[romano] : undefined;
+    if (permitidos) {
+      const porEpoca = pozo.filter((t) => permitidos.includes(t.periodo));
+      if (porEpoca.length) pozo = porEpoca;
+    }
+  }
+
+  if (tituloTema) {
+    const titulo = tituloTema.toLowerCase();
+    // Varios temas nombran al autor en adjetivo: «El método cartesiano» no
+    // contiene la palabra Descartes.
+    const porAdjetivo = ADJETIVOS.filter(([re]) => re.test(titulo)).map(([, a]) => a);
+    const delAutor = pozo.filter((t) => {
+      // "Tomás de Aquino" -> "tomás"; "José Ortega y Gasset" -> "gasset".
+      const apellido = t.autor.split(" de ")[0].split(" ").pop()!.toLowerCase();
+      if (apellido.length <= 3) return false;
+      return titulo.includes(apellido) || porAdjetivo.includes(apellido);
+    });
+    if (delAutor.length) pozo = delAutor;
+  }
+
+  return pozo[Math.floor(Math.random() * pozo.length)];
 }
 
 function citar(t: TextoCorpus) {
@@ -79,8 +136,17 @@ Formato real de la convocatoria de 2025, que debes reproducir con exactitud:
    del bloque {ROMANO}, «{NOMBRE DEL BLOQUE}». {ENCARGO DEL CENTRO}. Tiene usted que
    elaborar una propuesta didáctica.»
 
+   El curso se escribe SIEMPRE con la preposición, como en el documento oficial:
+   «2.º de Bachillerato», «1.º de Bachillerato», «4.º de ESO». Nunca «2.º Bachillerato».
+
    El encargo del centro es una efeméride, una petición de la vicedirección, una
    aportación a un eje temático o a un proyecto de centro.
+   Si usas una efeméride, tiene que EXISTIR de verdad. No inventes celebraciones
+   con nombre plausible. Ejemplos reales utilizables: Día Mundial de la Filosofía
+   (UNESCO, tercer jueves de noviembre), Día Escolar de la No Violencia y la Paz
+   (30 de enero), Día Internacional de la Mujer (8 de marzo), Día de los Derechos
+   Humanos (10 de diciembre), Día Internacional de los Trabajadores (1 de mayo).
+   No existe ningún «Día Escolar de la Filosofía».
    La expresión «situación de aprendizaje» es terminología LOMLOE y no se sustituye.
 
 Reglas innegociables:
@@ -134,17 +200,21 @@ Deno.serve(async (req) => {
       .from("temarios").select("id").eq("slug", "filosofia-secundaria").single();
 
     let anclaje = "";
+    let tituloTema = "";
     if (Number.isInteger(temaNumero)) {
       const { data: meta } = await admin
         .from("temas").select("numero, titulo")
         .eq("temario_id", temario!.id).eq("numero", temaNumero).maybeSingle();
       if (meta) {
+        tituloTema = meta.titulo ?? "";
         anclaje = `El ejercicio de análisis debe poder resolverse con el tema ${meta.numero} ` +
                   `del temario oficial: «${meta.titulo}».`;
       }
     }
 
-    const elegido = tipo === "comentario-de-texto" ? elegirTexto() : null;
+    const elegido = tipo === "comentario-de-texto"
+      ? elegirTexto(materia, bloque, tituloTema)
+      : null;
 
     const prompt = [
       `Redacta UN supuesto práctico completo del tipo: ${tipo}.`,
