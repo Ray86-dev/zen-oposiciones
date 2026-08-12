@@ -5,7 +5,10 @@ import {
 import {
   trocearParaVoz, limpiarParaVoz, cargarPrefsVoz, guardarPrefsVoz, PrefsVoz, VOZ_POR_DEFECTO,
 } from "@/lib/voz";
-import { EstadoVoz, sintetizar, descargarVoz, vocesDescargadas } from "@/lib/vozNeuronal";
+import {
+  EstadoVoz, sintetizar, descargarVoz, vocesDescargadas,
+  cancelarSintesis, liberarMotorVoz, apagarMotorVoz, SintesisCancelada,
+} from "@/lib/vozNeuronal";
 
 export type EstadoReproduccion = "parado" | "sonando" | "pausado";
 
@@ -31,6 +34,9 @@ interface Ctx {
 }
 
 const C = createContext<Ctx | null>(null);
+
+/** Cuántos audios ya sintetizados guardamos. Un WAV de 20 s ocupa casi 1 MB. */
+const TOPE_CACHE = 24;
 
 /** No todos los navegadores traen síntesis de voz; hay que poder vivir sin ella. */
 function sintesis(): SpeechSynthesis | null {
@@ -58,7 +64,10 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
   const prefsRef = useRef(VOZ_POR_DEFECTO);
   const fuenteRef = useRef<Fuente | null>(null);
   const audio = useRef<HTMLAudioElement | null>(null);
-  const cache = useRef<Map<string, Blob>>(new Map());
+  // Guardamos la promesa, no el blob: si el mismo trozo se pide dos veces
+  // (reproducción y prelectura) se sintetiza una sola vez.
+  const cache = useRef<Map<string, Promise<Blob>>>(new Map());
+  const urlActual = useRef<string | null>(null);
   const resaltar = useRef<((b: number) => void) | null>(null);
 
   useEffect(() => { prefsRef.current = prefs; }, [prefs]);
@@ -80,6 +89,13 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
     return () => s.removeEventListener("voiceschanged", leer);
   }, []);
 
+  /** Al salir, ni voz del sistema sonando ni worker ocupando memoria. */
+  useEffect(() => () => {
+    sintesis()?.cancel();
+    if (urlActual.current) URL.revokeObjectURL(urlActual.current);
+    apagarMotorVoz();
+  }, []);
+
   /**
    * Chrome corta la síntesis del sistema a los ~15 s si nadie la toca.
    * Este latido la mantiene viva mientras haya algo sonando.
@@ -93,14 +109,26 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
     return () => clearInterval(t);
   }, [estado, prefs.motor]);
 
+  /** Los object URL no se liberan solos: sin esto cada trozo deja su blob retenido. */
+  const soltarUrl = useCallback(() => {
+    if (urlActual.current) { URL.revokeObjectURL(urlActual.current); urlActual.current = null; }
+  }, []);
+
+  const vaciarCache = useCallback(() => {
+    for (const tarea of cache.current.values()) tarea.catch(() => {});
+    cache.current.clear();
+  }, []);
+
   const detener = useCallback((volverAlInicio = false) => {
     epoca.current += 1;
     sonandoRef.current = false;
     setEstado("parado");
     if (volverAlInicio) { iRef.current = 0; setIndice(0); }
     sintesis()?.cancel();
+    cancelarSintesis();
     if (audio.current) { audio.current.pause(); audio.current.removeAttribute("src"); }
-  }, []);
+    soltarUrl();
+  }, [soltarUrl]);
 
   const pausar = useCallback(() => {
     sonandoRef.current = false;
@@ -112,37 +140,56 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
   const claveCache = (idx: number, p: PrefsVoz) =>
     `${fuenteRef.current?.tema ?? 0}|${p.vozNeuronal}|${idx}`;
 
-  const pedirAudio = useCallback(async (idx: number, p: PrefsVoz): Promise<Blob> => {
-    const k = claveCache(idx, p);
-    const guardado = cache.current.get(k);
-    if (guardado) return guardado;
-    const trozo = fuenteRef.current!.trozos[idx];
-    const b = await sintetizar(limpiarParaVoz(trozo.texto), p.vozNeuronal);
-    cache.current.set(k, b);
-    if (cache.current.size > 40) {
-      const primera = cache.current.keys().next().value;
-      if (primera !== undefined) cache.current.delete(primera);
+  const pedirAudio = useCallback((idx: number, p: PrefsVoz): Promise<Blob> => {
+    const f = fuenteRef.current;
+    if (!f || idx < 0 || idx >= f.trozos.length) {
+      return Promise.reject(new RangeError("Trozo fuera de rango."));
     }
-    return b;
+    const k = claveCache(idx, p);
+    const enMarcha = cache.current.get(k);
+    if (enMarcha) return enMarcha;
+
+    const tarea = sintetizar(limpiarParaVoz(f.trozos[idx].texto), p.vozNeuronal);
+    cache.current.set(k, tarea);
+    // Una promesa rota no se queda en la caché: el siguiente intento debe volver
+    // a sintetizar en vez de heredar el error para siempre.
+    tarea.catch(() => { if (cache.current.get(k) === tarea) cache.current.delete(k); });
+
+    while (cache.current.size > TOPE_CACHE) {
+      const vieja = cache.current.keys().next().value;
+      if (vieja === undefined || vieja === k) break;
+      cache.current.delete(vieja);
+    }
+    return tarea;
   }, []);
 
   const sonarNeuronal = useCallback(async (idx: number, p: PrefsVoz, mi: number) => {
     const f = fuenteRef.current;
     if (!f || idx >= f.trozos.length) { detener(); return; }
-    let blob: Blob;
-    try {
-      blob = await pedirAudio(idx, p);
-    } catch (e) {
-      if (epoca.current !== mi) return;
-      setNeuronal({ fase: "error", pct: 0, mensaje: e instanceof Error ? e.message : "No se pudo sintetizar." });
-      detener();
-      return;
+
+    let blob: Blob | null = null;
+    for (let intento = 0; intento < 2 && !blob; intento++) {
+      try {
+        blob = await pedirAudio(idx, p);
+      } catch (e) {
+        if (epoca.current !== mi) return;                 // ya no toca: alguien saltó o paró
+        if (e instanceof SintesisCancelada) return;
+        if (intento === 0) continue;                      // un fallo suelto: reintenta una vez
+        setNeuronal({
+          fase: "error", pct: 0,
+          mensaje: "No se ha podido generar la voz. Prueba a recargar la página o a usar la voz del sistema.",
+        });
+        detener();
+        return;
+      }
     }
-    if (epoca.current !== mi || !sonandoRef.current) return;
+    if (!blob || epoca.current !== mi || !sonandoRef.current) return;
 
     if (!audio.current) audio.current = new Audio();
     const el = audio.current;
-    el.src = URL.createObjectURL(blob);
+    soltarUrl();
+    urlActual.current = URL.createObjectURL(blob);
+    el.src = urlActual.current;
     el.playbackRate = p.velocidad;
     el.onended = () => {
       if (epoca.current !== mi || !sonandoRef.current) return;
@@ -159,9 +206,10 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
       detener();
       return;
     }
-    void pedirAudio(idx + 1, p).catch(() => {});
-    void pedirAudio(idx + 2, p).catch(() => {});
-  }, [pedirAudio, detener]);
+    // Prelectura de los dos siguientes: van a la misma cola del worker.
+    if (idx + 1 < f.trozos.length) void pedirAudio(idx + 1, p).catch(() => {});
+    if (idx + 2 < f.trozos.length) void pedirAudio(idx + 2, p).catch(() => {});
+  }, [pedirAudio, detener, soltarUrl]);
 
   const sonarSistema = useCallback((idx: number, p: PrefsVoz, mi: number) => {
     const f = fuenteRef.current;
@@ -233,11 +281,13 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
   const cambiar = useCallback((cambios: Partial<PrefsVoz>) => {
     const n = { ...prefsRef.current, ...cambios };
     setPrefs(n); prefsRef.current = n; guardarPrefsVoz(n);
-    if (cambios.motor || cambios.vozNeuronal) cache.current.clear();
+    if (cambios.motor || cambios.vozNeuronal) vaciarCache();
+    // Si nos vamos a la voz del sistema, soltamos los ~60 MB del modelo.
+    if (cambios.motor === "sistema") liberarMotorVoz();
     const estaba = sonandoRef.current;
     detener();
     if (estaba) setTimeout(() => reproducir(n), 80);
-  }, [detener, reproducir]);
+  }, [detener, reproducir, vaciarCache]);
 
   const bajarVoz = useCallback(async (vozId: string) => {
     setNeuronal({ fase: "descargando", pct: 0, mensaje: "" });
@@ -254,9 +304,9 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
   const cargarTema = useCallback((tema: number, titulo: string, bloques: string[]) => {
     if (fuenteRef.current?.tema === tema) return;   // ya cargado: no cortar
     detener(true);
-    cache.current.clear();
+    vaciarCache();
     setFuente({ tema, titulo, trozos: trocearParaVoz(bloques) });
-  }, [detener]);
+  }, [detener, vaciarCache]);
 
   const fijarResaltado = useCallback((fn: ((b: number) => void) | null) => {
     resaltar.current = fn;
