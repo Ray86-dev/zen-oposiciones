@@ -87,7 +87,10 @@ Devuelve Markdown.`,
 Devuelve Markdown.`,
   },
   flashcards: {
-    proveedor: "gemini", tokens: 6000,
+    // Cada tarjeta pasó a llevar un ancla de hasta 15 palabras, así que ocupa
+    // casi el doble que antes. Con los 6.000 de siempre la respuesta llegaba
+    // cortada a media tarjeta y sin cerrar el array.
+    proveedor: "gemini", tokens: 14000,
     sistema: CONTEXTO_OPOSICION,
     instruccion: `Genera entre 20 y 30 tarjetas de repaso activo. Ni una más.
 
@@ -122,6 +125,24 @@ la relación. Evita tildes en los identificadores de nodo.`,
   },
 };
 
+/**
+ * Formato exigido al modelo, no sugerido. Con esquema, la API no le deja
+ * devolver prosa, disculpas ni vallas de código alrededor del JSON.
+ */
+const ESQUEMA_TARJETAS = {
+  type: "ARRAY",
+  items: {
+    type: "OBJECT",
+    properties: {
+      anverso: { type: "STRING" },
+      reverso: { type: "STRING" },
+      tipo: { type: "STRING", enum: ["concepto", "autor", "fecha", "argumento"] },
+      ancla: { type: "STRING" },
+    },
+    required: ["anverso", "reverso", "ancla"],
+  },
+};
+
 /** Ni una tarjeta más de las que caben en una sesión de repaso. */
 const TOPE_TARJETAS = 30;
 /** Un ancla de tres palabras aparece en cualquier parte: no prueba nada. */
@@ -139,13 +160,25 @@ interface Tarjeta { anverso: string; reverso: string; tipo?: string; ancla?: str
 function depurarTarjetas(bruto: string, material: string) {
   const limpio = bruto.replace(/```(?:json)?/g, "").trim();
   const a = limpio.indexOf("[");
-  const b = limpio.lastIndexOf("]");
-  if (a === -1 || b === -1) return { error: "El modelo no devolvió un array JSON." };
+  if (a === -1) return { error: "El modelo no devolvió un array JSON." };
 
   let crudas: unknown;
-  try { crudas = JSON.parse(limpio.slice(a, b + 1)); }
-  catch { return { error: "El modelo devolvió un JSON que no se puede leer." }; }
-  if (!Array.isArray(crudas)) return { error: "El modelo no devolvió una lista de tarjetas." };
+  try { crudas = JSON.parse(limpio.slice(a, limpio.lastIndexOf("]") + 1)); }
+  catch { crudas = null; }
+
+  // Rescate de una respuesta cortada por el tope de tokens: se cierra el array
+  // después de la última tarjeta completa. Perder las diez últimas es mejor que
+  // perder las veinte buenas que sí llegaron.
+  if (!Array.isArray(crudas)) {
+    const ultima = limpio.lastIndexOf("}");
+    if (ultima > a) {
+      try { crudas = JSON.parse(limpio.slice(a, ultima + 1) + "]"); }
+      catch { crudas = null; }
+    }
+  }
+  if (!Array.isArray(crudas)) {
+    return { error: "El modelo devolvió un JSON que no se puede leer." };
+  }
 
   const base = normalizar(material);
   const buenas: Tarjeta[] = [];
@@ -234,15 +267,26 @@ Deno.serve(async (req) => {
       material,
     ].join("\n");
 
-    const motor = tarea.proveedor === "deepseek" ? deepseek : gemini;
-    const { texto, modelo } = await motor(tarea.sistema, prompt, tarea.tokens);
+    const { texto, modelo, motivo, uso } = tarea.proveedor === "deepseek"
+      ? { ...await deepseek(tarea.sistema, prompt, tarea.tokens), motivo: "", uso: null }
+      : await gemini(tarea.sistema, prompt, tarea.tokens,
+          tipo === "flashcards" ? { esquema: ESQUEMA_TARJETAS } : {});
     if (!texto.trim()) return json({ error: "El modelo devolvió una respuesta vacía." }, 502);
 
     let contenidoFinal = texto;
     let descartadas: string[] = [];
     if (tipo === "flashcards") {
       const r = depurarTarjetas(texto, material);
-      if (r.error) return json({ error: r.error }, 502);
+      if (r.error) {
+        // Con el detalle delante, el siguiente fallo se diagnostica en un vistazo
+        // en vez de a ciegas: MAX_TOKENS dice «se cortó», STOP dice «no obedece».
+        const detalle = [
+          `motivo: ${motivo}`,
+          uso ? `tokens: ${JSON.stringify(uso)}` : null,
+          `devolvió ${texto.length} caracteres`,
+        ].filter(Boolean).join(" · ");
+        return json({ error: `${r.error} (${detalle})` }, 502);
+      }
       contenidoFinal = JSON.stringify(r.buenas);
       descartadas = r.descartadas ?? [];
     }

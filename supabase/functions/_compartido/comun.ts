@@ -166,12 +166,29 @@ export async function deepseek(
 }
 
 // ------------------------------------------------------------------ Gemini
-export async function gemini(sistema: string, usuario: string, maxTokens = 8000) {
+export interface OpcionesGemini {
+  /** Esquema OpenAPI. Con él, el modelo no puede devolver otra cosa que JSON. */
+  esquema?: unknown;
+  /**
+   * Cadena de pensamiento. Apagada por defecto y por el mismo motivo que en
+   * DeepSeek: los tokens de razonamiento salen del mismo `maxOutputTokens` que
+   * la respuesta, así que pensar de más devuelve una respuesta cortada por la
+   * mitad. Rellenar un formato fijo no lo necesita.
+   */
+  pensar?: boolean;
+}
+
+export async function gemini(
+  sistema: string,
+  usuario: string,
+  maxTokens = 8000,
+  op: OpcionesGemini = {},
+) {
   const clave = Deno.env.get("GEMINI_API_KEY");
   if (!clave) throw new Error("Falta el secreto GEMINI_API_KEY");
   const modelo = Deno.env.get("GEMINI_MODEL") ?? "gemini-3.6-flash";
 
-  const r = await fetch(
+  const pedir = (conExtras: boolean) => fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`,
     {
       method: "POST",
@@ -179,15 +196,44 @@ export async function gemini(sistema: string, usuario: string, maxTokens = 8000)
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: sistema }] },
         contents: [{ role: "user", parts: [{ text: usuario }] }],
-        generationConfig: { temperature: 0.5, maxOutputTokens: maxTokens },
+        generationConfig: {
+          temperature: 0.5,
+          maxOutputTokens: maxTokens,
+          ...(conExtras && op.esquema
+            ? { responseMimeType: "application/json", responseSchema: op.esquema }
+            : {}),
+          ...(conExtras && !op.pensar ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+        },
       }),
     },
   );
-  if (!r.ok) throw new Error(`Gemini ${r.status}: ${(await r.text()).slice(0, 300)}`);
+
+  let r = await pedir(true);
+  if (!r.ok) {
+    const detalle = (await r.text()).slice(0, 300);
+    // Red de seguridad, igual que en DeepSeek: si este modelo aún no acepta el
+    // esquema o el presupuesto de pensamiento, se repite sin ellos antes de dar
+    // la generación por perdida. Se pierde la garantía, no el servicio.
+    if (r.status === 400 && /thinking|responseSchema|responseMimeType|json/i.test(detalle)) {
+      r = await pedir(false);
+      if (!r.ok) throw new Error(`Gemini ${r.status}: ${(await r.text()).slice(0, 300)}`);
+    } else {
+      throw new Error(`Gemini ${r.status}: ${detalle}`);
+    }
+  }
+
   const j = await r.json();
-  const texto = (j.candidates?.[0]?.content?.parts ?? [])
+  const candidato = j.candidates?.[0];
+  const texto = (candidato?.content?.parts ?? [])
     .map((p: { text?: string }) => p.text ?? "").join("");
-  return { texto, modelo };
+  return {
+    texto,
+    modelo,
+    // Sin esto, una respuesta cortada por el tope de tokens es indistinguible
+    // de un modelo que no sabe obedecer el formato.
+    motivo: (candidato?.finishReason ?? "sin finishReason") as string,
+    uso: j.usageMetadata ?? null,
+  };
 }
 
 /**
