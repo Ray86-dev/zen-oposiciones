@@ -10,6 +10,7 @@ import { useLectura, estiloLectura, papelDe } from "@/lib/lectura";
 import AjustesLectura from "@/components/AjustesLectura";
 import PanelIA from "@/components/PanelIA";
 import PanelEvaluacion from "@/components/PanelEvaluacion";
+import Afinidades, { vinculosDe } from "@/components/Afinidades";
 import Voz from "@/components/Voz";
 import { useVoz } from "@/components/ProveedorVoz";
 
@@ -30,7 +31,7 @@ export default function LectorCliente({ numero }: { numero: number }) {
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const [notaAbierta, setNotaAbierta] = useState<Anotacion | null>(null);
   const [borrador, setBorrador] = useState("");
-  const [panel, setPanel] = useState<"notas" | "ia" | "evaluacion">("notas");
+  const [panel, setPanel] = useState<"notas" | "ia" | "evaluacion" | "cruces">("notas");
   const [zen, setZen] = useState(false);
   const [ajustes, setAjustes] = useState(false);
   const [avance, setAvance] = useState(0);
@@ -346,12 +347,14 @@ export default function LectorCliente({ numero }: { numero: number }) {
         <aside className={`flex flex-col gap-3 ${
           modoAncho ? "max-h-[60vh]" : "h-[calc(100vh-210px)] min-h-[440px]"}`}>
           <div className="flex shrink-0 gap-1 rounded-lg border border-borde p-1">
-            {(["notas", "ia", "evaluacion"] as const).map((p) => (
+            {(["notas", "ia", "evaluacion", "cruces"] as const).map((p) => (
               <button key={p} onClick={() => setPanel(p)}
-                className={`flex-1 rounded px-2 py-1.5 text-xs transition ${
+                className={`flex-1 rounded px-1.5 py-1.5 text-[11px] transition ${
                   panel === p ? "bg-tinta-3 text-texto" : "text-suave hover:text-texto"}`}>
                 {p === "notas" ? `Marcas (${subrayados.length + anotaciones.length})`
-                  : p === "ia" ? "Generar" : "Evaluar"}
+                  : p === "ia" ? "Generar"
+                  : p === "evaluacion" ? "Evaluar"
+                  : `Cruces (${vinculosDe(numero).length})`}
               </button>
             ))}
           </div>
@@ -361,6 +364,8 @@ export default function LectorCliente({ numero }: { numero: number }) {
               <PanelEvaluacion numero={numero} titulo={tema.titulo} />
             ) : panel === "ia" ? (
               <PanelIA numero={numero} titulo={tema.titulo} />
+            ) : panel === "cruces" ? (
+              <Afinidades numero={numero} />
             ) : (
               <div className="space-y-2">
                 {notaAbierta && (

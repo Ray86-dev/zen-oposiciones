@@ -1,0 +1,4816 @@
+{
+ "generado": "2026-08-13",
+ "metodo": "Solapamiento medido sobre los 71 temas redactados: intersección de perfiles de autor (50 %), vocabulario técnico compartido por TF-IDF (30 %) y autores raros en común (20 %). Se podaron los vínculos que solo compartían autores presentes en más de veinte temas. Veintisiete vínculos añadidos a mano donde el temario los exige aunque el texto no los delate.",
+ "afinidades": {
+  "1": [
+   {
+    "tema": 46,
+    "peso": 0.464,
+    "autores": [
+     "Hegel",
+     "Aristóteles",
+     "Rorty"
+    ],
+    "conceptos": [
+     "filosofia historia",
+     "filosofar"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 17,
+    "peso": 0.382,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Hegel"
+    ],
+    "conceptos": [
+     "wittgenstein",
+     "indice genesis"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 2,
+    "peso": 0.342,
+    "autores": [
+     "Aristóteles",
+     "Wittgenstein",
+     "Kant"
+    ],
+    "conceptos": [
+     "wittgenstein",
+     "filosofia saber"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 16,
+    "peso": 0.336,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Platón"
+    ],
+    "conceptos": [
+     "primeros principios",
+     "nietzsche"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 14,
+    "peso": 0.327,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Círculo de Viena"
+    ],
+    "conceptos": [
+     "philosophia",
+     "genesis"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "2": [
+   {
+    "tema": 14,
+    "peso": 0.378,
+    "autores": [
+     "Aristóteles",
+     "Heidegger",
+     "Kant"
+    ],
+    "conceptos": [
+     "heidegger",
+     "verificable"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 1,
+    "peso": 0.342,
+    "autores": [
+     "Aristóteles",
+     "Wittgenstein",
+     "Kant"
+    ],
+    "conceptos": [
+     "wittgenstein",
+     "filosofia saber"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 15,
+    "peso": 0.31,
+    "autores": [
+     "Heidegger",
+     "Aristóteles",
+     "Círculo de Viena"
+    ],
+    "conceptos": [
+     "disolucion",
+     "pregunta proyeccion"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 17,
+    "peso": 0.289,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Wittgenstein"
+    ],
+    "conceptos": [
+     "doble dimension",
+     "wittgenstein"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 4,
+    "peso": 0.275,
+    "autores": [
+     "Wittgenstein",
+     "Quine",
+     "Platón"
+    ],
+    "conceptos": [
+     "significado",
+     "holismo"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "3": [
+   {
+    "tema": 4,
+    "peso": null,
+    "autores": [
+     "Frege"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": false,
+    "razon": "lenguaje natural y formal desemboca en el problema del significado"
+   },
+   {
+    "tema": 68,
+    "peso": null,
+    "autores": [
+     "Wittgenstein"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "la distinción natural/formal es el punto de partida de la filosofía analítica"
+   },
+   {
+    "tema": 28,
+    "peso": 0.23,
+    "autores": [
+     "Chomsky",
+     "Cassirer"
+    ],
+    "conceptos": [
+     "lenguaje humano",
+     "lenguaje lenguaje"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 8,
+    "peso": 0.192,
+    "autores": [
+     "Austin",
+     "Gödel"
+    ],
+    "conceptos": [
+     "enunciados",
+     "matematica"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "4": [
+   {
+    "tema": 3,
+    "peso": null,
+    "autores": [
+     "Frege"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": false,
+    "razon": "lenguaje natural y formal desemboca en el problema del significado"
+   },
+   {
+    "tema": 68,
+    "peso": 0.536,
+    "autores": [
+     "Wittgenstein",
+     "Russell",
+     "Frege"
+    ],
+    "conceptos": [
+     "russell",
+     "francia"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 5,
+    "peso": 0.342,
+    "autores": [
+     "Frege",
+     "Russell"
+    ],
+    "conceptos": [
+     "russell",
+     "representar"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 6,
+    "peso": 0.281,
+    "autores": [
+     "Frege",
+     "Wittgenstein"
+    ],
+    "conceptos": [
+     "condiciones verdad",
+     "wittgenstein"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 2,
+    "peso": 0.275,
+    "autores": [
+     "Wittgenstein",
+     "Quine",
+     "Platón"
+    ],
+    "conceptos": [
+     "significado",
+     "holismo"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "5": [
+   {
+    "tema": 7,
+    "peso": null,
+    "autores": [
+     "Gödel"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": false,
+    "razon": "los límites de los sistemas formales cierran el recorrido de la lógica"
+   },
+   {
+    "tema": 6,
+    "peso": 0.462,
+    "autores": [
+     "Aristóteles",
+     "Frege"
+    ],
+    "conceptos": [
+     "silogistica",
+     "cuantificacion"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 4,
+    "peso": 0.342,
+    "autores": [
+     "Frege",
+     "Russell"
+    ],
+    "conceptos": [
+     "russell",
+     "representar"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 51,
+    "peso": 0.328,
+    "autores": [
+     "Aristóteles",
+     "Zenón de Citio"
+    ],
+    "conceptos": [
+     "axiomatico",
+     "teoremas"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 68,
+    "peso": 0.283,
+    "autores": [
+     "Russell",
+     "Frege"
+    ],
+    "conceptos": [
+     "cuantificacion",
+     "logicas"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 8,
+    "peso": 0.255,
+    "autores": [
+     "Aristóteles",
+     "Frege",
+     "Russell"
+    ],
+    "conceptos": [
+     "enunciados",
+     "frege russell"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "6": [
+   {
+    "tema": 5,
+    "peso": 0.462,
+    "autores": [
+     "Aristóteles",
+     "Frege"
+    ],
+    "conceptos": [
+     "silogistica",
+     "cuantificacion"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 4,
+    "peso": 0.281,
+    "autores": [
+     "Frege",
+     "Wittgenstein"
+    ],
+    "conceptos": [
+     "condiciones verdad",
+     "wittgenstein"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 50,
+    "peso": 0.267,
+    "autores": [
+     "Aristóteles",
+     "Sócrates"
+    ],
+    "conceptos": [
+     "aristotelica",
+     "universo"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 16,
+    "peso": 0.263,
+    "autores": [
+     "Aristóteles",
+     "Sócrates",
+     "Leibniz"
+    ],
+    "conceptos": [
+     "sistemas formales",
+     "primeros"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 68,
+    "peso": 0.236,
+    "autores": [
+     "Wittgenstein",
+     "Frege"
+    ],
+    "conceptos": [
+     "cuantificacion",
+     "proposiciones"
+    ],
+    "alimenta": true,
+    "costura": true
+   }
+  ],
+  "7": [
+   {
+    "tema": 5,
+    "peso": null,
+    "autores": [
+     "Gödel"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": false,
+    "razon": "los límites de los sistemas formales cierran el recorrido de la lógica"
+   },
+   {
+    "tema": 8,
+    "peso": 0.235,
+    "autores": [
+     "Gödel",
+     "Russell"
+    ],
+    "conceptos": [
+     "teoremas",
+     "axiomas"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 6,
+    "peso": 0.201,
+    "autores": [],
+    "conceptos": [
+     "calculo proposicional",
+     "formalizacion"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "8": [
+   {
+    "tema": 54,
+    "peso": null,
+    "autores": [
+     "Galileo"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "la verdad en las ciencias empíricas nace con la matematización galileana"
+   },
+   {
+    "tema": 69,
+    "peso": 0.303,
+    "autores": [
+     "Popper",
+     "Habermas",
+     "Adorno"
+    ],
+    "conceptos": [
+     "falsacionismo",
+     "disputa"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 68,
+    "peso": 0.265,
+    "autores": [
+     "Russell",
+     "Frege",
+     "Círculo de Viena"
+    ],
+    "conceptos": [
+     "russell",
+     "corriente"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 5,
+    "peso": 0.255,
+    "autores": [
+     "Aristóteles",
+     "Frege",
+     "Russell"
+    ],
+    "conceptos": [
+     "enunciados",
+     "frege russell"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 2,
+    "peso": 0.238,
+    "autores": [
+     "Popper",
+     "Aristóteles",
+     "Heidegger"
+    ],
+    "conceptos": [
+     "falsacionismo",
+     "heidegger"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 7,
+    "peso": 0.235,
+    "autores": [
+     "Gödel",
+     "Russell"
+    ],
+    "conceptos": [
+     "teoremas",
+     "axiomas"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "9": [
+   {
+    "tema": 62,
+    "peso": null,
+    "autores": [
+     "Comte"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "leyes y teorías científicas se formulan contra el modelo positivista"
+   },
+   {
+    "tema": 69,
+    "peso": null,
+    "autores": [
+     "Popper"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "el contexto de justificación se juega en la disputa del positivismo"
+   },
+   {
+    "tema": 8,
+    "peso": 0.21,
+    "autores": [
+     "Popper",
+     "Hempel"
+    ],
+    "conceptos": [
+     "teorias cientificas",
+     "concepciones"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "10": [
+   {
+    "tema": 54,
+    "peso": null,
+    "autores": [
+     "Newton"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "el determinismo que se discute es el del universo newtoniano"
+   },
+   {
+    "tema": 19,
+    "peso": 0.2,
+    "autores": [
+     "Popper"
+    ],
+    "conceptos": [
+     "indeterminismo",
+     "postulado"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 8,
+    "peso": 0.171,
+    "autores": [
+     "Popper",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "objetividad",
+     "einstein"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 23,
+    "peso": 0.161,
+    "autores": [
+     "Monod",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "seleccion natural",
+     "genealogia"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "11": [
+   {
+    "tema": 53,
+    "peso": null,
+    "autores": [
+     "Ockham"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "el problema de los universales tiene su desenlace en el nominalismo del XIV"
+   },
+   {
+    "tema": 12,
+    "peso": 0.305,
+    "autores": [
+     "Kant",
+     "Platón",
+     "Chomsky"
+    ],
+    "conceptos": [
+     "chomsky",
+     "innatismo"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 28,
+    "peso": 0.288,
+    "autores": [
+     "Chomsky",
+     "Piaget",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "chomsky",
+     "lenguaje pensamiento"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 27,
+    "peso": 0.285,
+    "autores": [
+     "Locke",
+     "Hume",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "realismo",
+     "nominalismo"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 14,
+    "peso": 0.268,
+    "autores": [
+     "Platón",
+     "Aristóteles",
+     "Kant"
+    ],
+    "conceptos": [
+     "realismo",
+     "cosas sensibles"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 18,
+    "peso": 0.263,
+    "autores": [
+     "Hume",
+     "Aristóteles",
+     "Kant"
+    ],
+    "conceptos": [
+     "predicacion",
+     "recepcion"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "12": [
+   {
+    "tema": 59,
+    "peso": null,
+    "autores": [
+     "Kant"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "el a priori del tema 12 es literalmente la estética y la analítica trascendentales del 59"
+   },
+   {
+    "tema": 55,
+    "peso": null,
+    "autores": [
+     "Descartes"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "las ideas innatas son el primer modelo de elemento a priori"
+   },
+   {
+    "tema": 17,
+    "peso": 0.332,
+    "autores": [
+     "Kant",
+     "Husserl",
+     "Platón"
+    ],
+    "conceptos": [
+     "husserl",
+     "categorias"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 11,
+    "peso": 0.305,
+    "autores": [
+     "Kant",
+     "Platón",
+     "Chomsky"
+    ],
+    "conceptos": [
+     "chomsky",
+     "innatismo"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 65,
+    "peso": 0.264,
+    "autores": [
+     "Husserl",
+     "Kant",
+     "Descartes"
+    ],
+    "conceptos": [
+     "ciencias cognitivas",
+     "fenomenologica"
+    ],
+    "alimenta": true,
+    "costura": true
+   }
+  ],
+  "13": [
+   {
+    "tema": 64,
+    "peso": null,
+    "autores": [
+     "Nietzsche"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "los límites de la razón y lo irracional se juegan en la crítica nietzscheana"
+   },
+   {
+    "tema": 20,
+    "peso": 0.285,
+    "autores": [
+     "Kant",
+     "Freud"
+    ],
+    "conceptos": [
+     "delimitacion",
+     "creencia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 1,
+    "peso": 0.268,
+    "autores": [
+     "Sexto Empírico",
+     "Kant",
+     "Nietzsche"
+    ],
+    "conceptos": [
+     "nietzsche",
+     "extranamiento"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 27,
+    "peso": 0.255,
+    "autores": [
+     "Locke",
+     "Kant",
+     "Hume"
+    ],
+    "conceptos": [
+     "conocimiento humano",
+     "representativa"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 18,
+    "peso": 0.252,
+    "autores": [
+     "Hume",
+     "Descartes",
+     "Kant"
+    ],
+    "conceptos": [
+     "descartes",
+     "ideas simples"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 21,
+    "peso": 0.251,
+    "autores": [
+     "Nietzsche",
+     "Kant",
+     "Hume"
+    ],
+    "conceptos": [
+     "nietzsche",
+     "delimitacion"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "14": [
+   {
+    "tema": 2,
+    "peso": 0.378,
+    "autores": [
+     "Aristóteles",
+     "Heidegger",
+     "Kant"
+    ],
+    "conceptos": [
+     "heidegger",
+     "verificable"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 17,
+    "peso": 0.355,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Platón"
+    ],
+    "conceptos": [
+     "strawson",
+     "ontologia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 15,
+    "peso": 0.351,
+    "autores": [
+     "Heidegger",
+     "Aristóteles",
+     "Círculo de Viena"
+    ],
+    "conceptos": [
+     "superacion metafisica",
+     "ontologia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 16,
+    "peso": 0.336,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Platón"
+    ],
+    "conceptos": [
+     "incondicionado",
+     "inteligible"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 1,
+    "peso": 0.327,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Círculo de Viena"
+    ],
+    "conceptos": [
+     "philosophia",
+     "genesis"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "15": [
+   {
+    "tema": 14,
+    "peso": 0.351,
+    "autores": [
+     "Heidegger",
+     "Aristóteles",
+     "Círculo de Viena"
+    ],
+    "conceptos": [
+     "superacion metafisica",
+     "ontologia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 2,
+    "peso": 0.31,
+    "autores": [
+     "Heidegger",
+     "Aristóteles",
+     "Círculo de Viena"
+    ],
+    "conceptos": [
+     "disolucion",
+     "pregunta proyeccion"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 67,
+    "peso": 0.299,
+    "autores": [
+     "Heidegger",
+     "Hegel"
+    ],
+    "conceptos": [
+     "heideggeriana",
+     "ontologica"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 16,
+    "peso": 0.281,
+    "autores": [
+     "Aristóteles",
+     "Tomás de Aquino"
+    ],
+    "conceptos": [
+     "ente ente",
+     "parmenides"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 47,
+    "peso": 0.238,
+    "autores": [
+     "Aristóteles",
+     "Parménides",
+     "Heráclito"
+    ],
+    "conceptos": [
+     "parmenides",
+     "heraclito"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "16": [
+   {
+    "tema": 14,
+    "peso": 0.336,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Platón"
+    ],
+    "conceptos": [
+     "incondicionado",
+     "inteligible"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 1,
+    "peso": 0.336,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Platón"
+    ],
+    "conceptos": [
+     "primeros principios",
+     "nietzsche"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 50,
+    "peso": 0.319,
+    "autores": [
+     "Aristóteles",
+     "Sócrates",
+     "Platón"
+    ],
+    "conceptos": [
+     "indice concepto",
+     "sustancia"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 17,
+    "peso": 0.314,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Platón"
+    ],
+    "conceptos": [
+     "formales",
+     "supremos"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 18,
+    "peso": 0.289,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Leibniz"
+    ],
+    "conceptos": [
+     "principio causalidad",
+     "leibniz"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "17": [
+   {
+    "tema": 1,
+    "peso": 0.382,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Hegel"
+    ],
+    "conceptos": [
+     "wittgenstein",
+     "indice genesis"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 14,
+    "peso": 0.355,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Platón"
+    ],
+    "conceptos": [
+     "strawson",
+     "ontologia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 12,
+    "peso": 0.332,
+    "autores": [
+     "Kant",
+     "Husserl",
+     "Platón"
+    ],
+    "conceptos": [
+     "husserl",
+     "categorias"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 16,
+    "peso": 0.314,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Platón"
+    ],
+    "conceptos": [
+     "formales",
+     "supremos"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 2,
+    "peso": 0.289,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Wittgenstein"
+    ],
+    "conceptos": [
+     "doble dimension",
+     "wittgenstein"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "18": [
+   {
+    "tema": 55,
+    "peso": null,
+    "autores": [
+     "Descartes"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "el método cartesiano funda la sustancia moderna que discute el 18"
+   },
+   {
+    "tema": 27,
+    "peso": 0.414,
+    "autores": [
+     "Hume",
+     "Aristóteles",
+     "Locke"
+    ],
+    "conceptos": [
+     "cualidades sensibles",
+     "percepciones"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 16,
+    "peso": 0.289,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Leibniz"
+    ],
+    "conceptos": [
+     "principio causalidad",
+     "leibniz"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 57,
+    "peso": 0.287,
+    "autores": [
+     "Leibniz",
+     "Aristóteles",
+     "Descartes"
+    ],
+    "conceptos": [
+     "leibniz",
+     "extensa"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 14,
+    "peso": 0.284,
+    "autores": [
+     "Hume",
+     "Aristóteles",
+     "Kant"
+    ],
+    "conceptos": [
+     "critica humeana",
+     "sustancia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 43,
+    "peso": 0.272,
+    "autores": [
+     "Hume",
+     "Aristóteles",
+     "Kant"
+    ],
+    "conceptos": [
+     "empirista",
+     "actividad"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "19": [
+   {
+    "tema": 60,
+    "peso": null,
+    "autores": [
+     "Kant"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "libertad como postulado de la razón práctica"
+   },
+   {
+    "tema": 41,
+    "peso": 0.332,
+    "autores": [
+     "Kant",
+     "Scheler"
+    ],
+    "conceptos": [
+     "scheler",
+     "persona"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 1,
+    "peso": 0.275,
+    "autores": [
+     "Kant",
+     "Hegel"
+    ],
+    "conceptos": [
+     "autoconciencia",
+     "genesis"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 61,
+    "peso": 0.258,
+    "autores": [
+     "Hegel",
+     "Kant"
+    ],
+    "conceptos": [
+     "eticidad",
+     "autoconciencia"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 24,
+    "peso": 0.24,
+    "autores": [
+     "Kant",
+     "Scheler"
+    ],
+    "conceptos": [
+     "genesis historica",
+     "persona"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 17,
+    "peso": 0.239,
+    "autores": [
+     "Kant",
+     "Hegel"
+    ],
+    "conceptos": [
+     "genesis concepto",
+     "causalidad"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "20": [
+   {
+    "tema": 13,
+    "peso": 0.285,
+    "autores": [
+     "Kant",
+     "Freud"
+    ],
+    "conceptos": [
+     "delimitacion",
+     "creencia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 17,
+    "peso": 0.246,
+    "autores": [
+     "Kant",
+     "Wittgenstein",
+     "Habermas"
+    ],
+    "conceptos": [
+     "wittgenstein",
+     "confianza"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 1,
+    "peso": 0.225,
+    "autores": [
+     "Kant",
+     "Wittgenstein"
+    ],
+    "conceptos": [
+     "wittgenstein",
+     "modernidad"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 52,
+    "peso": 0.217,
+    "autores": [
+     "Tomás de Aquino"
+    ],
+    "conceptos": [
+     "autonomia razon",
+     "tomas aquino"
+    ],
+    "alimenta": true,
+    "costura": true,
+    "razon": "el debate fe-razón tiene en la síntesis tomista su formulación canónica"
+   },
+   {
+    "tema": 2,
+    "peso": 0.204,
+    "autores": [
+     "Kant",
+     "Wittgenstein"
+    ],
+    "conceptos": [
+     "wittgenstein",
+     "asombro"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "21": [
+   {
+    "tema": 63,
+    "peso": 0.281,
+    "autores": [
+     "Marx",
+     "Feuerbach"
+    ],
+    "conceptos": [
+     "feuerbach",
+     "alienacion"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 13,
+    "peso": 0.251,
+    "autores": [
+     "Nietzsche",
+     "Kant",
+     "Hume"
+    ],
+    "conceptos": [
+     "nietzsche",
+     "delimitacion"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 1,
+    "peso": 0.23,
+    "autores": [
+     "Nietzsche",
+     "Kant"
+    ],
+    "conceptos": [
+     "religion",
+     "critica razon"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 64,
+    "peso": 0.22,
+    "autores": [
+     "Nietzsche"
+    ],
+    "conceptos": [
+     "nihilismo",
+     "ateismo"
+    ],
+    "alimenta": true,
+    "costura": true,
+    "razon": "el ateísmo contemporáneo arranca de la muerte de Dios"
+   },
+   {
+    "tema": 11,
+    "peso": 0.216,
+    "autores": [
+     "Kant",
+     "Hume",
+     "Russell"
+    ],
+    "conceptos": [
+     "cosas sensibles",
+     "russell"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "22": [
+   {
+    "tema": 64,
+    "peso": null,
+    "autores": [
+     "Nietzsche"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "la belleza tras la muerte del arte: el nacimiento de la tragedia"
+   },
+   {
+    "tema": 71,
+    "peso": null,
+    "autores": [
+     "Vattimo"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "la estética contemporánea se cierra en la postmodernidad"
+   },
+   {
+    "tema": 14,
+    "peso": 0.244,
+    "autores": [
+     "Kant",
+     "Heidegger",
+     "Platón"
+    ],
+    "conceptos": [
+     "heidegger",
+     "schopenhauer"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 2,
+    "peso": 0.224,
+    "autores": [
+     "Kant",
+     "Heidegger",
+     "Platón"
+    ],
+    "conceptos": [
+     "belleza",
+     "heidegger"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "23": [
+   {
+    "tema": 50,
+    "peso": null,
+    "autores": [
+     "Aristóteles"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "la evolución se discute contra la teleología de la naturaleza aristotélica"
+   },
+   {
+    "tema": 62,
+    "peso": 0.255,
+    "autores": [
+     "Darwin"
+    ],
+    "conceptos": [
+     "darwinismo",
+     "evolucionista"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 25,
+    "peso": 0.199,
+    "autores": [
+     "Darwin",
+     "Kant"
+    ],
+    "conceptos": [
+     "antropologicas",
+     "evolucion"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 10,
+    "peso": 0.161,
+    "autores": [
+     "Monod",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "seleccion natural",
+     "genealogia"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "24": [
+   {
+    "tema": 25,
+    "peso": 0.309,
+    "autores": [
+     "Gehlen",
+     "Kant",
+     "Scheler"
+    ],
+    "conceptos": [
+     "naturaleza cultura",
+     "antropologia filosofica"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 19,
+    "peso": 0.24,
+    "autores": [
+     "Kant",
+     "Scheler"
+    ],
+    "conceptos": [
+     "genesis historica",
+     "persona"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 41,
+    "peso": 0.23,
+    "autores": [
+     "Kant",
+     "Scheler",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "scheler",
+     "kantiana"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 46,
+    "peso": 0.21,
+    "autores": [
+     "Dilthey",
+     "Kant",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "dilthey",
+     "epistemologico"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "25": [
+   {
+    "tema": 66,
+    "peso": null,
+    "autores": [
+     "Freud"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "naturaleza y cultura es el eje de El malestar en la cultura"
+   },
+   {
+    "tema": 24,
+    "peso": 0.309,
+    "autores": [
+     "Gehlen",
+     "Kant",
+     "Scheler"
+    ],
+    "conceptos": [
+     "naturaleza cultura",
+     "antropologia filosofica"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 23,
+    "peso": 0.199,
+    "autores": [
+     "Darwin",
+     "Kant"
+    ],
+    "conceptos": [
+     "antropologicas",
+     "evolucion"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 29,
+    "peso": 0.194,
+    "autores": [
+     "Scheler",
+     "Darwin"
+    ],
+    "conceptos": [
+     "scheler",
+     "conducta"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 19,
+    "peso": 0.182,
+    "autores": [
+     "Kant",
+     "Scheler"
+    ],
+    "conceptos": [
+     "scheler puesto",
+     "hombre cosmos"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 40,
+    "peso": 0.174,
+    "autores": [
+     "Scheler",
+     "Kant"
+    ],
+    "conceptos": [
+     "scheler",
+     "sofistas"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "26": [
+   {
+    "tema": 30,
+    "peso": 0.511,
+    "autores": [
+     "Skinner",
+     "Watson",
+     "Piaget"
+    ],
+    "conceptos": [
+     "skinner",
+     "conducta humana"
+    ],
+    "alimenta": true,
+    "costura": false,
+    "razon": "aprendizaje y conducta comparten el debate conductismo-cognitivismo"
+   },
+   {
+    "tema": 28,
+    "peso": 0.295,
+    "autores": [
+     "Skinner",
+     "Watson",
+     "Piaget"
+    ],
+    "conceptos": [
+     "cognitivismo",
+     "conductismo"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 27,
+    "peso": 0.258,
+    "autores": [
+     "Gestalt",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "estimulos",
+     "sensaciones"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "27": [
+   {
+    "tema": 18,
+    "peso": 0.414,
+    "autores": [
+     "Hume",
+     "Aristóteles",
+     "Locke"
+    ],
+    "conceptos": [
+     "cualidades sensibles",
+     "percepciones"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 11,
+    "peso": 0.285,
+    "autores": [
+     "Locke",
+     "Hume",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "realismo",
+     "nominalismo"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 43,
+    "peso": 0.263,
+    "autores": [
+     "Kant",
+     "Aristóteles",
+     "Hume"
+    ],
+    "conceptos": [
+     "actividad",
+     "persona"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 26,
+    "peso": 0.258,
+    "autores": [
+     "Gestalt",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "estimulos",
+     "sensaciones"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 13,
+    "peso": 0.255,
+    "autores": [
+     "Locke",
+     "Kant",
+     "Hume"
+    ],
+    "conceptos": [
+     "conocimiento humano",
+     "representativa"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "28": [
+   {
+    "tema": 68,
+    "peso": null,
+    "autores": [
+     "Wittgenstein"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "pensamiento y lenguaje: el giro lingüístico da el marco"
+   },
+   {
+    "tema": 26,
+    "peso": 0.295,
+    "autores": [
+     "Skinner",
+     "Watson",
+     "Piaget"
+    ],
+    "conceptos": [
+     "cognitivismo",
+     "conductismo"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 11,
+    "peso": 0.288,
+    "autores": [
+     "Chomsky",
+     "Piaget",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "chomsky",
+     "lenguaje pensamiento"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 30,
+    "peso": 0.275,
+    "autores": [
+     "Skinner",
+     "Watson",
+     "Piaget"
+    ],
+    "conceptos": [
+     "conductismo",
+     "cognitiva"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 3,
+    "peso": 0.23,
+    "autores": [
+     "Chomsky",
+     "Cassirer"
+    ],
+    "conceptos": [
+     "lenguaje humano",
+     "lenguaje lenguaje"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 25,
+    "peso": 0.171,
+    "autores": [
+     "Cassirer"
+    ],
+    "conceptos": [
+     "lenguaje humano",
+     "cassirer"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "29": [
+   {
+    "tema": 38,
+    "peso": 0.23,
+    "autores": [
+     "Scheler",
+     "Freud"
+    ],
+    "conceptos": [
+     "scheler",
+     "emocional"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 25,
+    "peso": 0.194,
+    "autores": [
+     "Scheler",
+     "Darwin"
+    ],
+    "conceptos": [
+     "scheler",
+     "conducta"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 26,
+    "peso": 0.182,
+    "autores": [
+     "Freud",
+     "Darwin"
+    ],
+    "conceptos": [
+     "estimulos",
+     "psicologia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 40,
+    "peso": 0.175,
+    "autores": [
+     "Scheler"
+    ],
+    "conceptos": [
+     "sentimientos",
+     "emociones"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 66,
+    "peso": 0.169,
+    "autores": [
+     "Freud"
+    ],
+    "conceptos": [
+     "instinto",
+     "represion"
+    ],
+    "alimenta": true,
+    "costura": true
+   }
+  ],
+  "30": [
+   {
+    "tema": 26,
+    "peso": 0.511,
+    "autores": [
+     "Skinner",
+     "Watson",
+     "Piaget"
+    ],
+    "conceptos": [
+     "skinner",
+     "conducta humana"
+    ],
+    "alimenta": false,
+    "costura": false,
+    "razon": "aprendizaje y conducta comparten el debate conductismo-cognitivismo"
+   },
+   {
+    "tema": 28,
+    "peso": 0.275,
+    "autores": [
+     "Skinner",
+     "Watson",
+     "Piaget"
+    ],
+    "conceptos": [
+     "conductismo",
+     "cognitiva"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "31": [
+   {
+    "tema": 35,
+    "peso": 0.551,
+    "autores": [
+     "Marx",
+     "Durkheim",
+     "Parsons"
+    ],
+    "conceptos": [
+     "sociologia",
+     "cambio social"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 32,
+    "peso": 0.346,
+    "autores": [
+     "Marx",
+     "Hobbes",
+     "Durkheim"
+    ],
+    "conceptos": [
+     "parsons",
+     "durkheim"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 45,
+    "peso": 0.344,
+    "autores": [
+     "Marx",
+     "Escuela de Frankfurt",
+     "Weber"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "sistemica"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 36,
+    "peso": 0.325,
+    "autores": [
+     "Marx",
+     "Escuela de Frankfurt",
+     "Weber"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "dialectica"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 63,
+    "peso": 0.3,
+    "autores": [
+     "Marx",
+     "Escuela de Frankfurt",
+     "Engels"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "marxiana"
+    ],
+    "alimenta": true,
+    "costura": true
+   }
+  ],
+  "32": [
+   {
+    "tema": 35,
+    "peso": 0.361,
+    "autores": [
+     "Marx",
+     "Durkheim",
+     "Parsons"
+    ],
+    "conceptos": [
+     "parsons",
+     "cambio social"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 44,
+    "peso": 0.351,
+    "autores": [
+     "Rawls",
+     "Aristóteles",
+     "Rousseau"
+    ],
+    "conceptos": [
+     "rousseau contrato",
+     "derechos"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 31,
+    "peso": 0.346,
+    "autores": [
+     "Marx",
+     "Hobbes",
+     "Durkheim"
+    ],
+    "conceptos": [
+     "parsons",
+     "durkheim"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 42,
+    "peso": 0.29,
+    "autores": [
+     "Rawls",
+     "Hobbes",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "consenso",
+     "parsons"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 34,
+    "peso": 0.221,
+    "autores": [
+     "Hobbes",
+     "Rousseau"
+    ],
+    "conceptos": [
+     "derecho natural",
+     "justicia"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "33": [
+   {
+    "tema": 49,
+    "peso": null,
+    "autores": [
+     "Platón"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "las formas de organización política se comparan con la Polis justa"
+   },
+   {
+    "tema": 42,
+    "peso": 0.31,
+    "autores": [
+     "Weber",
+     "Maquiavelo"
+    ],
+    "conceptos": [
+     "gobierno",
+     "democracia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 31,
+    "peso": 0.239,
+    "autores": [
+     "Weber",
+     "Marx"
+    ],
+    "conceptos": [
+     "burocracia",
+     "concepciones"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 45,
+    "peso": 0.232,
+    "autores": [
+     "Weber",
+     "Marx"
+    ],
+    "conceptos": [
+     "administracion",
+     "organizacion politica"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 43,
+    "peso": 0.213,
+    "autores": [
+     "Weber"
+    ],
+    "conceptos": [
+     "liberal",
+     "derecho"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 63,
+    "peso": 0.21,
+    "autores": [
+     "Marx",
+     "Hegel"
+    ],
+    "conceptos": [
+     "marxismo",
+     "politica"
+    ],
+    "alimenta": true,
+    "costura": true
+   }
+  ],
+  "34": [
+   {
+    "tema": 49,
+    "peso": null,
+    "autores": [
+     "Platón"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "el fundamento de la justicia se plantea por primera vez en la República"
+   },
+   {
+    "tema": 32,
+    "peso": 0.221,
+    "autores": [
+     "Hobbes",
+     "Rousseau"
+    ],
+    "conceptos": [
+     "derecho natural",
+     "justicia"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 44,
+    "peso": 0.202,
+    "autores": [
+     "Rousseau"
+    ],
+    "conceptos": [
+     "moral derecho",
+     "juridica"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 43,
+    "peso": 0.196,
+    "autores": [
+     "Kant",
+     "Dworkin"
+    ],
+    "conceptos": [
+     "derecho",
+     "moralidad"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 42,
+    "peso": 0.188,
+    "autores": [
+     "Kant",
+     "Hobbes"
+    ],
+    "conceptos": [
+     "legalidad",
+     "justicia"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "35": [
+   {
+    "tema": 31,
+    "peso": 0.551,
+    "autores": [
+     "Marx",
+     "Durkheim",
+     "Parsons"
+    ],
+    "conceptos": [
+     "sociologia",
+     "cambio social"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 32,
+    "peso": 0.361,
+    "autores": [
+     "Marx",
+     "Durkheim",
+     "Parsons"
+    ],
+    "conceptos": [
+     "parsons",
+     "cambio social"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 63,
+    "peso": 0.271,
+    "autores": [
+     "Marx",
+     "Engels"
+    ],
+    "conceptos": [
+     "izquierda",
+     "capitalismo"
+    ],
+    "alimenta": true,
+    "costura": true
+   }
+  ],
+  "36": [
+   {
+    "tema": 67,
+    "peso": null,
+    "autores": [
+     "Heidegger"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "la pregunta por la técnica es de Heidegger antes que de nadie"
+   },
+   {
+    "tema": 45,
+    "peso": 0.599,
+    "autores": [
+     "Habermas",
+     "Marx",
+     "Marcuse"
+    ],
+    "conceptos": [
+     "alienacion",
+     "escuela frankfurt"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 69,
+    "peso": 0.48,
+    "autores": [
+     "Habermas",
+     "Adorno",
+     "Escuela de Frankfurt"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "razon instrumental"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 63,
+    "peso": 0.342,
+    "autores": [
+     "Marx",
+     "Marcuse",
+     "Escuela de Frankfurt"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "ideologia"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 31,
+    "peso": 0.325,
+    "autores": [
+     "Marx",
+     "Escuela de Frankfurt",
+     "Weber"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "dialectica"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 66,
+    "peso": 0.291,
+    "autores": [
+     "Habermas",
+     "Marcuse",
+     "Escuela de Frankfurt"
+    ],
+    "conceptos": [
+     "marcuse",
+     "escuela frankfurt"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "37": [
+   {
+    "tema": 38,
+    "peso": 0.364,
+    "autores": [
+     "Freud",
+     "Piaget",
+     "Kant"
+    ],
+    "conceptos": [
+     "kohlberg",
+     "heteronomia autonomia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 66,
+    "peso": 0.236,
+    "autores": [
+     "Freud"
+    ],
+    "conceptos": [
+     "superyo",
+     "pulsional"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 19,
+    "peso": 0.221,
+    "autores": [
+     "Kant",
+     "Zubiri"
+    ],
+    "conceptos": [
+     "autonomia",
+     "libertades"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 44,
+    "peso": 0.203,
+    "autores": [
+     "Rawls"
+    ],
+    "conceptos": [
+     "libertades",
+     "genesis"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 42,
+    "peso": 0.202,
+    "autores": [
+     "Rawls",
+     "Kant"
+    ],
+    "conceptos": [
+     "responsabilidad",
+     "kohlberg"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "38": [
+   {
+    "tema": 37,
+    "peso": 0.364,
+    "autores": [
+     "Freud",
+     "Piaget",
+     "Kant"
+    ],
+    "conceptos": [
+     "kohlberg",
+     "heteronomia autonomia"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 40,
+    "peso": 0.277,
+    "autores": [
+     "Moore",
+     "Scheler",
+     "Kant"
+    ],
+    "conceptos": [
+     "objetivismo",
+     "axiologico"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 39,
+    "peso": 0.257,
+    "autores": [
+     "Kant",
+     "Hare",
+     "Moore"
+    ],
+    "conceptos": [
+     "juicios morales",
+     "cognitivismo"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 29,
+    "peso": 0.23,
+    "autores": [
+     "Scheler",
+     "Freud"
+    ],
+    "conceptos": [
+     "scheler",
+     "emocional"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 41,
+    "peso": 0.207,
+    "autores": [
+     "Kant",
+     "Scheler"
+    ],
+    "conceptos": [
+     "scheler",
+     "etica material"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "39": [
+   {
+    "tema": 58,
+    "peso": 0.438,
+    "autores": [
+     "Hume",
+     "Ayer",
+     "Hare"
+    ],
+    "conceptos": [
+     "metaetica",
+     "juicios morales"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 41,
+    "peso": 0.41,
+    "autores": [
+     "Hume",
+     "Kant",
+     "Ayer"
+    ],
+    "conceptos": [
+     "etica discurso",
+     "emotivismo"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 40,
+    "peso": 0.325,
+    "autores": [
+     "Kant",
+     "Moore",
+     "Ayer"
+    ],
+    "conceptos": [
+     "emotivismo",
+     "stevenson"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 43,
+    "peso": 0.258,
+    "autores": [
+     "Hume",
+     "Kant"
+    ],
+    "conceptos": [
+     "morales",
+     "imperativos"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 38,
+    "peso": 0.257,
+    "autores": [
+     "Kant",
+     "Hare",
+     "Moore"
+    ],
+    "conceptos": [
+     "juicios morales",
+     "cognitivismo"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "40": [
+   {
+    "tema": 41,
+    "peso": 0.383,
+    "autores": [
+     "Kant",
+     "Scheler",
+     "Ayer"
+    ],
+    "conceptos": [
+     "scheler",
+     "etica material"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 39,
+    "peso": 0.325,
+    "autores": [
+     "Kant",
+     "Moore",
+     "Ayer"
+    ],
+    "conceptos": [
+     "emotivismo",
+     "stevenson"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 38,
+    "peso": 0.277,
+    "autores": [
+     "Moore",
+     "Scheler",
+     "Kant"
+    ],
+    "conceptos": [
+     "objetivismo",
+     "axiologico"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 17,
+    "peso": 0.213,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Husserl"
+    ],
+    "conceptos": [
+     "husserl",
+     "balance"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 19,
+    "peso": 0.206,
+    "autores": [
+     "Kant",
+     "Scheler"
+    ],
+    "conceptos": [
+     "scheler",
+     "indice concepto"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "41": [
+   {
+    "tema": 39,
+    "peso": 0.41,
+    "autores": [
+     "Hume",
+     "Kant",
+     "Ayer"
+    ],
+    "conceptos": [
+     "etica discurso",
+     "emotivismo"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 40,
+    "peso": 0.383,
+    "autores": [
+     "Kant",
+     "Scheler",
+     "Ayer"
+    ],
+    "conceptos": [
+     "scheler",
+     "etica material"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 60,
+    "peso": 0.363,
+    "autores": [
+     "Kant",
+     "Rawls"
+    ],
+    "conceptos": [
+     "imperativo categorico",
+     "moralidad"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 19,
+    "peso": 0.332,
+    "autores": [
+     "Kant",
+     "Scheler"
+    ],
+    "conceptos": [
+     "scheler",
+     "persona"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 42,
+    "peso": 0.304,
+    "autores": [
+     "Kant",
+     "Rawls",
+     "Habermas"
+    ],
+    "conceptos": [
+     "valores",
+     "imperativo categorico"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "42": [
+   {
+    "tema": 56,
+    "peso": null,
+    "autores": [
+     "Spinoza"
+    ],
+    "conceptos": [],
+    "alimenta": true,
+    "costura": true,
+    "razon": "el sujeto ético-político spinoziano es el precedente del tema"
+   },
+   {
+    "tema": 44,
+    "peso": 0.381,
+    "autores": [
+     "Rawls",
+     "Aristóteles",
+     "Habermas"
+    ],
+    "conceptos": [
+     "igualdad",
+     "legalidad"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 33,
+    "peso": 0.31,
+    "autores": [
+     "Weber",
+     "Maquiavelo"
+    ],
+    "conceptos": [
+     "gobierno",
+     "democracia"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 41,
+    "peso": 0.304,
+    "autores": [
+     "Kant",
+     "Rawls",
+     "Habermas"
+    ],
+    "conceptos": [
+     "valores",
+     "imperativo categorico"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 32,
+    "peso": 0.29,
+    "autores": [
+     "Rawls",
+     "Hobbes",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "consenso",
+     "parsons"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "43": [
+   {
+    "tema": 18,
+    "peso": 0.272,
+    "autores": [
+     "Hume",
+     "Aristóteles",
+     "Kant"
+    ],
+    "conceptos": [
+     "empirista",
+     "actividad"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 27,
+    "peso": 0.263,
+    "autores": [
+     "Kant",
+     "Aristóteles",
+     "Hume"
+    ],
+    "conceptos": [
+     "actividad",
+     "persona"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 41,
+    "peso": 0.263,
+    "autores": [
+     "Kant",
+     "Aristóteles",
+     "Hume"
+    ],
+    "conceptos": [
+     "axiologica",
+     "valores"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 14,
+    "peso": 0.261,
+    "autores": [
+     "Aristóteles",
+     "Kant",
+     "Hume"
+    ],
+    "conceptos": [
+     "strawson",
+     "disciplina"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "44": [
+   {
+    "tema": 42,
+    "peso": 0.381,
+    "autores": [
+     "Rawls",
+     "Aristóteles",
+     "Habermas"
+    ],
+    "conceptos": [
+     "igualdad",
+     "legalidad"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 32,
+    "peso": 0.351,
+    "autores": [
+     "Rawls",
+     "Aristóteles",
+     "Rousseau"
+    ],
+    "conceptos": [
+     "rousseau contrato",
+     "derechos"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 41,
+    "peso": 0.255,
+    "autores": [
+     "Aristóteles",
+     "Rawls",
+     "Habermas"
+    ],
+    "conceptos": [
+     "justicia",
+     "etica nicomaco"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "45": [
+   {
+    "tema": 36,
+    "peso": 0.599,
+    "autores": [
+     "Habermas",
+     "Marx",
+     "Marcuse"
+    ],
+    "conceptos": [
+     "alienacion",
+     "escuela frankfurt"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 69,
+    "peso": 0.446,
+    "autores": [
+     "Habermas",
+     "Adorno",
+     "Escuela de Frankfurt"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "razon instrumental"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 63,
+    "peso": 0.366,
+    "autores": [
+     "Marx",
+     "Escuela de Frankfurt",
+     "Marcuse"
+    ],
+    "conceptos": [
+     "alienacion",
+     "capitalismo"
+    ],
+    "alimenta": false,
+    "costura": true,
+    "razon": "alienación es un concepto de los Manuscritos"
+   },
+   {
+    "tema": 31,
+    "peso": 0.344,
+    "autores": [
+     "Marx",
+     "Escuela de Frankfurt",
+     "Weber"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "sistemica"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 66,
+    "peso": 0.278,
+    "autores": [
+     "Habermas",
+     "Marcuse",
+     "Escuela de Frankfurt"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "habermas"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "46": [
+   {
+    "tema": 1,
+    "peso": 0.464,
+    "autores": [
+     "Hegel",
+     "Aristóteles",
+     "Rorty"
+    ],
+    "conceptos": [
+     "filosofia historia",
+     "filosofar"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 71,
+    "peso": 0.294,
+    "autores": [
+     "Dilthey",
+     "Rorty"
+    ],
+    "conceptos": [
+     "dilthey",
+     "historicidad"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 61,
+    "peso": 0.269,
+    "autores": [
+     "Hegel",
+     "Kant"
+    ],
+    "conceptos": [
+     "historia filosofia",
+     "hegeliana"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 17,
+    "peso": 0.261,
+    "autores": [
+     "Aristóteles",
+     "Hegel",
+     "Kant"
+    ],
+    "conceptos": [
+     "hartmann",
+     "idealismo aleman"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 19,
+    "peso": 0.239,
+    "autores": [
+     "Hegel",
+     "Kant"
+    ],
+    "conceptos": [
+     "genesis",
+     "historica"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "47": [
+   {
+    "tema": 50,
+    "peso": 0.304,
+    "autores": [
+     "Aristóteles",
+     "Sócrates",
+     "Platón"
+    ],
+    "conceptos": [
+     "pensamiento presocratico",
+     "presocraticos"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 15,
+    "peso": 0.238,
+    "autores": [
+     "Aristóteles",
+     "Parménides",
+     "Heráclito"
+    ],
+    "conceptos": [
+     "parmenides",
+     "heraclito"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 48,
+    "peso": 0.233,
+    "autores": [
+     "Sócrates",
+     "Platón",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "politico",
+     "metodo dialectico"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 16,
+    "peso": 0.225,
+    "autores": [
+     "Aristóteles",
+     "Sócrates",
+     "Tomás de Aquino"
+    ],
+    "conceptos": [
+     "heraclito",
+     "parmenides"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 51,
+    "peso": 0.208,
+    "autores": [
+     "Aristóteles",
+     "Demócrito",
+     "Tomás de Aquino"
+    ],
+    "conceptos": [
+     "matematizacion",
+     "atomismo"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "48": [
+   {
+    "tema": 49,
+    "peso": 0.325,
+    "autores": [
+     "Platón",
+     "Sócrates",
+     "Gorgias"
+    ],
+    "conceptos": [
+     "ateniense",
+     "retorica"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 47,
+    "peso": 0.233,
+    "autores": [
+     "Sócrates",
+     "Platón",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "politico",
+     "metodo dialectico"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 50,
+    "peso": 0.228,
+    "autores": [
+     "Aristóteles",
+     "Sócrates",
+     "Platón"
+    ],
+    "conceptos": [
+     "naturaleza physis",
+     "pertinencia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 6,
+    "peso": 0.17,
+    "autores": [
+     "Sócrates",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "socrates",
+     "verdad lenguaje"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "49": [
+   {
+    "tema": 33,
+    "peso": null,
+    "autores": [
+     "Platón"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "las formas de organización política se comparan con la Polis justa"
+   },
+   {
+    "tema": 34,
+    "peso": null,
+    "autores": [
+     "Platón"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "el fundamento de la justicia se plantea por primera vez en la República"
+   },
+   {
+    "tema": 48,
+    "peso": 0.325,
+    "autores": [
+     "Platón",
+     "Sócrates",
+     "Gorgias"
+    ],
+    "conceptos": [
+     "ateniense",
+     "retorica"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 11,
+    "peso": 0.204,
+    "autores": [
+     "Platón",
+     "Popper",
+     "Sócrates"
+    ],
+    "conceptos": [
+     "socrates",
+     "ateniense"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "50": [
+   {
+    "tema": 23,
+    "peso": null,
+    "autores": [
+     "Aristóteles"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "la evolución se discute contra la teleología de la naturaleza aristotélica"
+   },
+   {
+    "tema": 16,
+    "peso": 0.319,
+    "autores": [
+     "Aristóteles",
+     "Sócrates",
+     "Platón"
+    ],
+    "conceptos": [
+     "indice concepto",
+     "sustancia"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 47,
+    "peso": 0.304,
+    "autores": [
+     "Aristóteles",
+     "Sócrates",
+     "Platón"
+    ],
+    "conceptos": [
+     "pensamiento presocratico",
+     "presocraticos"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 6,
+    "peso": 0.267,
+    "autores": [
+     "Aristóteles",
+     "Sócrates"
+    ],
+    "conceptos": [
+     "aristotelica",
+     "universo"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 14,
+    "peso": 0.244,
+    "autores": [
+     "Aristóteles",
+     "Platón",
+     "Sócrates"
+    ],
+    "conceptos": [
+     "sustancia",
+     "caracterizacion"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "51": [
+   {
+    "tema": 5,
+    "peso": 0.328,
+    "autores": [
+     "Aristóteles",
+     "Zenón de Citio"
+    ],
+    "conceptos": [
+     "axiomatico",
+     "teoremas"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 17,
+    "peso": 0.266,
+    "autores": [
+     "Aristóteles",
+     "Platón",
+     "Copérnico"
+    ],
+    "conceptos": [
+     "platon aristoteles",
+     "aristotelica"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 53,
+    "peso": 0.247,
+    "autores": [
+     "Aristóteles",
+     "Tomás de Aquino"
+    ],
+    "conceptos": [
+     "matematizacion",
+     "surgimiento"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 52,
+    "peso": 0.238,
+    "autores": [
+     "Tomás de Aquino",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "demostracion",
+     "felicidad"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "52": [
+   {
+    "tema": 53,
+    "peso": 0.29,
+    "autores": [
+     "Tomás de Aquino",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "tomista",
+     "teologia"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 51,
+    "peso": 0.238,
+    "autores": [
+     "Tomás de Aquino",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "demostracion",
+     "felicidad"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 16,
+    "peso": 0.237,
+    "autores": [
+     "Tomás de Aquino",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "primeros principios",
+     "demostracion"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 15,
+    "peso": 0.218,
+    "autores": [
+     "Tomás de Aquino",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "esencia existencia",
+     "tomas aquino"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 20,
+    "peso": 0.217,
+    "autores": [
+     "Tomás de Aquino"
+    ],
+    "conceptos": [
+     "autonomia razon",
+     "tomas aquino"
+    ],
+    "alimenta": false,
+    "costura": true,
+    "razon": "el debate fe-razón tiene en la síntesis tomista su formulación canónica"
+   }
+  ],
+  "53": [
+   {
+    "tema": 52,
+    "peso": 0.29,
+    "autores": [
+     "Tomás de Aquino",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "tomista",
+     "teologia"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 51,
+    "peso": 0.247,
+    "autores": [
+     "Aristóteles",
+     "Tomás de Aquino"
+    ],
+    "conceptos": [
+     "matematizacion",
+     "surgimiento"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 11,
+    "peso": 0.221,
+    "autores": [
+     "Guillermo de Ockham",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "nominalismo",
+     "universales"
+    ],
+    "alimenta": false,
+    "costura": true,
+    "razon": "el problema de los universales tiene su desenlace en el nominalismo del XIV"
+   },
+   {
+    "tema": 54,
+    "peso": 0.221,
+    "autores": [
+     "Newton",
+     "Galileo",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "matematizacion",
+     "galileo newton"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "54": [
+   {
+    "tema": 8,
+    "peso": null,
+    "autores": [
+     "Galileo"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "la verdad en las ciencias empíricas nace con la matematización galileana"
+   },
+   {
+    "tema": 10,
+    "peso": null,
+    "autores": [
+     "Newton"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "el determinismo que se discute es el del universo newtoniano"
+   },
+   {
+    "tema": 62,
+    "peso": 0.23,
+    "autores": [
+     "Newton",
+     "Galileo"
+    ],
+    "conceptos": [
+     "newtoniana",
+     "mecanica"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 53,
+    "peso": 0.221,
+    "autores": [
+     "Newton",
+     "Galileo",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "matematizacion",
+     "galileo newton"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 51,
+    "peso": 0.198,
+    "autores": [
+     "Aristóteles",
+     "Copérnico",
+     "Platón"
+    ],
+    "conceptos": [
+     "copernico",
+     "matematizacion"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 57,
+    "peso": 0.179,
+    "autores": [
+     "Leibniz",
+     "Newton",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "leibniz",
+     "espacio tiempo"
+    ],
+    "alimenta": true,
+    "costura": false
+   }
+  ],
+  "55": [
+   {
+    "tema": 18,
+    "peso": null,
+    "autores": [
+     "Descartes"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "el método cartesiano funda la sustancia moderna que discute el 18"
+   },
+   {
+    "tema": 12,
+    "peso": null,
+    "autores": [
+     "Descartes"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "las ideas innatas son el primer modelo de elemento a priori"
+   },
+   {
+    "tema": 1,
+    "peso": 0.2,
+    "autores": [
+     "Descartes",
+     "Sexto Empírico"
+    ],
+    "conceptos": [
+     "descartes",
+     "duda metodica"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 54,
+    "peso": 0.174,
+    "autores": [],
+    "conceptos": [
+     "copernico",
+     "revolucion cientifica"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "56": [
+   {
+    "tema": 42,
+    "peso": null,
+    "autores": [
+     "Spinoza"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "el sujeto ético-político spinoziano es el precedente del tema"
+   },
+   {
+    "tema": 18,
+    "peso": 0.175,
+    "autores": [
+     "Spinoza",
+     "Descartes"
+    ],
+    "conceptos": [
+     "spinoza",
+     "estabilidad"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "57": [
+   {
+    "tema": 18,
+    "peso": 0.287,
+    "autores": [
+     "Leibniz",
+     "Aristóteles",
+     "Descartes"
+    ],
+    "conceptos": [
+     "leibniz",
+     "extensa"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 16,
+    "peso": 0.224,
+    "autores": [
+     "Leibniz",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "suficiente",
+     "verdades razon"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 54,
+    "peso": 0.179,
+    "autores": [
+     "Leibniz",
+     "Newton",
+     "Aristóteles"
+    ],
+    "conceptos": [
+     "leibniz",
+     "espacio tiempo"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "58": [
+   {
+    "tema": 39,
+    "peso": 0.438,
+    "autores": [
+     "Hume",
+     "Ayer",
+     "Hare"
+    ],
+    "conceptos": [
+     "metaetica",
+     "juicios morales"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 18,
+    "peso": 0.259,
+    "autores": [
+     "Locke",
+     "Hume"
+    ],
+    "conceptos": [
+     "empirista",
+     "racionalismo"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 27,
+    "peso": 0.236,
+    "autores": [
+     "Locke",
+     "Hume"
+    ],
+    "conceptos": [
+     "impresiones",
+     "psicologia"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "59": [
+   {
+    "tema": 12,
+    "peso": null,
+    "autores": [
+     "Kant"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "el a priori del tema 12 es literalmente la estética y la analítica trascendentales del 59"
+   },
+   {
+    "tema": 60,
+    "peso": 0.541,
+    "autores": [
+     "Kant"
+    ],
+    "conceptos": [
+     "razon practica",
+     "postulados"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 14,
+    "peso": 0.276,
+    "autores": [
+     "Kant",
+     "Hume",
+     "Copérnico"
+    ],
+    "conceptos": [
+     "strawson",
+     "incondicionado"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 17,
+    "peso": 0.257,
+    "autores": [
+     "Kant",
+     "Copérnico"
+    ],
+    "conceptos": [
+     "giro copernicano",
+     "balance"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 41,
+    "peso": 0.251,
+    "autores": [
+     "Kant",
+     "Hume"
+    ],
+    "conceptos": [
+     "razon practica",
+     "incondicionado"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "60": [
+   {
+    "tema": 19,
+    "peso": null,
+    "autores": [
+     "Kant"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "libertad como postulado de la razón práctica"
+   },
+   {
+    "tema": 59,
+    "peso": 0.541,
+    "autores": [
+     "Kant"
+    ],
+    "conceptos": [
+     "razon practica",
+     "postulados"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 41,
+    "peso": 0.363,
+    "autores": [
+     "Kant",
+     "Rawls"
+    ],
+    "conceptos": [
+     "imperativo categorico",
+     "moralidad"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "61": [
+   {
+    "tema": 63,
+    "peso": 0.303,
+    "autores": [
+     "Hegel",
+     "Adorno"
+    ],
+    "conceptos": [
+     "hegeliana",
+     "izquierda"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 46,
+    "peso": 0.269,
+    "autores": [
+     "Hegel",
+     "Kant"
+    ],
+    "conceptos": [
+     "historia filosofia",
+     "hegeliana"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 19,
+    "peso": 0.258,
+    "autores": [
+     "Hegel",
+     "Kant"
+    ],
+    "conceptos": [
+     "eticidad",
+     "autoconciencia"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 17,
+    "peso": 0.204,
+    "autores": [
+     "Hegel",
+     "Kant"
+    ],
+    "conceptos": [
+     "ontologia",
+     "determinaciones"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 1,
+    "peso": 0.193,
+    "autores": [
+     "Hegel",
+     "Kant"
+    ],
+    "conceptos": [
+     "autoconciencia",
+     "filosofia saber"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "62": [
+   {
+    "tema": 9,
+    "peso": null,
+    "autores": [
+     "Comte"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "leyes y teorías científicas se formulan contra el modelo positivista"
+   },
+   {
+    "tema": 23,
+    "peso": 0.255,
+    "autores": [
+     "Darwin"
+    ],
+    "conceptos": [
+     "darwinismo",
+     "evolucionista"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 54,
+    "peso": 0.23,
+    "autores": [
+     "Newton",
+     "Galileo"
+    ],
+    "conceptos": [
+     "newtoniana",
+     "mecanica"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 26,
+    "peso": 0.174,
+    "autores": [
+     "Darwin"
+    ],
+    "conceptos": [
+     "sensaciones",
+     "cientifico"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "63": [
+   {
+    "tema": 45,
+    "peso": 0.366,
+    "autores": [
+     "Marx",
+     "Escuela de Frankfurt",
+     "Marcuse"
+    ],
+    "conceptos": [
+     "alienacion",
+     "capitalismo"
+    ],
+    "alimenta": false,
+    "costura": true,
+    "razon": "alienación es un concepto de los Manuscritos"
+   },
+   {
+    "tema": 36,
+    "peso": 0.342,
+    "autores": [
+     "Marx",
+     "Marcuse",
+     "Escuela de Frankfurt"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "ideologia"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 61,
+    "peso": 0.303,
+    "autores": [
+     "Hegel",
+     "Adorno"
+    ],
+    "conceptos": [
+     "hegeliana",
+     "izquierda"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 31,
+    "peso": 0.3,
+    "autores": [
+     "Marx",
+     "Escuela de Frankfurt",
+     "Engels"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "marxiana"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 21,
+    "peso": 0.281,
+    "autores": [
+     "Marx",
+     "Feuerbach"
+    ],
+    "conceptos": [
+     "feuerbach",
+     "alienacion"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "64": [
+   {
+    "tema": 13,
+    "peso": null,
+    "autores": [
+     "Nietzsche"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "los límites de la razón y lo irracional se juegan en la crítica nietzscheana"
+   },
+   {
+    "tema": 22,
+    "peso": null,
+    "autores": [
+     "Nietzsche"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "la belleza tras la muerte del arte: el nacimiento de la tragedia"
+   },
+   {
+    "tema": 16,
+    "peso": 0.233,
+    "autores": [
+     "Nietzsche",
+     "Sócrates",
+     "Platón"
+    ],
+    "conceptos": [
+     "verdadero",
+     "pensamiento contemporaneo"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 21,
+    "peso": 0.22,
+    "autores": [
+     "Nietzsche"
+    ],
+    "conceptos": [
+     "nihilismo",
+     "ateismo"
+    ],
+    "alimenta": false,
+    "costura": true,
+    "razon": "el ateísmo contemporáneo arranca de la muerte de Dios"
+   },
+   {
+    "tema": 1,
+    "peso": 0.2,
+    "autores": [
+     "Nietzsche",
+     "Platón",
+     "Sócrates"
+    ],
+    "conceptos": [
+     "resentimiento",
+     "nacimiento"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "65": [
+   {
+    "tema": 67,
+    "peso": 0.291,
+    "autores": [
+     "Husserl",
+     "Heidegger",
+     "Sartre"
+    ],
+    "conceptos": [
+     "intersubjetividad",
+     "fenomenologico"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 12,
+    "peso": 0.264,
+    "autores": [
+     "Husserl",
+     "Kant",
+     "Descartes"
+    ],
+    "conceptos": [
+     "ciencias cognitivas",
+     "fenomenologica"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 17,
+    "peso": 0.255,
+    "autores": [
+     "Husserl",
+     "Kant"
+    ],
+    "conceptos": [
+     "husserl",
+     "trascendental"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 40,
+    "peso": 0.178,
+    "autores": [
+     "Husserl",
+     "Kant"
+    ],
+    "conceptos": [
+     "brentano",
+     "husserl"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "66": [
+   {
+    "tema": 25,
+    "peso": null,
+    "autores": [
+     "Freud"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "naturaleza y cultura es el eje de El malestar en la cultura"
+   },
+   {
+    "tema": 36,
+    "peso": 0.291,
+    "autores": [
+     "Habermas",
+     "Marcuse",
+     "Escuela de Frankfurt"
+    ],
+    "conceptos": [
+     "marcuse",
+     "escuela frankfurt"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 45,
+    "peso": 0.278,
+    "autores": [
+     "Habermas",
+     "Marcuse",
+     "Escuela de Frankfurt"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "habermas"
+    ],
+    "alimenta": true,
+    "costura": true
+   },
+   {
+    "tema": 69,
+    "peso": 0.244,
+    "autores": [
+     "Habermas",
+     "Escuela de Frankfurt",
+     "Marcuse"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "habermas"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 37,
+    "peso": 0.236,
+    "autores": [
+     "Freud"
+    ],
+    "conceptos": [
+     "superyo",
+     "pulsional"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 20,
+    "peso": 0.192,
+    "autores": [
+     "Freud",
+     "Habermas"
+    ],
+    "conceptos": [
+     "religion",
+     "porvenir"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "67": [
+   {
+    "tema": 36,
+    "peso": null,
+    "autores": [
+     "Heidegger"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "la pregunta por la técnica es de Heidegger antes que de nadie"
+   },
+   {
+    "tema": 70,
+    "peso": null,
+    "autores": [
+     "Ortega y Gasset"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": false,
+    "razon": "raciovitalismo y filosofías de la existencia son la misma coyuntura"
+   },
+   {
+    "tema": 15,
+    "peso": 0.299,
+    "autores": [
+     "Heidegger",
+     "Hegel"
+    ],
+    "conceptos": [
+     "heideggeriana",
+     "ontologica"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 65,
+    "peso": 0.291,
+    "autores": [
+     "Husserl",
+     "Heidegger",
+     "Sartre"
+    ],
+    "conceptos": [
+     "intersubjetividad",
+     "fenomenologico"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 71,
+    "peso": 0.225,
+    "autores": [
+     "Heidegger"
+    ],
+    "conceptos": [
+     "horizontes",
+     "finitud"
+    ],
+    "alimenta": false,
+    "costura": false
+   },
+   {
+    "tema": 17,
+    "peso": 0.214,
+    "autores": [
+     "Husserl",
+     "Hegel",
+     "Platón"
+    ],
+    "conceptos": [
+     "husserl",
+     "ontologica"
+    ],
+    "alimenta": true,
+    "costura": true
+   }
+  ],
+  "68": [
+   {
+    "tema": 28,
+    "peso": null,
+    "autores": [
+     "Wittgenstein"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "pensamiento y lenguaje: el giro lingüístico da el marco"
+   },
+   {
+    "tema": 3,
+    "peso": null,
+    "autores": [
+     "Wittgenstein"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "la distinción natural/formal es el punto de partida de la filosofía analítica"
+   },
+   {
+    "tema": 4,
+    "peso": 0.536,
+    "autores": [
+     "Wittgenstein",
+     "Russell",
+     "Frege"
+    ],
+    "conceptos": [
+     "russell",
+     "francia"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 5,
+    "peso": 0.283,
+    "autores": [
+     "Russell",
+     "Frege"
+    ],
+    "conceptos": [
+     "cuantificacion",
+     "logicas"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 8,
+    "peso": 0.265,
+    "autores": [
+     "Russell",
+     "Frege",
+     "Círculo de Viena"
+    ],
+    "conceptos": [
+     "russell",
+     "corriente"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "69": [
+   {
+    "tema": 9,
+    "peso": null,
+    "autores": [
+     "Popper"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "el contexto de justificación se juega en la disputa del positivismo"
+   },
+   {
+    "tema": 36,
+    "peso": 0.48,
+    "autores": [
+     "Habermas",
+     "Adorno",
+     "Escuela de Frankfurt"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "razon instrumental"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 45,
+    "peso": 0.446,
+    "autores": [
+     "Habermas",
+     "Adorno",
+     "Escuela de Frankfurt"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "razon instrumental"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 8,
+    "peso": 0.303,
+    "autores": [
+     "Popper",
+     "Habermas",
+     "Adorno"
+    ],
+    "conceptos": [
+     "falsacionismo",
+     "disputa"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 2,
+    "peso": 0.246,
+    "autores": [
+     "Popper",
+     "Adorno",
+     "Horkheimer"
+    ],
+    "conceptos": [
+     "falsacionismo",
+     "critica escuela"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 66,
+    "peso": 0.244,
+    "autores": [
+     "Habermas",
+     "Escuela de Frankfurt",
+     "Marcuse"
+    ],
+    "conceptos": [
+     "escuela frankfurt",
+     "habermas"
+    ],
+    "alimenta": false,
+    "costura": false
+   }
+  ],
+  "70": [
+   {
+    "tema": 67,
+    "peso": null,
+    "autores": [
+     "Ortega y Gasset"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": false,
+    "razon": "raciovitalismo y filosofías de la existencia son la misma coyuntura"
+   },
+   {
+    "tema": 19,
+    "peso": 0.171,
+    "autores": [
+     "Zubiri"
+    ],
+    "conceptos": [
+     "interior",
+     "exterior"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 37,
+    "peso": 0.165,
+    "autores": [
+     "Zubiri"
+    ],
+    "conceptos": [
+     "xavier zubiri",
+     "exterior"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ],
+  "71": [
+   {
+    "tema": 22,
+    "peso": null,
+    "autores": [
+     "Vattimo"
+    ],
+    "conceptos": [],
+    "alimenta": false,
+    "costura": true,
+    "razon": "la estética contemporánea se cierra en la postmodernidad"
+   },
+   {
+    "tema": 46,
+    "peso": 0.294,
+    "autores": [
+     "Dilthey",
+     "Rorty"
+    ],
+    "conceptos": [
+     "dilthey",
+     "historicidad"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 67,
+    "peso": 0.225,
+    "autores": [
+     "Heidegger"
+    ],
+    "conceptos": [
+     "horizontes",
+     "finitud"
+    ],
+    "alimenta": true,
+    "costura": false
+   },
+   {
+    "tema": 1,
+    "peso": 0.213,
+    "autores": [
+     "Rorty",
+     "Nietzsche"
+    ],
+    "conceptos": [
+     "conversacion",
+     "rorty filosofia"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 12,
+    "peso": 0.196,
+    "autores": [
+     "Gadamer"
+    ],
+    "conceptos": [
+     "hermeneutica",
+     "prejuicios"
+    ],
+    "alimenta": false,
+    "costura": true
+   },
+   {
+    "tema": 2,
+    "peso": 0.195,
+    "autores": [
+     "Heidegger"
+    ],
+    "conceptos": [
+     "heidegger",
+     "vattimo"
+    ],
+    "alimenta": false,
+    "costura": true
+   }
+  ]
+ }
+}
