@@ -1,7 +1,11 @@
 "use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-interface Tarjeta { anverso: string; reverso: string; tipo?: string }
+interface Tarjeta {
+  anverso: string; reverso: string; tipo?: string;
+  /** Fragmento literal del tema que sostiene la respuesta. */
+  ancla?: string;
+}
 
 /** El modelo a veces envuelve el JSON en vallas de código o añade texto alrededor. */
 export function leerTarjetas(bruto: string): Tarjeta[] | null {
@@ -103,6 +107,17 @@ export default function Flashcards({ bruto }: { bruto: string }) {
           <Cara lado="dorso" acento="#2fbf94">
             <span className="mb-3 self-start text-[10px] uppercase tracking-widest text-jade">Respuesta</span>
             <p className="text-[15px] leading-relaxed">{t.reverso}</p>
+            {/* De dónde sale. Una tarjeta sin esto es una tarjeta en la que no
+                conviene fiarse: se generó antes de que se comprobara el anclaje. */}
+            {t.ancla ? (
+              <p className="mt-3 border-l-2 border-jade/40 pl-2 text-[11px] italic leading-snug text-suave">
+                «{t.ancla}»
+              </p>
+            ) : (
+              <p className="mt-3 border-l-2 border-ambar/50 pl-2 text-[11px] leading-snug text-ambar">
+                Sin anclaje al tema: tarjeta antigua, contrástala antes de darla por buena.
+              </p>
+            )}
             <span className="mt-auto pt-4 text-[11px] text-suave">1 la sabía · 2 repasar</span>
           </Cara>
         </div>

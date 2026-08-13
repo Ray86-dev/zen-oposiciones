@@ -192,6 +192,38 @@ export async function gemini(sistema: string, usuario: string, maxTokens = 8000)
   return { texto, modelo };
 }
 
+/**
+ * Corta el bloque final de bibliografía y webgrafía.
+ *
+ * Es una lista de obras reales que el modelo conoce de su entrenamiento, así que
+ * mandarla como «material de partida» es una invitación a preguntar por libros
+ * que el tema solo cita. Así salió una tarjeta sobre las etapas del saber en
+ * Zubiri cuando Zubiri aparece una vez en el tema 1, en la bibliografía.
+ */
+export function sinBibliografia(texto: string): string {
+  // El índice del principio también dice «Bibliografía», así que hay que
+  // quedarse con la ÚLTIMA aparición, no con la primera: cortando por la
+  // primera, el tema 1 pasaba de 22.100 caracteres a 762.
+  const patron = /\n[^\n]{0,40}\b(BIBLIOGRAF[IÍ]A|REFERENCIAS BIBLIOGR)/gi;
+  let corte = -1;
+  for (const m of texto.matchAll(patron)) {
+    if (m.index !== undefined) corte = m.index;
+  }
+  // Red de seguridad: si el corte se llevara más de un tercio del tema, es que
+  // hemos acertado en el sitio equivocado. Mejor mandarlo entero.
+  if (corte < 0 || corte < texto.length * 0.66) return texto;
+  return texto.slice(0, corte).trimEnd();
+}
+
+/** Normaliza para comparar: sin tildes, sin puntuación y sin dobles espacios. */
+export function normalizar(s: string): string {
+  return s
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9ñ]+/g, " ")
+    .trim();
+}
+
 /** Recorta el tema para no exceder la ventana de contexto. */
 export function recortar(html: string, maxCaracteres = 60000) {
   const texto = html

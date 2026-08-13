@@ -61,27 +61,108 @@ export async function registrarUso(
 }
 
 // ---------------------------------------------------------------- DeepSeek
-export async function deepseek(sistema: string, usuario: string, maxTokens = 8000) {
+/**
+ * Cuánto se le deja pensar al modelo antes de responder.
+ *
+ * deepseek-v4-flash razona por defecto, y su presupuesto de razonamiento sale
+ * del mismo `max_tokens` que la respuesta. Con 6000 se gastó los 6000 pensando
+ * (reasoning_tokens: 6000) y devolvió el contenido vacío con finish_reason
+ * "length": dos minutos de espera para nada. Redactar un enunciado con un
+ * formato fijo no necesita cadena de pensamiento, así que por defecto va
+ * apagada; quien la necesite, que la pida.
+ */
+export type Pensar = "no" | "poco" | "normal";
+
+export async function deepseek(
+  sistema: string,
+  usuario: string,
+  maxTokens = 8000,
+  pensar: Pensar = "no",
+) {
   const clave = Deno.env.get("DEEPSEEK_API_KEY");
   if (!clave) throw new Error("Falta el secreto DEEPSEEK_API_KEY");
   const modelo = Deno.env.get("DEEPSEEK_MODEL") ?? "deepseek-v4-flash";
 
-  const r = await fetch("https://api.deepseek.com/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${clave}` },
-    body: JSON.stringify({
-      model: modelo,
-      messages: [
-        { role: "system", content: sistema },
-        { role: "user", content: usuario },
-      ],
-      temperature: 0.4,
-      max_tokens: maxTokens,
-    }),
-  });
-  if (!r.ok) throw new Error(`DeepSeek ${r.status}: ${(await r.text()).slice(0, 300)}`);
-  const j = await r.json();
-  return { texto: j.choices?.[0]?.message?.content ?? "", modelo };
+  const pensamiento = pensar === "no"
+    ? { type: "disabled" }
+    : { type: "enabled", reasoning_effort: pensar === "poco" ? "low" : "high" };
+
+  // La pasarela de Supabase corta la función a los ~150 s y devuelve un 504:
+  // un error mudo, sin traza, que no dice si el modelo tardó, se atascó o no
+  // existe. Mejor rendirse antes por nuestra cuenta y contarlo.
+  const ESPERA_MAXIMA = 75_000;
+
+  const pedir = async (tope: number, conPensamiento = true) => {
+    const aborto = new AbortController();
+    const reloj = setTimeout(() => aborto.abort(), ESPERA_MAXIMA);
+    let r: Response;
+    try {
+      r = await fetch("https://api.deepseek.com/chat/completions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${clave}` },
+        body: JSON.stringify({
+          model: modelo,
+          messages: [
+            { role: "system", content: sistema },
+            { role: "user", content: usuario },
+          ],
+          temperature: 0.4,
+          max_tokens: tope,
+          ...(conPensamiento ? { thinking: pensamiento } : {}),
+        }),
+        signal: aborto.signal,
+      });
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") {
+        throw new Error(
+          `El modelo ${modelo} no respondió en ${ESPERA_MAXIMA / 1000} s. ` +
+          `Comprueba el secreto DEEPSEEK_MODEL y el saldo de la cuenta.`,
+        );
+      }
+      throw e;
+    } finally {
+      clearTimeout(reloj);
+    }
+    if (!r.ok) {
+      const cuerpo = (await r.text()).slice(0, 300);
+      // Red de seguridad: si esta cuenta o este modelo aún no aceptan el
+      // parámetro `thinking`, se repite sin él antes de dar la tarde por
+      // perdida. Se pierde el control del razonamiento, no el servicio.
+      if (r.status === 400 && conPensamiento && /thinking|reasoning/i.test(cuerpo)) {
+        clearTimeout(reloj);
+        return await pedir(tope, false);
+      }
+      throw new Error(`DeepSeek ${r.status}: ${cuerpo}`);
+    }
+    const j = await r.json();
+    const eleccion = j.choices?.[0];
+    return {
+      texto: (eleccion?.message?.content ?? "") as string,
+      motivo: (eleccion?.finish_reason ?? "sin finish_reason") as string,
+      // Los modelos con cadena de pensamiento la devuelven en un campo aparte.
+      razonando: Boolean(eleccion?.message?.reasoning_content),
+      uso: j.usage ?? null,
+      claves: Object.keys(j ?? {}).join(","),
+    };
+  };
+
+  // Sin reintento: duplicar el tope duplicaba la espera y era lo que hacía
+  // saltar el 504 de la pasarela. Antes de reintentar hay que saber por qué
+  // vino vacío, y para eso está el detalle de abajo.
+  const res = await pedir(maxTokens);
+
+  if (!res.texto.trim()) {
+    const detalle = [
+      `modelo ${modelo}`,
+      `finish_reason: ${res.motivo}`,
+      res.razonando ? "devolvió cadena de pensamiento pero no respuesta" : null,
+      res.uso ? `tokens: ${JSON.stringify(res.uso)}` : null,
+      res.motivo === "sin finish_reason" ? `claves de la respuesta: ${res.claves}` : null,
+    ].filter(Boolean).join(" · ");
+    throw new Error(`El modelo no devolvió texto (${detalle}).`);
+  }
+
+  return { texto: res.texto, modelo };
 }
 
 // ------------------------------------------------------------------ Gemini
@@ -107,6 +188,38 @@ export async function gemini(sistema: string, usuario: string, maxTokens = 8000)
   const texto = (j.candidates?.[0]?.content?.parts ?? [])
     .map((p: { text?: string }) => p.text ?? "").join("");
   return { texto, modelo };
+}
+
+/**
+ * Corta el bloque final de bibliografía y webgrafía.
+ *
+ * Es una lista de obras reales que el modelo conoce de su entrenamiento, así que
+ * mandarla como «material de partida» es una invitación a preguntar por libros
+ * que el tema solo cita. Así salió una tarjeta sobre las etapas del saber en
+ * Zubiri cuando Zubiri aparece una vez en el tema 1, en la bibliografía.
+ */
+export function sinBibliografia(texto: string): string {
+  // El índice del principio también dice «Bibliografía», así que hay que
+  // quedarse con la ÚLTIMA aparición, no con la primera: cortando por la
+  // primera, el tema 1 pasaba de 22.100 caracteres a 762.
+  const patron = /\n[^\n]{0,40}\b(BIBLIOGRAF[IÍ]A|REFERENCIAS BIBLIOGR)/gi;
+  let corte = -1;
+  for (const m of texto.matchAll(patron)) {
+    if (m.index !== undefined) corte = m.index;
+  }
+  // Red de seguridad: si el corte se llevara más de un tercio del tema, es que
+  // hemos acertado en el sitio equivocado. Mejor mandarlo entero.
+  if (corte < 0 || corte < texto.length * 0.66) return texto;
+  return texto.slice(0, corte).trimEnd();
+}
+
+/** Normaliza para comparar: sin tildes, sin puntuación y sin dobles espacios. */
+export function normalizar(s: string): string {
+  return s
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9ñ]+/g, " ")
+    .trim();
 }
 
 /** Recorta el tema para no exceder la ventana de contexto. */

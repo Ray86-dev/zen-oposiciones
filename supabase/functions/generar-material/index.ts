@@ -4,7 +4,7 @@
 
 import {
   CORS, json, clienteAdmin, usuarioDe, dentroDelCupo, registrarUso,
-  deepseek, gemini, recortar,
+  deepseek, gemini, recortar, sinBibliografia, normalizar,
 } from "./comun.ts";
 
 const CONTEXTO_OPOSICION = `
@@ -27,7 +27,12 @@ utilizable dentro de ese límite.
 
 Escribe en español de España, con registro académico y sin florituras.
 Nunca inventes citas, obras, páginas ni datos bibliográficos: si no estás seguro
-de una referencia, omítela.`;
+de una referencia, omítela.
+
+Una obra citada NO es contenido estudiado. Que el material mencione un libro no
+te autoriza a explicar lo que dice ese libro con lo que sepas por tu cuenta: la
+persona que estudia solo tiene delante el material, y una pregunta que no puede
+responder con él le hace memorizar algo que nadie ha verificado.`;
 
 const TAREAS: Record<string, { proveedor: "deepseek" | "gemini"; sistema: string; instruccion: string; tokens: number }> = {
   esquema: {
@@ -84,9 +89,20 @@ Devuelve Markdown.`,
   flashcards: {
     proveedor: "gemini", tokens: 6000,
     sistema: CONTEXTO_OPOSICION,
-    instruccion: `Genera entre 20 y 30 tarjetas de repaso activo.
-Devuelve EXCLUSIVAMENTE un array JSON válido, sin texto alrededor ni vallas de código,
-con esta forma: [{"anverso":"pregunta","reverso":"respuesta","tipo":"concepto|autor|fecha|argumento"}]
+    instruccion: `Genera entre 20 y 30 tarjetas de repaso activo. Ni una más.
+
+Toda tarjeta debe poder responderse ÚNICAMENTE con el material de partida. No
+uses nada que sepas por tu cuenta, por seguro que estés. Si un autor solo
+aparece mencionado de pasada, no preguntes por su pensamiento.
+
+Cada tarjeta lleva un «ancla»: un fragmento COPIADO LITERALMENTE del material,
+de entre 5 y 15 palabras, que contenga la respuesta. Cópialo tal cual, sin
+reescribirlo ni resumirlo. Si no encuentras un fragmento literal que sostenga la
+respuesta, esa tarjeta no vale: descártala y haz otra.
+
+Devuelve EXCLUSIVAMENTE un array JSON válido, sin texto alrededor ni vallas de
+código, con esta forma:
+[{"anverso":"pregunta","reverso":"respuesta","tipo":"concepto|autor|fecha|argumento","ancla":"fragmento literal del material"}]
 Las preguntas deben obligar a recordar, no a reconocer.`,
   },
   preguntas: {
@@ -105,6 +121,56 @@ Usa entre 12 y 20 nodos con etiquetas breves y aristas etiquetadas cuando aclare
 la relación. Evita tildes en los identificadores de nodo.`,
   },
 };
+
+/** Ni una tarjeta más de las que caben en una sesión de repaso. */
+const TOPE_TARJETAS = 30;
+/** Un ancla de tres palabras aparece en cualquier parte: no prueba nada. */
+const MINIMO_PALABRAS_ANCLA = 4;
+
+interface Tarjeta { anverso: string; reverso: string; tipo?: string; ancla?: string }
+
+/**
+ * Se queda solo con las tarjetas cuya ancla aparece de verdad en el tema.
+ *
+ * Pedirle al modelo que no se salga del material reduce el problema; comprobarlo
+ * lo cierra. La comparación es indulgente con tildes, mayúsculas y puntuación
+ * —eso son maneras de escribir lo mismo— y estricta con el contenido.
+ */
+function depurarTarjetas(bruto: string, material: string) {
+  const limpio = bruto.replace(/```(?:json)?/g, "").trim();
+  const a = limpio.indexOf("[");
+  const b = limpio.lastIndexOf("]");
+  if (a === -1 || b === -1) return { error: "El modelo no devolvió un array JSON." };
+
+  let crudas: unknown;
+  try { crudas = JSON.parse(limpio.slice(a, b + 1)); }
+  catch { return { error: "El modelo devolvió un JSON que no se puede leer." }; }
+  if (!Array.isArray(crudas)) return { error: "El modelo no devolvió una lista de tarjetas." };
+
+  const base = normalizar(material);
+  const buenas: Tarjeta[] = [];
+  const descartadas: string[] = [];
+
+  for (const c of crudas as Tarjeta[]) {
+    if (!c?.anverso || !c?.reverso) continue;
+    if (buenas.length >= TOPE_TARJETAS) { descartadas.push(`${c.anverso} (sobra del tope)`); continue; }
+    const ancla = normalizar(String(c.ancla ?? ""));
+    if (ancla.split(" ").filter(Boolean).length < MINIMO_PALABRAS_ANCLA) {
+      descartadas.push(`${c.anverso} (sin ancla)`);
+      continue;
+    }
+    if (!base.includes(ancla)) {
+      descartadas.push(`${c.anverso} (el ancla no está en el tema)`);
+      continue;
+    }
+    buenas.push({ anverso: c.anverso, reverso: c.reverso, tipo: c.tipo, ancla: c.ancla });
+  }
+
+  if (!buenas.length) {
+    return { error: "Ninguna tarjeta se sostiene sobre el texto del tema. Vuelve a generarlas." };
+  }
+  return { buenas, descartadas };
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS });
@@ -150,6 +216,13 @@ Deno.serve(async (req) => {
       .from("temas").select("titulo, bloque_nombre")
       .eq("temario_id", temario.id).eq("numero", temaNumero).maybeSingle();
 
+    // Las tarjetas se generan sin la bibliografía delante: es una lista de obras
+    // reales que el modelo conoce, y con ella a la vista pregunta por libros que
+    // el tema solo cita. El tema de examen sí la necesita, que puntúa.
+    const material = tipo === "flashcards"
+      ? sinBibliografia(recortar(contenido.html))
+      : recortar(contenido.html);
+
     const prompt = [
       `TEMA ${temaNumero}: ${meta?.titulo ?? ""}`,
       meta?.bloque_nombre ? `Bloque: ${meta.bloque_nombre}` : "",
@@ -158,21 +231,38 @@ Deno.serve(async (req) => {
       tarea.instruccion,
       "",
       "MATERIAL DE PARTIDA:",
-      recortar(contenido.html),
+      material,
     ].join("\n");
 
     const motor = tarea.proveedor === "deepseek" ? deepseek : gemini;
     const { texto, modelo } = await motor(tarea.sistema, prompt, tarea.tokens);
     if (!texto.trim()) return json({ error: "El modelo devolvió una respuesta vacía." }, 502);
 
+    let contenidoFinal = texto;
+    let descartadas: string[] = [];
+    if (tipo === "flashcards") {
+      const r = depurarTarjetas(texto, material);
+      if (r.error) return json({ error: r.error }, 502);
+      contenidoFinal = JSON.stringify(r.buenas);
+      descartadas = r.descartadas ?? [];
+    }
+
     await admin.from("materiales_ia").insert({
       user_id: usuario.id, temario_id: temario.id, tema_numero: temaNumero,
-      tipo, modelo, contenido: texto,
-      metadatos: { proveedor: tarea.proveedor, palabras: texto.split(/\s+/).length },
+      tipo, modelo, contenido: contenidoFinal,
+      metadatos: {
+        proveedor: tarea.proveedor,
+        palabras: contenidoFinal.split(/\s+/).length,
+        ...(tipo === "flashcards" ? { descartadas: descartadas.length, motivos: descartadas.slice(0, 20) } : {}),
+      },
     });
     await registrarUso(admin, usuario.id, tipo, `tema-${temaNumero}`);
 
-    return json({ contenido: texto, modelo, cacheado: false, usadasHoy: cupo.usadas + 1, limite: cupo.limite });
+    return json({
+      contenido: contenidoFinal, modelo, cacheado: false,
+      usadasHoy: cupo.usadas + 1, limite: cupo.limite,
+      ...(tipo === "flashcards" ? { descartadas: descartadas.length } : {}),
+    });
   } catch (e) {
     return json({ error: e instanceof Error ? e.message : "Error inesperado" }, 500);
   }
