@@ -30,6 +30,8 @@ interface Ctx {
   detener: (volverAlInicio?: boolean) => void;
   saltar: (d: number) => void;
   cambiar: (p: Partial<PrefsVoz>) => void;
+  /** Silencia y devuelve el volumen anterior, sin cortar la lectura. */
+  alternarSilencio: () => void;
   bajarVoz: (id: string) => Promise<void>;
 }
 
@@ -69,6 +71,8 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
   const cache = useRef<Map<string, Promise<Blob>>>(new Map());
   const urlActual = useRef<string | null>(null);
   const resaltar = useRef<((b: number) => void) | null>(null);
+  /** Para que quitar el silencio devuelva el volumen que tenías, no un 100 %. */
+  const volumenPrevio = useRef(1);
 
   useEffect(() => { prefsRef.current = prefs; }, [prefs]);
   useEffect(() => { fuenteRef.current = fuente; }, [fuente]);
@@ -191,6 +195,7 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
     urlActual.current = URL.createObjectURL(blob);
     el.src = urlActual.current;
     el.playbackRate = p.velocidad;
+    el.volume = p.volumen;
     el.onended = () => {
       if (epoca.current !== mi || !sonandoRef.current) return;
       const sig = idx + 1;
@@ -220,6 +225,9 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
     if (v) u.voice = v;
     u.lang = v?.lang ?? "es-ES";
     u.rate = p.velocidad;
+    // La API no deja tocar el volumen de una locución ya lanzada: el cambio
+    // entra en la frase siguiente. Con frases de pocos segundos no se nota.
+    u.volume = p.volumen;
     u.onend = () => {
       if (epoca.current !== mi || !sonandoRef.current) return;
       const sig = idx + 1;
@@ -279,8 +287,20 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
   }, [estado, sonarNeuronal, sonarSistema]);
 
   const cambiar = useCallback((cambios: Partial<PrefsVoz>) => {
+    if (cambios.volumen !== undefined) {
+      cambios = { ...cambios, volumen: Math.min(1, Math.max(0, cambios.volumen)) };
+    }
     const n = { ...prefsRef.current, ...cambios };
     setPrefs(n); prefsRef.current = n; guardarPrefsVoz(n);
+
+    // El volumen es el único ajuste que se aplica en caliente. Los demás obligan
+    // a resintetizar, pero reiniciar la frase a cada tirón del deslizador sería
+    // insufrible: aquí basta con tocar el elemento de audio que ya está sonando.
+    if (Object.keys(cambios).length === 1 && cambios.volumen !== undefined) {
+      if (audio.current) audio.current.volume = n.volumen;
+      return;
+    }
+
     if (cambios.motor || cambios.vozNeuronal) vaciarCache();
     // Si nos vamos a la voz del sistema, soltamos los ~60 MB del modelo.
     if (cambios.motor === "sistema") liberarMotorVoz();
@@ -288,6 +308,12 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
     detener();
     if (estaba) setTimeout(() => reproducir(n), 80);
   }, [detener, reproducir, vaciarCache]);
+
+  const alternarSilencio = useCallback(() => {
+    const v = prefsRef.current.volumen;
+    if (v > 0) { volumenPrevio.current = v; cambiar({ volumen: 0 }); }
+    else cambiar({ volumen: volumenPrevio.current || 1 });
+  }, [cambiar]);
 
   const bajarVoz = useCallback(async (vozId: string) => {
     setNeuronal({ fase: "descargando", pct: 0, mensaje: "" });
@@ -315,7 +341,8 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
   const valor: Ctx = {
     fuente, estado, indice, prefs, neuronal, descargadas, vocesSistema,
     cargarTema, fijarResaltado,
-    reproducir: () => reproducir(), pausar, reanudar, detener, saltar, cambiar, bajarVoz,
+    reproducir: () => reproducir(), pausar, reanudar, detener, saltar, cambiar,
+    alternarSilencio, bajarVoz,
   };
   return <C.Provider value={valor}>{children}</C.Provider>;
 }

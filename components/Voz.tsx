@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useVoz } from "@/components/ProveedorVoz";
 import { VOCES_ES } from "@/lib/vozNeuronal";
 import Transporte from "@/components/Transporte";
+import Volumen from "@/components/Volumen";
 
 /** Panel de lectura en voz alta. Es solo interfaz: la reproducción vive en el proveedor. */
 export default function Voz({ cerrar }: { cerrar: () => void }) {
@@ -35,8 +36,9 @@ export default function Voz({ cerrar }: { cerrar: () => void }) {
           {estado !== "parado" && restante > 0 && ` · ~${restante} min`}
           {estado === "pausado" && " · en pausa"}
         </span>
+        <div className="ml-auto hidden sm:flex"><Volumen /></div>
         <button onClick={() => setAjustes((a) => !a)}
-          className="ml-auto rounded-lg border border-borde px-2 py-1.5 text-[11px] text-suave hover:text-texto">
+          className="ml-auto rounded-lg border border-borde px-2 py-1.5 text-[11px] text-suave hover:text-texto sm:ml-0">
           {usandoNeuronal ? (vozActual?.nombre ?? "Neuronal") : "Sistema"} · {prefs.velocidad}×
         </button>
         <button onClick={() => { detener(); cerrar(); }} title="Cerrar el reproductor"
@@ -89,6 +91,12 @@ export default function Voz({ cerrar }: { cerrar: () => void }) {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* En pantalla estrecha no cabe junto al transporte: vive aquí. */}
+          <div className="sm:hidden">
+            <p className="mb-1 text-[10px] uppercase tracking-widest text-suave">Volumen</p>
+            <Volumen />
           </div>
 
           {!usandoNeuronal && (

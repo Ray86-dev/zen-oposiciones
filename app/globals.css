@@ -350,3 +350,30 @@ body { background: transparent; }
     animation: zen-latido 1.8s ease-in-out infinite;
   }
 }
+
+/* Deslizador de volumen.
+   Con appearance:none el navegador deja de pintar el control entero, pulgar
+   incluido: hay que devolverlo a mano o el usuario ve una raya sin nada que
+   arrastrar. El relleno de la barra va en el style del elemento, porque
+   depende del valor. */
+.zen-vol { -webkit-appearance: none; appearance: none; outline: none; }
+.zen-vol::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 9999px;
+  background: var(--jade);
+  cursor: pointer;
+  border: none;
+}
+.zen-vol::-moz-range-thumb {
+  width: 11px;
+  height: 11px;
+  border-radius: 9999px;
+  background: var(--jade);
+  cursor: pointer;
+  border: none;
+}
+.zen-vol::-moz-range-track { background: transparent; }
+.zen-vol:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px color-mix(in oklab, var(--jade) 35%, transparent); }

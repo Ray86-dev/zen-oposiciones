@@ -42,10 +42,12 @@ export interface PrefsVoz {
   vozNeuronal: string;        // modelo Piper descargado
   velocidad: number;
   tono: number;
+  /** 0 a 1. Se aplica en caliente, sin cortar la frase que esté sonando. */
+  volumen: number;
 }
 export const VOZ_POR_DEFECTO: PrefsVoz = {
   motor: "sistema", vozURI: null,
-  vozNeuronal: "es_ES-sharvard-medium", velocidad: 1, tono: 1,
+  vozNeuronal: "es_ES-sharvard-medium", velocidad: 1, tono: 1, volumen: 1,
 };
 const CLAVE = "zen-voz";
 
@@ -53,7 +55,11 @@ export function cargarPrefsVoz(): PrefsVoz {
   if (typeof window === "undefined") return VOZ_POR_DEFECTO;
   try {
     const raw = window.localStorage.getItem(CLAVE);
-    return raw ? { ...VOZ_POR_DEFECTO, ...JSON.parse(raw) } : VOZ_POR_DEFECTO;
+    if (!raw) return VOZ_POR_DEFECTO;
+    const p = { ...VOZ_POR_DEFECTO, ...JSON.parse(raw) } as PrefsVoz;
+    // Un volumen fuera de rango hace que el <audio> lance y se corte la lectura.
+    p.volumen = Number.isFinite(p.volumen) ? Math.min(1, Math.max(0, p.volumen)) : 1;
+    return p;
   } catch { return VOZ_POR_DEFECTO; }
 }
 export function guardarPrefsVoz(p: PrefsVoz) {

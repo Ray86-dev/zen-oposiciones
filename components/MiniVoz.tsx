@@ -1,6 +1,7 @@
 "use client";
 import { useVoz } from "@/components/ProveedorVoz";
 import Transporte from "@/components/Transporte";
+import Volumen from "@/components/Volumen";
 
 /**
  * Barra flotante que aparece en cuanto algo suena, en cualquier página.
@@ -27,6 +28,7 @@ export default function MiniVoz() {
             {indice + 1} de {total}{estado === "pausado" && " · en pausa"}
           </p>
         </div>
+        <div className="hidden shrink-0 sm:flex"><Volumen compacto /></div>
       </div>
     </div>
   );
