@@ -1,8 +1,8 @@
 "use client";
 import { createContext, useContext, useEffect, useState, useMemo, ReactNode } from "react";
-import { EstadoApp, cargar, guardar, estadoInicial, progresoDe } from "@/lib/almacen";
+import { EstadoApp, cargar, guardar, estadoInicial, progresoDe, hoy } from "@/lib/almacen";
 import { EstadoTema, Temario, SesionPlan } from "@/lib/tipos";
-import { generarPlan, resumirPlan } from "@/lib/plan";
+import { generarPlan, resumirPlan, CONSOLIDADOS } from "@/lib/plan";
 import temarioJson from "@/data/temario-filosofia.json";
 import { useSesion } from "@/components/Sesion";
 import { db, temarioId } from "@/lib/supabase";
@@ -18,6 +18,10 @@ interface Ctx {
   actualizar: (parcial: Partial<EstadoApp>) => void;
   fijarEstadoTema: (numero: number, estado: EstadoTema) => void;
   fijarConfianza: (numero: number, confianza: number) => void;
+  /** Pone un tema a la cabeza de la cola y recalcula el plan desde hoy. */
+  elegirTema: (numero: number) => void;
+  /** Lo devuelve al orden automático. */
+  soltarTema: (numero: number) => void;
   registrarSesion: (minutos: number, tipo: string, tema?: number) => void;
   recargarProgreso: () => Promise<void>;
 }
@@ -64,6 +68,15 @@ export function Proveedor({ children }: { children: ReactNode }) {
     return () => { vivo = false; };
   }, [usuario, listo]);
 
+  /**
+   * El plan se simula desde hoy, no desde la fecha de inicio. Los días que
+   * pasan sin estudiar ya no consumen cola: lo pendiente sigue pendiente y lo
+   * que se mueve es la fecha de fin, que es lo único que puede moverse.
+   * Antes de la hidratación se ancla al inicio para que servidor y cliente
+   * rendericen lo mismo.
+   */
+  const ancla = listo ? hoy() : estado.fechaInicio;
+
   const plan = useMemo(
     () => generarPlan({
       inicio: estado.fechaInicio,
@@ -71,13 +84,15 @@ export function Proveedor({ children }: { children: ReactNode }) {
       disponibilidad: estado.disponibilidad,
       temario,
       progreso: estado.progreso,
+      ancla,
+      prioridad: estado.prioridad,
     }),
-    [estado.fechaInicio, estado.fechaPrueba, estado.disponibilidad, estado.progreso]
+    [estado.fechaInicio, estado.fechaPrueba, estado.disponibilidad, estado.progreso, estado.prioridad, ancla]
   );
 
   const resumen = useMemo(
-    () => resumirPlan(plan, estado.fechaInicio, estado.fechaPrueba),
-    [plan, estado.fechaInicio, estado.fechaPrueba]
+    () => resumirPlan(plan, ancla, estado.fechaPrueba),
+    [plan, ancla, estado.fechaPrueba]
   );
 
   /** Envía un tema a la nube. Si no hay sesión, no hace nada: queda en local. */
@@ -138,8 +153,19 @@ export function Proveedor({ children }: { children: ReactNode }) {
           vueltas: nuevo === "dominado" ? Math.max(1, p.vueltas) : p.vueltas,
         };
         void sincronizarTema(numero, actualizado);
-        return { ...e, progreso: { ...e.progreso, [numero]: actualizado } };
+        // Un tema consolidado ya no necesita ir por delante: sale de la cola manual.
+        const prioridad = CONSOLIDADOS.includes(nuevo)
+          ? e.prioridad.filter((n) => n !== numero)
+          : e.prioridad;
+        return { ...e, prioridad, progreso: { ...e.progreso, [numero]: actualizado } };
       }),
+    elegirTema: (numero) =>
+      setEstado((e) => ({
+        ...e,
+        prioridad: [numero, ...e.prioridad.filter((n) => n !== numero)].slice(0, 8),
+      })),
+    soltarTema: (numero) =>
+      setEstado((e) => ({ ...e, prioridad: e.prioridad.filter((n) => n !== numero) })),
     fijarConfianza: (numero, confianza) =>
       setEstado((e) => ({
         ...e,

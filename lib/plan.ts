@@ -1,4 +1,4 @@
-import { Temario, Tema, Disponibilidad, SesionPlan, Fase, ProgresoTema } from "./tipos";
+import { Temario, Tema, Disponibilidad, SesionPlan, Fase, ProgresoTema, EstadoTema, ESTADOS } from "./tipos";
 import { iso, parse, sumaDias, diasEntre, diaSemana } from "./fechas";
 
 /**
@@ -62,6 +62,17 @@ export function fases(inicio: string, prueba: string): Fase[] {
   ];
 }
 
+/**
+ * Un tema deja la cola de primera vuelta solo cuando está consolidado. «Leído» o
+ * «esquematizado» significa empezado, no hecho: sigue en la cola con lo que le
+ * falte, que es justo lo que pasa cuando abandonas un tema a la mitad.
+ */
+export const CONSOLIDADOS: EstadoTema[] = ["memorizado", "dominado"];
+
+export function pesoEstado(e: EstadoTema): number {
+  return ESTADOS.find((x) => x.id === e)?.peso ?? 0;
+}
+
 export interface OpcionesPlan {
   inicio: string;
   prueba: string;
@@ -70,6 +81,15 @@ export interface OpcionesPlan {
   progreso?: Record<number, ProgresoTema>;
   /** Nº de temas objetivo. Por defecto, todos. */
   objetivoTemas?: number;
+  /**
+   * Fecha desde la que se simula. Las fases siguen colgando de `inicio` —van
+   * contra la fecha de examen, no contra ti—, pero la cola de temas arranca
+   * aquí. Sin esto, los días que pasan sin estudiar vacían la cola solos y el
+   * plan te asigna el tema que «tocaría» en vez del que te toca de verdad.
+   */
+  ancla?: string;
+  /** Temas que van a la cabeza de la cola, en este orden. */
+  prioridad?: number[];
 }
 
 /** Minutos disponibles en una fecha concreta. */
@@ -89,9 +109,12 @@ export function generarPlan(o: OpcionesPlan): SesionPlan[] {
   const orden = ordenEstudio(temario).slice(0, o.objetivoTemas ?? temario.temas.length);
   const porNumero = new Map(temario.temas.map((t) => [t.numero, t]));
 
-  const pendientes = orden.filter((n) => (progreso[n]?.estado ?? "pendiente") === "pendiente");
+  // El plan se recalcula desde hoy: lo no hecho no se pierde, se empuja.
+  const ancla = o.ancla && diasEntre(inicio, o.ancla) > 0 ? o.ancla : inicio;
+  const pendientes = orden.filter(
+    (n) => !CONSOLIDADOS.includes(progreso[n]?.estado ?? "pendiente")
+  );
   const fs = fases(inicio, prueba);
-  const finPrimeraVuelta = fs[1].hasta;
 
   const sesiones: SesionPlan[] = [];
   const repasosPendientes: { fecha: string; tema: number; ronda: number }[] = [];
@@ -103,13 +126,27 @@ export function generarPlan(o: OpcionesPlan): SesionPlan[] {
   const factor = () => FACTOR_VUELTA[Math.min(vuelta - 1, FACTOR_VUELTA.length - 1)];
   const costeTema = (n: number) => Math.max(25, Math.round(esfuerzoTema(porNumero.get(n)!) * factor()));
 
-  const cola = [...pendientes];
-  /** minutos que le faltan al tema en cabeza de la cola */
-  let restanteTemaActual = cola.length ? costeTema(cola[0]) : 0;
-  let fecha = inicio;
+  /**
+   * Lo que le falta a un tema al entrar en la cola. En la primera vuelta se
+   * descuenta lo ya avanzado —el estado declarado y los minutos registrados, lo
+   * que vaya más lejos— para que un tema a medias se retome donde se dejó en
+   * lugar de volver a empezar. Nunca baja de una sesión mínima: aunque los
+   * minutos digan que está, falta cerrarlo.
+   */
+  const costeRestante = (n: number) => {
+    const total = costeTema(n);
+    const p = progreso[n];
+    if (vuelta > 1 || !p || p.vueltas > 0) return total;
+    const hecho = Math.min(total, Math.max(Math.round(total * pesoEstado(p.estado)), p.minutosInvertidos));
+    return Math.max(MIN_SESION, total - hecho);
+  };
 
-  // Ritmo objetivo: repartir la primera vuelta hasta el final de la fase 2.
-  const diasVuelta = Math.max(1, diasEntre(inicio, finPrimeraVuelta));
+  // Lo que tú has puesto delante manda sobre el orden por bloques.
+  const prio = (o.prioridad ?? []).filter((n) => porNumero.has(n));
+  const cola = [...prio, ...pendientes.filter((n) => !prio.includes(n))];
+  /** minutos que le faltan al tema en cabeza de la cola */
+  let restanteTemaActual = cola.length ? costeRestante(cola[0]) : 0;
+  let fecha = ancla;
 
   while (diasEntre(fecha, prueba) >= 0) {
     let restante = minutosDisponibles(fecha, disponibilidad);
@@ -172,7 +209,7 @@ export function generarPlan(o: OpcionesPlan): SesionPlan[] {
           // temario, más rápida, priorizando lo que hace más tiempo que no se toca.
           vuelta += 1;
           cola.push(...orden);
-          restanteTemaActual = costeTema(cola[0]);
+          restanteTemaActual = costeRestante(cola[0]);
         }
         const n = cola[0];
         const t = porNumero.get(n)!;
@@ -197,7 +234,7 @@ export function generarPlan(o: OpcionesPlan): SesionPlan[] {
           if (vuelta === 1) {
             repasosPendientes.push({ fecha: sumaDias(fecha, INTERVALOS[0]), tema: n, ronda: 0 });
           }
-          restanteTemaActual = cola.length ? costeTema(cola[0]) : 0;
+          restanteTemaActual = cola.length ? costeRestante(cola[0]) : 0;
         }
       }
     }
@@ -205,6 +242,81 @@ export function generarPlan(o: OpcionesPlan): SesionPlan[] {
   }
 
   return sesiones;
+}
+
+export interface Candidato {
+  temaNumero: number;
+  titulo: string;
+  minutos: number;
+  /** Por qué está en la lista, en dos palabras. */
+  etiqueta: string;
+  motivo: string;
+}
+
+/**
+ * Tres formas legítimas de empezar el día: seguir la cola, atender lo que se
+ * está borrando, o abrir el bloque más flojo. El plan propone; la elección es
+ * tuya y reordena la cola, no la rompe.
+ */
+export function candidatosDeHoy(o: {
+  temario: Temario;
+  progreso: Record<number, ProgresoTema>;
+  plan: SesionPlan[];
+  fecha: string;
+}): Candidato[] {
+  const { temario, progreso, plan, fecha } = o;
+  const porNumero = new Map(temario.temas.map((t) => [t.numero, t]));
+  const estadoDe = (n: number) => progreso[n]?.estado ?? "pendiente";
+  const out: Candidato[] = [];
+  const usado = new Set<number>();
+
+  const add = (n: number | undefined, etiqueta: string, motivo: string, minutos: number) => {
+    if (n == null || usado.has(n)) return;
+    const t = porNumero.get(n);
+    if (!t) return;
+    usado.add(n);
+    out.push({ temaNumero: n, titulo: `Tema ${n}. ${t.titulo}`, minutos, etiqueta, motivo });
+  };
+
+  // 1) Lo que dice el plan para hoy.
+  const dePlan = plan.find((s) => s.fecha === fecha && s.tipo === "estudio" && s.temaNumero != null);
+  if (dePlan) add(dePlan.temaNumero, "Sigue el plan", dePlan.motivo, dePlan.minutos);
+
+  // 2) Lo que lleva más tiempo sin tocarse de lo ya empezado.
+  const enfriando = temario.temas
+    .filter((t) => estadoDe(t.numero) !== "pendiente")
+    .map((t) => ({ n: t.numero, dias: progreso[t.numero]?.ultimoRepaso
+      ? diasEntre(progreso[t.numero]!.ultimoRepaso!, fecha) : 999 }))
+    .sort((a, b) => b.dias - a.dias)[0];
+  if (enfriandoseVale(enfriando)) {
+    add(enfriando!.n, "Se enfría",
+      `Llevas ${enfriando!.dias === 999 ? "varios" : enfriando!.dias} días sin tocarlo. Repasar antes de olvidar cuesta un tercio.`, 30);
+  }
+
+  // 3) El bloque con menos recorrido: el sorteo no avisa de por dónde cae.
+  const avancePorBloque = new Map<string, { suma: number; n: number }>();
+  for (const t of temario.temas) {
+    const a = avancePorBloque.get(t.bloqueId) ?? { suma: 0, n: 0 };
+    a.suma += pesoEstado(estadoDe(t.numero));
+    a.n += 1;
+    avancePorBloque.set(t.bloqueId, a);
+  }
+  const flojo = [...avancePorBloque.entries()]
+    .sort((a, b) => a[1].suma / a[1].n - b[1].suma / b[1].n)[0]?.[0];
+  if (flojo) {
+    const orden = ordenEstudio(temario);
+    const n = orden.find((x) => porNumero.get(x)?.bloqueId === flojo && estadoDe(x) === "pendiente");
+    const t = n != null ? porNumero.get(n) : undefined;
+    if (t) add(n, "Bloque en blanco",
+      `${t.bloque} es tu bloque con menos recorrido. Se sortean 5 temas de los 71: conviene no dejar áreas a cero.`,
+      Math.min(90, esfuerzoTema(t)));
+  }
+
+  return out;
+}
+
+function enfriandoseVale(c: { n: number; dias: number } | undefined): boolean {
+  return !!c && c.dias >= 5;
 }
 
 export interface ResumenPlan {
@@ -233,12 +345,19 @@ export function resumirPlan(sesiones: SesionPlan[], inicio: string, prueba: stri
 }
 
 /**
- * Horas semanales mínimas para completar la primera vuelta a los 71 temas
- * antes de una fecha límite (por defecto, el final de la fase 2).
+ * Horas semanales mínimas para completar la primera vuelta antes de una fecha
+ * límite (por defecto, el final de la fase 2). Con `progreso`, cuenta solo lo
+ * que te queda: la cifra que hay que mirar cuando ya has empezado.
  */
-export function ritmoMinimoSemanal(temario: Temario, inicio: string, limite: string): number {
-  const esfuerzo = temario.temas.reduce((a, t) => a + esfuerzoTema(t), 0);
-  const repasos = temario.temas.length * (30 + 25 + 20);
+export function ritmoMinimoSemanal(
+  temario: Temario, inicio: string, limite: string,
+  progreso?: Record<number, ProgresoTema>,
+): number {
+  const temas = progreso
+    ? temario.temas.filter((t) => !CONSOLIDADOS.includes(progreso[t.numero]?.estado ?? "pendiente"))
+    : temario.temas;
+  const esfuerzo = temas.reduce((a, t) => a + esfuerzoTema(t), 0);
+  const repasos = temas.length * (30 + 25 + 20);
   const semanas = Math.max(1, diasEntre(inicio, limite) / 7);
   return Math.round(((esfuerzo + repasos) / semanas / 60) * 10) / 10;
 }

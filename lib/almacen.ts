@@ -8,6 +8,12 @@ export interface EstadoApp {
   fechaPrueba: string;
   disponibilidad: Disponibilidad;
   progreso: Record<number, ProgresoTema>;
+  /**
+   * Temas que van por delante del orden automático, en este orden. Es lo que
+   * escribes cuando eliges tú qué estudiar hoy; se vacía solo al consolidar
+   * el tema.
+   */
+  prioridad: number[];
   sesionesHechas: { fecha: string; minutos: number; tipo: string; tema?: number }[];
   intentos: { id: string; supuesto: string; fecha: string; minutos: number; nota: number | null; marcados: string[] }[];
 }
@@ -20,6 +26,7 @@ export function estadoInicial(): EstadoApp {
     fechaPrueba: sabadoPrueba(2027),
     disponibilidad: DISPONIBILIDAD_POR_DEFECTO,
     progreso: {},
+    prioridad: [],
     sesionesHechas: [],
     intentos: [],
   };

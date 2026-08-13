@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useApp } from "@/components/Proveedor";
 import { hoy } from "@/lib/almacen";
 import { diasEntre, formatoLargo, formatoCorto } from "@/lib/fechas";
-import { fases, ritmoMinimoSemanal } from "@/lib/plan";
+import { fases, ritmoMinimoSemanal, candidatosDeHoy } from "@/lib/plan";
 import { probabilidadAlMenosUno, probabilidadAlMenos, temasParaProbabilidad } from "@/lib/probabilidad";
 import { ESTADOS } from "@/lib/tipos";
 import { consejoDe } from "@/lib/consejos";
@@ -12,7 +12,7 @@ import Pastilla from "@/components/Pastilla";
 import Aparece from "@/components/efectos/Aparece";
 
 export default function Panel() {
-  const { estado, temario, plan, resumen, listo } = useApp();
+  const { estado, temario, plan, resumen, listo, elegirTema, soltarTema } = useApp();
   if (!listo) return <Esqueleto />;
 
   const h = hoy();
@@ -22,6 +22,8 @@ export default function Panel() {
 
   const deHoy = plan.filter((s) => s.fecha === h);
   const proximas = plan.filter((s) => diasEntre(h, s.fecha) > 0).slice(0, 5);
+  const candidatos = candidatosDeHoy({ temario, progreso: estado.progreso, plan, fecha: h });
+  const programado = deHoy.find((s) => s.tipo === "estudio")?.temaNumero;
 
   const progresos = Object.values(estado.progreso);
   const preparados = progresos.filter((p) => p.estado === "memorizado" || p.estado === "dominado").length;
@@ -40,7 +42,7 @@ export default function Panel() {
   const p1 = probabilidadAlMenosUno(preparados);
   const p2 = probabilidadAlMenos(2, preparados);
   const para90 = temasParaProbabilidad(0.9);
-  const ritmoMin = ritmoMinimoSemanal(temario, estado.fechaInicio, fs[1].hasta);
+  const ritmoMin = ritmoMinimoSemanal(temario, h, fs[1].hasta, estado.progreso);
   const ritmoActual = Math.round((estado.disponibilidad.porDiaSemana.reduce((a, b) => a + b, 0) / 60) * 10) / 10;
 
   return (
@@ -151,6 +153,55 @@ export default function Panel() {
             })}
           </ul>
         )}
+        {candidatos.length > 1 && (
+          <div className="mt-6 border-t border-borde/60 pt-5">
+            <p className="text-xs uppercase tracking-widest text-suave">O eliges tú</p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-3">
+              {candidatos.map((c) => {
+                const activo = c.temaNumero === programado;
+                return (
+                  <button
+                    key={c.temaNumero}
+                    onClick={() => elegirTema(c.temaNumero)}
+                    className={`flex flex-col rounded-lg border p-3 text-left transition ${
+                      activo
+                        ? "border-jade bg-jade/5"
+                        : "border-borde bg-tinta-3/40 hover:border-jade/50 hover:bg-tinta-3"
+                    }`}
+                  >
+                    <span className="text-[10px] uppercase tracking-wide text-jade">{c.etiqueta}</span>
+                    <span className="mt-1 text-sm leading-snug">{c.titulo}</span>
+                    <span className="mt-1 flex-1 text-xs leading-snug text-suave">{c.motivo}</span>
+                    <span className="mt-2 text-xs tabular-nums text-suave">
+                      {activo ? "Es lo que hay puesto hoy" : `Ponerlo hoy · ${c.minutos} min`}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            <p className="mt-3 text-xs text-suave">
+              Lo que elijas encabeza la cola y el resto del plan se recoloca solo. Ningún tema se
+              pierde: lo que no hagas hoy sigue esperándote mañana.{" "}
+              <Link href="/temario" className="text-jade underline">Buscar otro tema</Link>
+            </p>
+            {estado.prioridad.length > 0 && (
+              <p className="mt-3 flex flex-wrap items-center gap-2 text-xs text-suave">
+                <span>Por delante del orden automático:</span>
+                {estado.prioridad.map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => soltarTema(n)}
+                    className="rounded-full border border-borde px-2 py-0.5 transition hover:border-coral hover:text-coral"
+                    title="Devolverlo al orden automático"
+                  >
+                    Tema {n} ✕
+                  </button>
+                ))}
+              </p>
+            )}
+          </div>
+        )}
+
         <p className="mt-5 border-l-2 border-jade/40 pl-3 text-sm italic text-suave">
           {consejoDe(fase.id, new Date().getDate())}
         </p>
