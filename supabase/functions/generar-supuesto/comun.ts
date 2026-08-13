@@ -190,7 +190,20 @@ export async function gemini(
   if (!clave) throw new Error("Falta el secreto GEMINI_API_KEY");
   const modelo = Deno.env.get("GEMINI_MODEL") ?? "gemini-3.6-flash";
 
-  const pedir = (conExtras: boolean) => fetch(
+  /**
+   * Escalera de reintentos. Gemini rechaza una petición mal formada con
+   * «Request contains an invalid argument» y ni una palabra sobre qué campo
+   * sobra, así que no sirve de nada mirar el mensaje: hay que ir quitando
+   * extras y volver a probar. De más garantías a menos.
+   */
+  const PELDANOS: { nombre: string; esquema: boolean; sinPensar: boolean }[] = [
+    { nombre: "esquema+sin pensar", esquema: true, sinPensar: true },
+    { nombre: "esquema", esquema: true, sinPensar: false },
+    { nombre: "sin pensar", esquema: false, sinPensar: true },
+    { nombre: "básico", esquema: false, sinPensar: false },
+  ];
+
+  const pedir = (p: typeof PELDANOS[number]) => fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/${modelo}:generateContent`,
     {
       method: "POST",
@@ -201,28 +214,28 @@ export async function gemini(
         generationConfig: {
           temperature: 0.5,
           maxOutputTokens: maxTokens,
-          ...(conExtras && op.esquema
+          ...(p.esquema && op.esquema
             ? { responseMimeType: "application/json", responseSchema: op.esquema }
             : {}),
-          ...(conExtras && !op.pensar ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
+          ...(p.sinPensar && !op.pensar ? { thinkingConfig: { thinkingBudget: 0 } } : {}),
         },
       }),
     },
   );
 
-  let r = await pedir(true);
-  if (!r.ok) {
-    const detalle = (await r.text()).slice(0, 300);
-    // Red de seguridad, igual que en DeepSeek: si este modelo aún no acepta el
-    // esquema o el presupuesto de pensamiento, se repite sin ellos antes de dar
-    // la generación por perdida. Se pierde la garantía, no el servicio.
-    if (r.status === 400 && /thinking|responseSchema|responseMimeType|json/i.test(detalle)) {
-      r = await pedir(false);
-      if (!r.ok) throw new Error(`Gemini ${r.status}: ${(await r.text()).slice(0, 300)}`);
-    } else {
-      throw new Error(`Gemini ${r.status}: ${detalle}`);
-    }
+  let r: Response | null = null;
+  let peldano = "";
+  let ultimo = "";
+  for (const p of PELDANOS) {
+    // Un peldaño que no añade nada respecto al anterior no se prueba dos veces.
+    if (!op.esquema && p.esquema) continue;
+    if (op.pensar && p.sinPensar) continue;
+    const intento = await pedir(p);
+    if (intento.ok) { r = intento; peldano = p.nombre; break; }
+    ultimo = `${intento.status}: ${(await intento.text()).slice(0, 300)}`;
+    if (intento.status !== 400) break;   // 401, 429 o 500 no se arreglan quitando extras
   }
+  if (!r) throw new Error(`Gemini ${ultimo}`);
 
   const j = await r.json();
   const candidato = j.candidates?.[0];
@@ -235,6 +248,8 @@ export async function gemini(
     // de un modelo que no sabe obedecer el formato.
     motivo: (candidato?.finishReason ?? "sin finishReason") as string,
     uso: j.usageMetadata ?? null,
+    /** Qué peldaño de la escalera aceptó la petición. */
+    peldano,
   };
 }
 

@@ -136,7 +136,9 @@ const ESQUEMA_TARJETAS = {
     properties: {
       anverso: { type: "STRING" },
       reverso: { type: "STRING" },
-      tipo: { type: "STRING", enum: ["concepto", "autor", "fecha", "argumento"] },
+      // Sin `enum`: la API lo rechaza con un 400 mudo si no se acompaña de
+      // `format: "enum"`, y los cuatro valores ya van dichos en la instrucción.
+      tipo: { type: "STRING" },
       ancla: { type: "STRING" },
     },
     required: ["anverso", "reverso", "ancla"],
@@ -267,8 +269,8 @@ Deno.serve(async (req) => {
       material,
     ].join("\n");
 
-    const { texto, modelo, motivo, uso } = tarea.proveedor === "deepseek"
-      ? { ...await deepseek(tarea.sistema, prompt, tarea.tokens), motivo: "", uso: null }
+    const { texto, modelo, motivo, uso, peldano } = tarea.proveedor === "deepseek"
+      ? { ...await deepseek(tarea.sistema, prompt, tarea.tokens), motivo: "", uso: null, peldano: "" }
       : await gemini(tarea.sistema, prompt, tarea.tokens,
           tipo === "flashcards" ? { esquema: ESQUEMA_TARJETAS } : {});
     if (!texto.trim()) return json({ error: "El modelo devolvió una respuesta vacía." }, 502);
@@ -282,6 +284,7 @@ Deno.serve(async (req) => {
         // en vez de a ciegas: MAX_TOKENS dice «se cortó», STOP dice «no obedece».
         const detalle = [
           `motivo: ${motivo}`,
+          peldano ? `vía: ${peldano}` : null,
           uso ? `tokens: ${JSON.stringify(uso)}` : null,
           `devolvió ${texto.length} caracteres`,
         ].filter(Boolean).join(" · ");
