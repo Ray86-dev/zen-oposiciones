@@ -195,14 +195,14 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
     urlActual.current = URL.createObjectURL(blob);
     el.src = urlActual.current;
     el.playbackRate = p.velocidad;
-    el.volume = p.volumen;
+    el.volume = prefsRef.current.volumen;
     el.onended = () => {
       if (epoca.current !== mi || !sonandoRef.current) return;
       const sig = idx + 1;
       if (sig >= f.trozos.length) { detener(true); return; }
       setIndice(sig); iRef.current = sig;
       resaltar.current?.(f.trozos[sig].bloque);
-      void sonarNeuronal(sig, p, mi);
+      void sonarNeuronal(sig, prefsRef.current, mi);
     };
     try { await el.play(); }
     catch {
@@ -227,14 +227,14 @@ export function ProveedorVoz({ children }: { children: ReactNode }) {
     u.rate = p.velocidad;
     // La API no deja tocar el volumen de una locución ya lanzada: el cambio
     // entra en la frase siguiente. Con frases de pocos segundos no se nota.
-    u.volume = p.volumen;
+    u.volume = prefsRef.current.volumen;
     u.onend = () => {
       if (epoca.current !== mi || !sonandoRef.current) return;
       const sig = idx + 1;
       if (sig >= f.trozos.length) { detener(true); return; }
       setIndice(sig); iRef.current = sig;
       resaltar.current?.(f.trozos[sig].bloque);
-      sonarSistema(sig, p, mi);
+      sonarSistema(sig, prefsRef.current, mi);
     };
     u.onerror = () => detener();
     s.speak(u);
