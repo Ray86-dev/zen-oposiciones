@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "smoke": "tsx smoke.tsx",
+    "prueba-volumen": "tsx prueba-volumen.tsx",
     "seed": "tsx scripts/seed.ts",
     "subir-contenido": "node scripts/subir-contenido.mjs",
     "desplegar-funciones": "supabase functions deploy generar-supuesto generar-material evaluar --project-ref hulbafouyprldwclyjsq"
