@@ -1,5 +1,7 @@
 # Zen · Oposiciones de Filosofía
 
+> **In English:** A guided study plan for the Spanish secondary-teacher exams in philosophy: a tracker for the 71 official topics, an in-app reader with highlights and notes, AI study aids, timed practice cases and the real odds that a prepared topic comes up. Next.js, Supabase.
+
 Plan de estudio guiado para el procedimiento selectivo del **Cuerpo de Profesores de
 Enseñanza Secundaria, especialidad Filosofía (590/201)** en Canarias, con horizonte
 **agosto 2026 → junio 2027**.
